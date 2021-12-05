@@ -16,7 +16,7 @@
 
 class Material{
     constructor(shaderProgram){
-
+        hejsan du äger, detta måste däremot tas bort
     }
 
     
