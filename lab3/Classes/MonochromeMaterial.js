@@ -8,13 +8,16 @@
 */
 
 class MonochromeMaterial extends Material{
-    constructor(valueR, valueG, valueB){
+    constructor(valueR, valueG, valueB, shaderProgram){
+        super(shaderProgram)
         this.valueR = valueR;
         this.valueG = valueG;
         this.valueB = valueB;
+        this.colorLocation = gl.getUniformLocation(shaderProgram, 'uniform_color');
     }
 
-    ApplyMaterial(){
-        
+    ApplyMaterial(self){
+        this.shaderProgram.activate();
+        gl.unifrom4f(this.colorLocation, this.valueR, this.valueG, this.valueB);
     }
 }
