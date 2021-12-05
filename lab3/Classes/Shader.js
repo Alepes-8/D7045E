@@ -9,7 +9,7 @@
  *
  *  @author Alex Peschel, Oliver Olofsson
  */
-class Shader{
+export class Shader{
     constructor(){
         this.source;
         this.type;
@@ -26,9 +26,9 @@ class Shader{
      *      type can be explained as the variable which is either gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
      * @returns 
      */
-    compileShader(self, source, type){//Implement a shader class that takes a shader source code and a shader type, and compiles it.
+    combindShaders(gl, source, type){//Implement a shader class that takes a shader source code and a shader type, and compiles it.
         //save it
-        let shader = gl.createShader( type );
+        let shader = gl.createShader(type);
         gl.shaderSource(shader,source);
         gl.compileShader(shader);
         if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
@@ -38,14 +38,16 @@ class Shader{
         self.type = type;
 
         //save the compileing
+        console.log(shader);
         self.glShader = shader;
-    }
+         console.log("part2", self.glShader);
+   }
     
-    shaderType(self){
+    shaderType(){
         return self.type;
     }
 
     getter(self){
         return self.glShader; 
     }
-}
+}   
