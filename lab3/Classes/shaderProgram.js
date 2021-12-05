@@ -16,7 +16,7 @@ class ShaderProgram{
     }
 
     combineShaders(self, shader1, shader2){ //links them into a GL Shader program
-        self.prog = createProgram(gl, shader1, shader2);
+        self.prog = createProgram(gl, shader1.glShader, shader2.glShader);
     }
 
     activate(self){ //activates the GL shader program
