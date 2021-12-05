@@ -101,13 +101,13 @@ function drawPrimitive( primitiveType, color, vertices ) {
  * way to draw with WebGL.  Here, the geometry is so simple that it doesn't matter.)
  */
 function draw() { 
-    gl.clearColor(0,0,0,1);
+    gl.clearColor(0.7,0.7,0.7,1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     /* Set the value of projection to represent the projection transformation. */
     
     if (document.getElementById("persproj").checked) {
-         mat4.perspective(projection, Math.PI/5, 1, 4, 8);
+         mat4.perspective(projection, Math.PI/5, 1, 4, 20);
     }
     else {
          mat4.ortho(projection,-2, 2, -2, 2, 4, 8);
@@ -120,9 +120,9 @@ function draw() {
     /* Apply the modeling tranformation to modelview, and send modelview
        to the corresponding uniform variable in the shader program. */
     
-    mat4.rotateX(modelview, modelview, rotateX);
-    mat4.rotateY(modelview, modelview, rotateY);
-    mat4.rotateZ(modelview, modelview, rotateZ);
+    //mat4.rotateX(modelview, modelview, rotateX);
+    //mat4.rotateY(modelview, modelview, rotateY);
+    //mat4.rotateZ(modelview, modelview, rotateZ);
     
     /* Multiply the modelview and projection transformss to get the combined
        transform, and send it to the shader program. */
@@ -142,17 +142,17 @@ function draw() {
     gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
 
     gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program
-    drawPrimitive( gl.TRIANGLE_FAN, [1,0,0,1], [ -1,-1,1, 1,-1,1, 1,1,1, -1,1,1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [1,0,0,1], [ -1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ ]);
     gl.uniform3f( u_normal, 0, 0, -1 );
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1,-1,-1, -1,1,-1, 1,1,-1, 1,-1,-1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ ]);
     gl.uniform3f( u_normal, 0, 1, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [0,0,1,1], [ -1,1,-1, -1,1,1, 1,1,1, 1,1,-1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [0,0,1,1], [ -1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ]);
     gl.uniform3f( u_normal, 0, -1, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [1,1,0,1], [ -1,-1,-1, 1,-1,-1, 1,-1,1, -1,-1,1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [1,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ]);
     gl.uniform3f( u_normal, 1, 0, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [1,0,1,1], [ 1,-1,-1, 1,1,-1, 1,1,1, 1,-1,1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [1,0,1,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ ]);
     gl.uniform3f( u_normal, -1, 0, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,1,1], [ -1,-1,-1, -1,-1,1, -1,1,1, -1,1,-1 ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,1,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ]);
     
     /* Draw coordinate axes as thick colored lines that extend through the cube.
        The lines are drawn with lighting disabled. */
@@ -223,12 +223,12 @@ function createProgram(gl, vShader, fShader) {
 function doKey(evt) {
     let rotationChanged = true;
     switch (evt.keyCode) {
-        case 37: rotateY -= 0.05; break;        // left arrow
-        case 39: rotateY +=  0.05; break;       // right arrow
-        case 38: rotateX -= 0.05; break;        // up arrow
-        case 40: rotateX += 0.05; break;        // down arrow
-        case 33: rotateZ += 0.05; break;        // PageUp
-        case 34: rotateZ -= 0.05; break;        // PageDown
+        case 37: rotateX -= 0.05; break;        // left arrow
+        case 39: rotateX +=  0.05; break;       // right arrow
+        case 38: rotateY += 0.05; break;        // up arrow
+        case 40: rotateY -= 0.05; break;        // down arrow
+        case 33: rotateZ -= 0.05; break;        // PageUp
+        case 34: rotateZ += 0.05; break;        // PageDown
         case 13:                                // return key
         case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
         default: rotationChanged = false;
