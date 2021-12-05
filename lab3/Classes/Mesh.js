@@ -10,10 +10,20 @@ index data describing the mesh, and create (via WebGL/OpenGL calls)
 */
 
 class Mesh{
-    constructor(vertexArray, meshIndex){
+    constructor(vertices, indices){
+        this.vertices = vertices;
+        this.indices = indices;
+
         this.vao = gl.createVertexArray(); //'vao' = 'vertex array object'
         this.vbo = gl.createBuffer();   //'vbo' = 'vertex buffer object'
         this.ibo = gl.createBuffer();   //'ibo' = 'index buffer object'
+    }
 
+    getVertices(){
+        return this.vertices;
+    }
+
+    getIndices(){
+        return this.indices;
     }
 }

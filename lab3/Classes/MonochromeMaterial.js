@@ -13,7 +13,7 @@ class MonochromeMaterial extends Material{
         this.valueR = valueR;
         this.valueG = valueG;
         this.valueB = valueB;
-        this.colorLocation = gl.getUniformLocation(shaderProgram, 'uniform_color');
+        this.colorLocation = gl.getUniformLocation(shaderProgram, 'u_color');
     }
 
     ApplyMaterial(self){
