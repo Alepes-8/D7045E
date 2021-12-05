@@ -193,11 +193,11 @@ function initGL() {
  * source code for the vertex shader and for the fragment shader.
  */
 function createProgram(gl, vShader, fShader) {
-    var obj1 = new Shader();
+    /*var obj1 = new Shader();
     obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
     var obj2 = new Shader();
     obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER )
-
+    */
     let vsh = gl.createShader( gl.VERTEX_SHADER );
     gl.shaderSource(vsh,vShader);
     gl.compileShader(vsh);
