@@ -14,10 +14,21 @@
     issued.
 */
 
+/**
+ * Abstract class
+ */
 class Material{
+    /* holds a variable that points to a ShaderProgram object */
     constructor(shaderProgram){
-        hejsan du äger, detta måste däremot tas bort
+        this.prog = shaderProgram;
+
+        if(this.constructor == Material){
+            throw new Error("Object of Abstract Class cannot be created");
+        }
     }
 
-    
+    /* Abstract method that will be overriden by subclasses */
+    ApplyMaterial(){
+        throw new Error("Has no implementation yet")
+    }
 }

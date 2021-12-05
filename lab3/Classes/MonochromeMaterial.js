@@ -11,4 +11,8 @@ class MonochromeMaterial extends Material{
         this.valueG = valueG;
         this.valueB = valueB;
     }
+
+    ApplyMaterial(){
+        
+    }
 }
