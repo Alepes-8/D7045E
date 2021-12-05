@@ -7,7 +7,7 @@
  *   shader. There should be a method that returns the type ((for instance, as an enum).
  *   ● Include error checking so a failed compile does not go unnoticed.
  *
- *  @Author Alex Peschel 
+ *  @author Alex Peschel, Oliver Olofsson
  */
 class Shader{
     constructor(){
