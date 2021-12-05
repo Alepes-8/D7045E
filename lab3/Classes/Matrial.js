@@ -1,4 +1,4 @@
-/*
+/**
 ● Implement an abstract class Material that acts as a surface material.
 ● The class should have:
     a. An internal variable prog that points to a ShaderProgram object. This
@@ -12,7 +12,9 @@
     b. an abstract (not implemented) method ApplyMaterial that subclasses should
     implement to get the shaders fitted with uniforms before a draw call can be
     issued.
-*/
+
+    @author Alex Peschel, Oliver Olofsson
+ */
 
 /**
  * Abstract class
