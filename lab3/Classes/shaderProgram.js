@@ -12,14 +12,21 @@
 class ShaderProgram{
 
     constructor(){
-        this.prog;
+        this.comboProg;
     }
 
-    combineShaders(self, shader1, shader2){ //links them into a GL Shader program
-        self.prog = createProgram(gl, shader1.glShader, shader2.glShader);
+    combineShaders(gl, self, shader1, shader2){ //links them into a GL Shader program
+        let prog = gl.createProgram();
+        gl.attachShader(prog,shader1);
+        gl.attachShader(prog, shader2);
+        gl.linkProgram(prog);
+        if ( ! gl.getProgramParameter( prog, gl.LINK_STATUS) ) {
+        throw new Error("Link error in program:  " + gl.getProgramInfoLog(prog));
+        }
+        self.comboProg = prog;
     }
 
     activate(self){ //activates the GL shader program
-        gl.useProgram(self.prog);
+        gl.useProgram(self.comboProg);
     }
 }

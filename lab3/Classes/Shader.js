@@ -14,43 +14,27 @@ class Shader{
         this.source;
         this.type;
         this.glShader;
-        this.shaders = {
-            vertexShaderSource: vertexShaderSource = `FrpF
-                attribute vec3 a_coords;
-                uniform mat4 modelviewProjection;
-                uniform bool lit;
-                uniform vec3 normal;
-                uniform mat3 normalMatrix;
-                uniform vec4 color;
-                varying vec4 v_color;
-                void main() {
-                    vec4 coords = vec4(a_coords,1.0);
-                    gl_Position = modelviewProjection * coords;
-                    if (lit) {
-                    vec3 N = normalize(normalMatrix*normal);  // Transformed unit normal
-                    float dotProduct = abs(N.z);  // cosine of angle of incidence of light with surface
-                    v_color = vec4( dotProduct*color.rgb, color.a );
-                    }
-                    else {
-                        v_color = color;
-                    }
-                }`,
-
-            fragmentShaderSource: fragmentShaderSource = `
-                #ifdef GL_FRAGMENT_PRECISION_HIGH
-                precision highp float;
-                #else
-                precision mediump float;
-                #endif
-                varying vec4 v_color;
-                void main() {
-                    gl_FragColor = v_color;
-                }`
-        }
     }
 
+    /**
+     * 
+     * @param {*} self 
+     * @param {*} source 
+     *      source will be the main code for the shader. 
+     *      It will either be vertexShaderSource or fragmentShaderSource
+     * @param {*} type 
+     *      type can be explained as the variable which is either gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
+     * @returns 
+     */
     compileShader(self, source, type){//Implement a shader class that takes a shader source code and a shader type, and compiles it.
         //save it
+        let shader = gl.createShader( type );
+        gl.shaderSource(shader,source);
+        gl.compileShader(shader);
+        if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
+            throw new Error("Error in vertex shader:  " + gl.getShaderInfoLog(shader));
+         }
+
         self.source = source;
         self.type = type;
         
