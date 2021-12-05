@@ -35,25 +35,10 @@ class Shader{
             throw new Error("Error in vertex shader:  " + gl.getShaderInfoLog(shader));
          }
 
-        self.source = source;
         self.type = type;
-        
-        
-        try {
-            //Compile it
-            let shader = ;
-
-        } catch (error) {
-            console.error(error);
-            // expected output: ReferenceError: nonExistentFunction is not defined
-            // Note - error messages will vary depending on browser
-        }
-        
 
         //save the compileing
         self.glShader = shader;
-
-        return shader;
     }
     
     shaderType(self){
