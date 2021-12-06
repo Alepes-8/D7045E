@@ -36,10 +36,13 @@ class GraphicsNode{
      * */
     update(m2){   
         var result = [];
-        var m1 = self.transform;
+        var m1 = this.transform;
+        console.log(m1);
+
         for (var i = 0; i < m1.length; i++) {
             result[i] = [];
             for (var j = 0; j < m2[0].length; j++) {
+
                 var sum = 0;
                 for (var k = 0; k < m1[0].length; k++) {
                     sum += m1[i][k] * m2[k][j];
@@ -47,7 +50,10 @@ class GraphicsNode{
                 result[i][j] = sum;
             }
         }
-        return result;
+        result[0][0] = 1
+        result[1][1] = 1
+        result[2][2] = 1
+        this.transform = result;
     }
 
 

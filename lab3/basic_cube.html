@@ -61,6 +61,8 @@ const fragmentShaderSource = `
     }`;
 
 let gl;   // The webgl context.
+let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,5],[ 0,0,0,1]];
+let testGraphcsNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
 
 let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
 let a_coords_buffer;    // Buffer to hold the values for a_coords.
@@ -233,15 +235,23 @@ function doKey(evt) {
     let rotationChanged = true;
     switch (evt.keyCode) {
         case 37: rotateX -= 0.05;
-            let test = new Graph
-            update(mat4(0,0,0,0, 0,0,0,-0.1, 0,0,0,0, 0,0,0,0)) 
+            testGraphcsNode.update([[0,0,0,-0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
             break;        // left arrow
         case 39: rotateX +=  0.05; 
+            testGraphcsNode.update([[0,0,0,0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
             break;       // right arrow
-        case 38: rotateY += 0.05; break;        // up arrow
-        case 40: rotateY -= 0.05; break;        // down arrow
-        case 33: rotateZ -= 0.05; break;        // PageUp
-        case 34: rotateZ += 0.05; break;        // PageDown
+        case 38: rotateY += 0.05; 
+            testGraphcsNode.update([[0,0,0,0], [0,0,0,0.05], [0,0,0,0], [0,0,0,1]]) 
+            break;        // up arrow
+        case 40: rotateY -= 0.05; 
+            testGraphcsNode.update([[0,0,0,0], [0,0,0,-0.05], [0,0,0,0], [0,0,0,1]]) 
+            break;         // down arrow
+        case 33: rotateZ -= 0.05;
+            testGraphcsNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,-0.05], [0,0,0,1]]) 
+            break;         // PageUp
+        case 34: rotateZ += 0.05;         
+            testGraphcsNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,0.05], [0,0,0,1]]) 
+            break;// PageDown
         case 13:                                // return key
         case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
         default: rotationChanged = false;
