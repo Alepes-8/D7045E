@@ -35,6 +35,10 @@ class Mesh{
         this.gl.enableVertexAttribArray(this.vertexPos);
     }
 
+    getVertexArray() {
+        return this.vao;
+    }
+
     getVertices(){
         return this.vertices;
     }
