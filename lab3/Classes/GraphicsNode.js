@@ -13,16 +13,19 @@
  */
 
 class GraphicsNode{
-    constructor(mesh, material, transform){
+    constructor(gl, mesh, material, transform){
+        this.gl = gl;
         this.mesh = mesh;   //this is an object not an instance
         this.material = material;
         this.transform = transform
     }
 
     draw(self){
-        gl.bindVertexArray(self.mesh); //binds the mesh's vertex array object
-        self.material.applymaterial(); //calls the ApplyMaterial method of the material
-        draw();
+        gl.bindVertexArray(this.mesh); //binds the mesh's vertex array object
+        this.material.applymaterial(); //calls the ApplyMaterial method of the material
+        // gl.drawElements(mode, count, type, offset);
+        // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
+        this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0); //executes a draw call
     }
 
     
@@ -31,7 +34,7 @@ class GraphicsNode{
      * from //https://stackoverflow.com/questions/27205018/multiply-2-matrices-in-javascript 
      * 
      * */
-    update(self, m2){   
+    update(m2){   
         var result = [];
         var m1 = self.transform;
         for (var i = 0; i < m1.length; i++) {
