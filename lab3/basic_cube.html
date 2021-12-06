@@ -112,7 +112,7 @@ function draw() {
 
     /*This is to determain the size of the board*/
     if (document.getElementById("persproj").checked) {
-         mat4.perspective(projection, Math.PI/5, 1, 4, 20);
+         mat4.perspective(projection, Math.PI/5, 1, 4, 80);
     }
     else {
          mat4.ortho(projection,-2, 2, -2, 2, 4, 8);
@@ -146,18 +146,28 @@ function draw() {
     
     gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
     gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program
-    drawPrimitive( gl.TRIANGLE_FAN, [1,0,0,1], [ -1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ ]);
-    gl.uniform3f( u_normal, 0, 0, -1 );
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ ]);
+
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ ]);
-    gl.uniform3f( u_normal, 0, 1, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [0,0,1,1], [ -1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ]);
-    gl.uniform3f( u_normal, 0, -1, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [1,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ]);
-    gl.uniform3f( u_normal, 1, 0, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [1,0,1,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ ]);
-    gl.uniform3f( u_normal, -1, 0, 0 );
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,1,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ]);
-    
+
+    gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ] );
+
+    gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ] );
+
+    gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ] );
+
+    gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ] );
+
+
     /* Draw coordinate axes as thick colored lines that extend through the cube.
        The lines are drawn with lighting disabled. */
        
@@ -174,8 +184,9 @@ function draw() {
 
 /* Initialize the WebGL context.  Called from init() */
 function initGL() {
-    let prog = createProgram( gl, vertexShaderSource, fragmentShaderSource );
-    gl.useProgram(prog);
+    let test = createProgram( gl, vertexShaderSource, fragmentShaderSource );
+    test.activate()
+    let prog = test.getprogram();
     a_coords_loc =  gl.getAttribLocation(prog, "a_coords");
     u_modelviewProj = gl.getUniformLocation(prog, "modelviewProjection");
     u_color =  gl.getUniformLocation(prog, "color");
@@ -202,7 +213,7 @@ function createProgram(gl, vShader, fShader) {
     obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
     obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER)
     combine.combineShaders(gl, obj1.getter(), obj2.getter());
-    return combine.getprogram();
+    return combine;
 }
 
 
