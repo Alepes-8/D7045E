@@ -156,7 +156,7 @@ function draw() {
     gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth)
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX, -height+rotateY, depth+rotateZ,  width+rotateX,-height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ,  -width+rotateX, height+rotateY,depth+rotateZ]);
 
-    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ ]);
 
     //gl.uniform3f( u_normal, 0, 0, 1 );    

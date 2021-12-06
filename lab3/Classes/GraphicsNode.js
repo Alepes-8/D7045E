@@ -20,7 +20,7 @@ class GraphicsNode{
         this.transform = transform;
     }
 
-    draw(self){
+    draw(){
         gl.bindVertexArray(this.mesh); //binds the mesh's vertex array object
         this.material.applymaterial(); //calls the ApplyMaterial method of the material
         // gl.drawElements(mode, count, type, offset);
