@@ -17,7 +17,7 @@ class GraphicsNode{
         this.gl = gl;
         this.mesh = mesh;   //this is an object not an instance
         this.material = material;
-        this.transform = transform
+        this.transform = transform;
     }
 
     draw(self){
