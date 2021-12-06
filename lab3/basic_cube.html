@@ -17,6 +17,8 @@
 
 
 <script src="gl_matrix.js"></script>
+<script src="Classes/Shader.js"></script>
+<script src="Classes/shaderProgram.js"></script>
 
 
 <script>
@@ -102,6 +104,7 @@ function drawPrimitive( primitiveType, color, vertices ) {
  * way to draw with WebGL.  Here, the geometry is so simple that it doesn't matter.)
  */
 function draw() { 
+    
     gl.clearColor(0.7,0.7,0.7,1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
@@ -193,32 +196,13 @@ function initGL() {
  * source code for the vertex shader and for the fragment shader.
  */
 function createProgram(gl, vShader, fShader) {
-    /*var obj1 = new Shader();
-    obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
+    var obj1 = new Shader();
     var obj2 = new Shader();
-    obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER )
-    */
-    let vsh = gl.createShader( gl.VERTEX_SHADER );
-    gl.shaderSource(vsh,vShader);
-    gl.compileShader(vsh);
-    if ( ! gl.getShaderParameter(vsh, gl.COMPILE_STATUS) ) {
-        throw new Error("Error in vertex shader:  " + gl.getShaderInfoLog(vsh));
-     }
-     console.log("real shader", vsh)
-    let fsh = gl.createShader( gl.FRAGMENT_SHADER );
-    gl.shaderSource(fsh, fShader);
-    gl.compileShader(fsh);
-    if ( ! gl.getShaderParameter(fsh, gl.COMPILE_STATUS) ) {
-       throw new Error("Error in fragment shader:  " + gl.getShaderInfoLog(fsh));
-    }
-    let prog = gl.createProgram();
-    gl.attachShader(prog, vsh);
-    gl.attachShader(prog, fsh);
-    gl.linkProgram(prog);
-    if ( ! gl.getProgramParameter( prog, gl.LINK_STATUS) ) {
-       throw new Error("Link error in program:  " + gl.getProgramInfoLog(prog));
-    }
-    return prog;
+    var combine = new ShaderProgram();
+    obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
+    obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER)
+    combine.combineShaders(gl, obj1.getter(), obj2.getter());
+    return combine.getprogram();
 }
 
 

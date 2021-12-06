@@ -9,11 +9,11 @@
  *
  *  @author Alex Peschel, Oliver Olofsson
  */
-export class Shader{
+class Shader{
     constructor(){
         this.source;
         this.type;
-        this.glShader;
+        this.shader;
     }
 
     /**
@@ -29,25 +29,20 @@ export class Shader{
     combindShaders(gl, source, type){//Implement a shader class that takes a shader source code and a shader type, and compiles it.
         //save it
         let shader = gl.createShader(type);
-        gl.shaderSource(shader,source);
+        gl.shaderSource(shader, source);
         gl.compileShader(shader);
         if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
             throw new Error("Error in vertex shader:  " + gl.getShaderInfoLog(shader));
-         }
-
-        self.type = type;
-
-        //save the compileing
-        console.log(shader);
-        self.glShader = shader;
-         console.log("part2", self.glShader);
-   }
+        }
+        this.type = type;
+        this.shader = shader; 
+    }
     
     shaderType(){
-        return self.type;
+        return this.type;
     }
 
-    getter(self){
-        return self.glShader; 
+    getter(){
+        return this.shader    
     }
 }   
