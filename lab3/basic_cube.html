@@ -19,7 +19,7 @@
 <script src="gl_matrix.js"></script>
 <script src="Classes/Shader.js"></script>
 <script src="Classes/shaderProgram.js"></script>
-
+<script src="Classes/Cuboid.js"></script>
 
 <script>
  
@@ -144,28 +144,33 @@ function draw() {
        with lighting turned on, and with the normal vectors that are needed for
        the lighting calculuations. */
     
+    let firstCube = new Cuboid(2,1,4);
+
+    let height = firstCube.height/2;
+    let width = firstCube.width/2;
+    let depth = firstCube.depth/2;
     gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
-    gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ ]);
+    gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth)
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX, -height+rotateY, depth+rotateZ,  width+rotateX,-height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ,  -width+rotateX, height+rotateY,depth+rotateZ]);
 
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ ]);
+    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ ]);
 
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,1+rotateY,-1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ ] );
+    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ ] );
 
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ ] );
+    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ ] );
 
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ 1+rotateX,-1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,-1+rotateZ, 1+rotateX,1+rotateY,1+rotateZ, 1+rotateX,-1+rotateY,1+rotateZ] );
+    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ] );
 
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-1+rotateX,-1+rotateY,-1+rotateZ, -1+rotateX,-1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,1+rotateZ, -1+rotateX,1+rotateY,-1+rotateZ ] );
+    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ ] );
 
 
     /* Draw coordinate axes as thick colored lines that extend through the cube.
