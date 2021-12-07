@@ -21,11 +21,64 @@ class GraphicsNode{
     } 
 
     draw(){
-        this.gl.bindVertexArray(this.mesh); //binds the mesh's vertex array object
-        this.material.applymaterial(); //calls the ApplyMaterial method of the material
+        this.gl.bindVertexArray(this.mesh.getVertexArray()); //binds the mesh's vertex array object
+        this.material.applyMaterial(this.transform); //calls the ApplyMaterial method of the material
         // gl.drawElements(mode, count, type, offset);
         // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
+
+        console.log("hejsan");
+        console.log( this.mesh.getIndices());
         this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0); //executes a draw call
+
+        
+
+
+        /* Draw the six faces of a cube, with different colors.  The faces are drawn
+        with lighting turned on, and with the normal vectors that are needed for
+        the lighting calculuations. */
+        
+        let firstCube = new Cuboid(2,1,4);
+        let height = firstCube.height/2;
+        let width = firstCube.width/2;
+        let depth = firstCube.depth/2;
+        let coard = [1, -4, -10 ]
+        let changeX = greenGraphicNode.transform[0][3];
+        let changeY = greenGraphicNode.transform[1][3];
+        let changeZ = greenGraphicNode.transform[2][3];
+    
+    
+
+        gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
+        gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth) 
+        //greenGraphicNode.draw();
+        
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0], -height+changeY+coard[1], depth+changeZ+coard[2],  +width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], +width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],  -width+changeX+coard[0], height+changeY+coard[1],depth+changeZ+coard[2]]);
+
+        gl.uniform3f( u_normal, 0, 0, 1 );    
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2] ]);
+
+        gl.uniform3f( u_normal, 0, 0, 1 );    
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
+        drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
+
+        gl.uniform3f( u_normal, 0, 0, 1 );    
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
+        drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ] );
+
+        gl.uniform3f( u_normal, 0, 0, 1 );    
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
+        drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2]] );
+
+        gl.uniform3f( u_normal, 0, 0, 1 );    
+        drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
+        drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
+
+
+        /* Draw coordinate axes as thick colored lines that extend through the cube.
+        The lines are drawn with lighting disabled. */
+        
+        gl.uniform1i( u_lit, 0 );  // Turn off lighting
+
     }
 
     

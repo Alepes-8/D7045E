@@ -69,6 +69,8 @@ let gl;   // The webgl context.
 let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,0],[ 0,0,0,1]];
 var greenGraphicNode;
 let shaderProgram;
+let nodes=[];
+var camera;
 
 let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
 let a_coords_buffer;    // Buffer to hold the values for a_coords.
@@ -145,34 +147,28 @@ function drawPrimitive( primitiveType, color, vertices ) {
  * (Note that the use of the above drawPrimitive function is not an efficient
  * way to draw with WebGL.  Here, the geometry is so simple that it doesn't matter.)
  */
-function draw() { 
-    
-    gl.clearColor(0.7,0.7,0.7,1);
+function render() { 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    shaderProgram.activate();
     
     /* Set the value of projection to represent the projection transformation. */
 
     /*This is to determain the size of the board*/
     if (document.getElementById("persproj").checked) {
-         mat4.perspective(projection, Math.PI/5, 1, 4, 80);
+        mat4.perspective(projection, Math.PI/5, 1, 4, 80);
     }
     else {
-         mat4.ortho(projection,-2, 2, -2, 2, 4, 8);
+        mat4.ortho(projection,-2, 2, -2, 2, 4, 8);
     }
     
     /* Set the value of modelview to represent the viewing transform. */
 
     mat4.lookAt(modelview, [0,2,6], [0,0,0], [0,1,0]);
-    
-    /* Apply the modeling tranformation to modelview, and send modelview
-       to the corresponding uniform variable in the shader program. */
-    
-    //mat4.rotateX(modelview, modelview, rotateX);
-    //mat4.rotateY(modelview, modelview, rotateY);
-    //mat4.rotateZ(modelview, modelview, rotateZ);
+
     
     /* Multiply the modelview and projection transformss to get the combined
-       transform, and send it to the shader program. */
+    transform, and send it to the shader program. */
     
     mat4.multiply( modelviewProj, projection, modelview );
     gl.uniformMatrix4fv(u_modelviewProj, false, modelviewProj );
@@ -182,91 +178,8 @@ function draw() {
     mat3.normalFromMat4(normalMatrix, modelview);
     gl.uniformMatrix3fv(u_normalMatrix, false, normalMatrix);
 
-    /* Draw the six faces of a cube, with different colors.  The faces are drawn
-       with lighting turned on, and with the normal vectors that are needed for
-       the lighting calculuations. */
-    
-    let firstCube = new Cuboid(2,1,4);
-    let height = firstCube.height/2;
-    let width = firstCube.width/2;
-    let depth = firstCube.depth/2;
-    let coard = [1, -4, -10 ]
-    let changeX = greenGraphicNode.transform[0][3];
-    let changeY = greenGraphicNode.transform[1][3];
-    let changeZ = greenGraphicNode.transform[2][3];
+
     greenGraphicNode.draw();
-
-    gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
-    gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth)
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0], -height+changeY+coard[1], depth+changeZ+coard[2],  +width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], +width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],  -width+changeX+coard[0], height+changeY+coard[1],depth+changeZ+coard[2]]);
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2]] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
-
-
-    /* Draw coordinate axes as thick colored lines that extend through the cube.
-       The lines are drawn with lighting disabled. */
-       
-    gl.uniform1i( u_lit, 0 );  // Turn off lighting
-    /*
-    gl.lineWidth(4);
-    drawPrimitive( gl.LINES, [1,0,0,1], [ -2,0,0, 2,0,0] );
-    drawPrimitive( gl.LINES, [0,1,0,1], [ 0,-2,0, 0,2,0] );
-    drawPrimitive( gl.LINES, [0,0,1,1], [ 0,0,-2, 0,0,2] );
-    gl.lineWidth(1);
-    */
-}
-
-
-/* Initialize the WebGL context.  Called from init() */
-function initGL() {    
-
-    shaderProgram = createProgram( gl, vertexShaderSource, fragmentShaderSource );
-    shaderProgram.activate()
-    let prog = shaderProgram.getprogram();
-    a_coords_loc =  gl.getAttribLocation(prog, "a_coords");
-    u_modelviewProj = gl.getUniformLocation(prog, "modelviewProjection");
-    u_color =  gl.getUniformLocation(prog, "color");
-    u_lit =  gl.getUniformLocation(prog, "lit");
-    u_normal =  gl.getUniformLocation(prog, "normal");
-    u_normalMatrix =  gl.getUniformLocation(prog, "normalMatrix");
-    a_coords_buffer = gl.createBuffer();
-    gl.enable(gl.DEPTH_TEST);
-}
-
-
-/* Creates a program for use in the WebGL context gl, and returns the
- * identifier for that program.  If an error occurs while compiling or
- * linking the program, an exception of type Error is thrown.  The error
- * string contains the compilation or linking error.  If no error occurs,
- * the program identifier is the return value of the function.
- *    The second and third parameters are strings that contain the
- * source code for the vertex shader and for the fragment shader.
- */
-function createProgram(gl, vShader, fShader) {
-    var obj1 = new Shader();
-    var obj2 = new Shader();
-    var combine = new ShaderProgram();
-    obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
-    obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER)
-    combine.combineShaders(gl, obj1.getter(), obj2.getter());
-    return combine;
 }
 
 
@@ -303,7 +216,7 @@ function doKey(evt) {
     }
     if (rotationChanged) {
               evt.preventDefault();
-             draw();
+              render();
     }
 }
 
@@ -324,26 +237,62 @@ function init() {
             "<p>Sorry, could not get a WebGL graphics context.</p>";
         return;
     }
+    gl.clearColor(0.7,0.7,0.7,1);
+    gl.enable(gl.DEPTH_TEST);
+
     try {
-        initGL();  // initialize the WebGL graphics context
+        var obj1 = new Shader();
+        var obj2 = new Shader();
+        shaderProgram = new ShaderProgram();
+        
+        obj1.combindShaders(gl,  vertexShaderSource, gl.VERTEX_SHADER )
+        obj2.combindShaders(gl,  fragmentShaderSource, gl.FRAGMENT_SHADER)
+        shaderProgram.combineShaders(gl, obj1.getter(), obj2.getter());
+
+        shaderProgram.activate()
+        let prog = shaderProgram.getProgram();
+        a_coords_loc =  gl.getAttribLocation(prog, "a_coords");
+        u_modelviewProj = gl.getUniformLocation(prog, "modelviewProjection");
+        u_color =  gl.getUniformLocation(prog, "color");
+        u_lit =  gl.getUniformLocation(prog, "lit");
+        u_normal =  gl.getUniformLocation(prog, "normal");
+        u_normalMatrix =  gl.getUniformLocation(prog, "normalMatrix");
+        a_coords_buffer = gl.createBuffer();
     }
     catch (e) {
         document.getElementById("canvas-holder").innerHTML =
             "<p>Sorry, could not initialize the WebGL graphics context:" + e.message + "</p>";
         return;
     }
+    camera = new Camera(gl, shaderProgram.getProgram());
+
+
     document.getElementById("persproj").checked = true;
-    document.getElementById("persproj").onchange = draw;
-    document.getElementById("orthproj").onchange = draw;
+    document.getElementById("persproj").onchange = render;
+    document.getElementById("orthproj").onchange = render;
     document.addEventListener("keydown", doKey, false);
 
-    let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getprogram());
+    let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getProgram());
     let chromeRed = new MonochromeMaterial(gl, [0.8, 0.0, 0.4, 1.0], shaderProgram);
     let chromeGreen = new MonochromeMaterial(gl, [0.0, 1.0, 0.0, 1.0], shaderProgram);
     
     greenGraphicNode = new GraphicsNode(gl, mesh, chromeGreen , greenNodeTransform);
 
-    draw();
+    /*
+    var max = 10;
+    var min = -10;
+    var maxZ = 10;
+    var minZ = -40
+    for (var i = 0; i <= 60; i++) {
+        var x = Math.floor(Math.random() * (max - min)) + min;
+        var y = Math.floor(Math.random() * (max - min)) + min;
+        var z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
+        var transform =[[1,0,0,x],[ 0,1,0,y],[ 0,0,1,z],[ 0,0,0,1]];
+        nodes.push(new GraphicsNode(gl, mesh, chromeRed, transform));
+
+    }
+    */
+    render();
 }
 
 
