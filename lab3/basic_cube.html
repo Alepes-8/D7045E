@@ -335,8 +335,8 @@ function init() {
     document.addEventListener("keydown", doKey, false);
 
     let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getprogram());
-    let chromeRed = new MonochromeMaterial(gl, vec4(0.8, 0.0, 0.4, 1.0), shaderProgram);
-    let chromeGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0.0, 1.0), shaderProgram);
+    let chromeRed = new MonochromeMaterial(gl, [0.8, 0.0, 0.4, 1.0], shaderProgram);
+    let chromeGreen = new MonochromeMaterial(gl, [0.0, 1.0, 0.0, 1.0], shaderProgram);
     
     greenGraphicNode = new GraphicsNode(gl, mesh, chromeGreen , greenNodeTransform);
 
