@@ -922,7 +922,7 @@ function inverse(m)
    if(m.length == 4) return inverse4(m);
 }
 
-function normalMatrix(m, flag)
+function normalMatrixs(m, flag)
 {
     var a = mat4();
     a = inverse(transpose(m));
@@ -935,7 +935,7 @@ function normalMatrix(m, flag)
 
 }
 
-function projection(width, height, depth) {
+function projections(width, height, depth) {
     // Note: This matrix flips the Y axis so 0 is at the top.
     return [
        2 / width, 0, 0, 0,
