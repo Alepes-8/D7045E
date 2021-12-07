@@ -311,7 +311,7 @@ function doKey(evt) {
 function init() {
     try {
         let canvas = document.getElementById("webglcanvas");
-        gl = canvas.getContext("webgl");
+        gl = canvas.getContext("webgl2");
         if ( ! gl ) {
             throw "Browser does not support WebGL";
         }
