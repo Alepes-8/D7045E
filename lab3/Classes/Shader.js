@@ -14,7 +14,7 @@ class Shader{
         this.source;
         this.type;
         this.shader;
-    }
+    } 
 
     /**
      * 
@@ -28,7 +28,7 @@ class Shader{
      */
     combindShaders(gl, source, type){//Implement a shader class that takes a shader source code and a shader type, and compiles it.
         //save it
-        let shader = gl.createShader(type);
+        let shader = gl.createShader(type);   
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
         if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {

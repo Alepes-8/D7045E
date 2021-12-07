@@ -14,11 +14,11 @@
 
 class GraphicsNode{
     constructor(gl, mesh, material, transform){
-        this.gl = gl;
+        this.gl = gl; 
         this.mesh = mesh;   //this is an object not an instance
         this.material = material;
-        this.transform = transform;
-    }
+        this.transform = transform; 
+    } 
 
     draw(){
         gl.bindVertexArray(this.mesh); //binds the mesh's vertex array object

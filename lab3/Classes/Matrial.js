@@ -8,7 +8,7 @@
     material.
         ■ (The vertex shader transforms mesh vertices and can of course also
         affect the coloring by sending information over to the fragment
-        shader.)
+        shader.) 
     b. an abstract (not implemented) method ApplyMaterial that subclasses should
     implement to get the shaders fitted with uniforms before a draw call can be
     issued.
@@ -21,9 +21,9 @@
  */
 class Material{
     /* holds a variable that points to a ShaderProgram object */
-    constructor(shaderProgram){
-        this.prog = shaderProgram;
-
+    constructor(shaderProgram){ 
+        this.prog = shaderProgram; 
+ 
         if(this.constructor == Material){
             throw new Error("Object of Abstract Class cannot be created");
         }

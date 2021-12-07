@@ -9,7 +9,7 @@
     ● It also sets up vertex attribute pointers accordingly.
 
     @author Alex Peschel, Oliver Olofsson
- */
+ */ 
 
 class Mesh{
     constructor(gl, vertices, indices, shaderProgram){
@@ -18,7 +18,7 @@ class Mesh{
         this.indices = indices;
 
         this.vao = this.gl.createVertexArray(); //'vao' = 'vertex array object'
-        this.gl.bindVertexArray(this.vao);
+        this.gl.bindVertexArray(this.vao);  
 
         this.vbo = this.gl.createBuffer();   //'vbo' = 'vertex buffer object'
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);

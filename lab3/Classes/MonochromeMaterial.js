@@ -15,7 +15,7 @@ class MonochromeMaterial extends Material{
         this.colorLocation = null
         this.shaderProgram = shaderProgram;
     }
-
+ 
     ApplyMaterial(transform){
         let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
         this.gl.uniformMatrix4fv(cMatrix, false, transform);
@@ -31,7 +31,7 @@ class MonochromeMaterial extends Material{
             //Make the color of the cubes darker the farther away they are from the camera.
             colorChange[0] = this.color[0] * (1/(1-dist));
             colorChange[1] = this.color[1] * (1/(1-dist));
-            colorChange[2] = this.color[2] * (1/(1-dist));
+            colorChange[2] = this.color[2] * (1/(1-dist));  
             colorChange[3] = 1
             this.gl.unifrom4fv(this.colorLocation, colorChange);
         }

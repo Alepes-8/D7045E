@@ -19,7 +19,7 @@ class ShaderProgram{
     combineShaders(gl, shader1, shader2){ //links them into a GL Shader program
         let prog = gl.createProgram();
         gl.attachShader(prog,shader1);
-        gl.attachShader(prog, shader2);
+        gl.attachShader(prog, shader2);   
         gl.linkProgram(prog);
         if ( ! gl.getProgramParameter( prog, gl.LINK_STATUS) ) {
         throw new Error("Link error in program:  " + gl.getProgramInfoLog(prog));
