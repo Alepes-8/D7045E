@@ -21,8 +21,8 @@ class GraphicsNode{
     } 
 
     draw(){
-        this.gl.bindVertexArray(this.mesh); //binds the mesh's vertex array object
-        this.material.applymaterial(); //calls the ApplyMaterial method of the material
+        this.gl.bindVertexArray(this.mesh.getVertexArray()); //binds the mesh's vertex array object
+        this.material.applyMaterial(this.transform); //calls the ApplyMaterial method of the material
         // gl.drawElements(mode, count, type, offset);
         // https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/drawElements
         this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0); //executes a draw call

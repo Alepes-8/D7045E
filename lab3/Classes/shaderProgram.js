@@ -32,7 +32,7 @@ class ShaderProgram{
         this.gl.useProgram(this.comboProg);
     }
 
-    getprogram(){
+    getProgram(){
         return this.comboProg;
     }
 }

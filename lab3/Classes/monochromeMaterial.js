@@ -16,7 +16,7 @@ class MonochromeMaterial extends Material{
         this.shaderProgram = shaderProgram;
     }
  
-    ApplyMaterial(transform){
+    applyMaterial(transform){
         let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
         this.gl.uniformMatrix4fv(cMatrix, false, transform);
 
@@ -26,14 +26,14 @@ class MonochromeMaterial extends Material{
         let colorChange = [];
 
         if(dist == 1){ // if the distance is 1 the cubes should have their original color as they are close to the camera.
-            this.gl.unifrom4fv(this.colorLocation, this.color);
+            this.gl.uniform4fv(this.colorLocation, this.color);
         }else{
             //Make the color of the cubes darker the farther away they are from the camera.
             colorChange[0] = this.color[0] * (1/(1-dist));
             colorChange[1] = this.color[1] * (1/(1-dist));
             colorChange[2] = this.color[2] * (1/(1-dist));  
             colorChange[3] = 1
-            this.gl.unifrom4fv(this.colorLocation, colorChange);
+            this.gl.uniform4fv(this.colorLocation, colorChange);
         }
     }
 }
