@@ -62,7 +62,7 @@ const fragmentShaderSource = `
 
 let gl;   // The webgl context.
 let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,0],[ 0,0,0,1]];
-var greenGraphicNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
+var greenGraphicNode;
 
 let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
 let a_coords_buffer;    // Buffer to hold the values for a_coords.
@@ -163,19 +163,19 @@ function draw() {
     gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2] ]);
 
-    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
     drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
 
-    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
     drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ] );
 
-    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
     drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2]] );
 
-    //gl.uniform3f( u_normal, 0, 0, 1 );    
+    gl.uniform3f( u_normal, 0, 0, 1 );    
     drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
     drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
 
@@ -296,6 +296,7 @@ function init() {
     document.getElementById("persproj").onchange = draw;
     document.getElementById("orthproj").onchange = draw;
     document.addEventListener("keydown", doKey, false);
+    greenGraphicNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
 
     draw();
 }
