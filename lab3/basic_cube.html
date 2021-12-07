@@ -49,7 +49,7 @@
     var gl;
     var nodes = [];
     var greenNode;
-    var greenNodeTransform = mat4(1,0,0,-3, 0,1,0,1, 0,0,1,2, 0,0,0,1);
+    var greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
     var camera;
     var shader;
     var vertices = [
@@ -62,142 +62,113 @@
         vec4(-0.2, 0.2, -0.5, 1),
         vec4(-0.2, -0.2, -0.5, 1)
     ];
+
     var indices = [
         0, 1, 2, 
         2, 3, 0, 
         0, 1, 6, 
         6, 7, 0, 
-        1, 6, 2, 
-        2, 6, 5, 
-        7, 6, 5, 
-        5, 7, 4, 
-        5, 4, 3, 
-        3, 2, 5, 
-        7, 4, 3, 
-        7, 3, 0
+        1, 2, 5,
+        5, 6, 1, 
+        2, 5, 4,
+        4, 3, 2,
+        3, 0, 7,
+        7, 4, 3,
+        4, 5, 6,
+        6, 7, 4
     ];
 
     function init() {
-    canvas = document.getElementById("gl-canvas");
-    gl = canvas.getContext("webgl2");
+        canvas = document.getElementById("gl-canvas");
+        gl = canvas.getContext("webgl2");
 
-    if (!gl) {alert("WebGL isn't available");}
+        if (!gl) {alert("WebGL isn't available");}
 
-    //webgl configurations
-    gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor(0.8, 1, 1, 1.0 );
+        //webgl configurations
+        gl.viewport( 0, 0, canvas.width, canvas.height );
+        gl.clearColor(0.8, 1, 1, 1.0 );
 
-    gl.enable(gl.DEPTH_TEST);
+        gl.enable(gl.DEPTH_TEST);
 
-    var fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, "fragment-shader");
-    var vertexShader = new Shader(gl, gl.VERTEX_SHADER, "vertex-shader");
-    shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
-    //shader.activateShader();
+        var fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, "fragment-shader");
+        var vertexShader = new Shader(gl, gl.VERTEX_SHADER, "vertex-shader");
+        shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
+        //shader.activateShader();
 
-    camera = new Camera(gl, shader.getProgram());
+        camera = new Camera(gl, shader.getProgram());
 
-    document.addEventListener("keydown", doKey, false);
+        document.addEventListener('keydown', doKey, false);
 
-    var mesh = new Mesh(gl, vertices, indices, shader.getProgram());
-    var monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-    var monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
+        let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
+        var monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
+        var monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
+        var monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
 
-    greenNode = new GraphicsNode(gl, mesh, monoGreen, greenNodeTransform);
+        greenNode = new GraphicsNode(gl, mesh, monoGreen, greenNodeTransform, monoBlack);
 
-    var max = 10;
-    var min = -10;
-    var maxZ = 10;
-    var minZ = -40
-    for (var i = 0; i <= 60; i++) {
-        var x = Math.floor(Math.random() * (max - min)) + min;
-        var y = Math.floor(Math.random() * (max - min)) + min;
-        var z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-        var transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-        nodes.push(new GraphicsNode(gl, mesh, monoBlue, transform));
-    }
+        var max = 10;
+        var min = -10;
+        var maxZ = 10;
+        var minZ = -40
+        for (var i = 0; i <= 60; i++) {
+            var x = Math.floor(Math.random() * (max - min)) + min;
+            var y = Math.floor(Math.random() * (max - min)) + min;
+            var z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
+            var transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
+            nodes.push(new GraphicsNode(gl, mesh, monoBlue, transform,monoBlack));
+        }
 
-    //camera.activate();
+        //camera.activate();
 
-    render();
+        render();
     }
 
     function render() {
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    shader.activate();
-    camera.activate();
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        shader.activate();
+        camera.activate();
 
-    greenNode.draw();
+        greenNode.draw();
 
-    for(var i = 0; i < nodes.length; i++) {
-        nodes[i].draw();
-    }
-    }
-
-    window.addEventListener('keydown', function(event) {
-        //increase y
-        if(event.keyCode == 87) { //W
-            greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0.1, 0,0,0,0, 0,0,0,0));
-            greenNode.updateTransform(greenNodeTransform);
-
-        //decrease x
-        } else if(event.keyCode == 65) { //A
-        greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,-0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
-        greenNode.updateTransform(greenNodeTransform);
-
-        //decrease y
-        } else if(event.keyCode == 83) { //S
-        greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,-0.1, 0,0,0,0, 0,0,0,0));
-        greenNode.updateTransform(greenNodeTransform);
-
-        //increase x
-        } else if(event.keyCode == 68) { //D
-        greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
-        greenNode.updateTransform(greenNodeTransform);
-
-        //decrease z
-        } else if(event.keyCode == 69) { //E
-        greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0, 0,0,0,-0.1, 0,0,0,0));
-        greenNode.updateTransform(greenNodeTransform);
-        //console.log(testTransform[2][3])
-
-        //increase z
-        } else if(event.keyCode == 67) { //C
-        greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0, 0,0,0,0.1, 0,0,0,0));
-        greenNode.updateTransform(greenNodeTransform);
+        for(var i = 0; i < nodes.length; i++) {
+            nodes[i].draw();
         }
+    }
 
-        //render with updated position for green cube
-        render();
-    });
-    
     function doKey(evt) {
-        let rotationChanged = true;
+        let movementChange = true;
         switch (evt.keyCode) {
             case 37:
-                greenGraphicNode.update([[0,0,0,-0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,-0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
+                greenNode.updateTransform(greenNodeTransform);
                 break;        // left arrow
             case 39:
-                greenGraphicNode.update([[0,0,0,0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
+            greenNode.updateTransform(greenNodeTransform);
                 break;       // right arrow
             case 38: 
-                greenGraphicNode.update([[0,0,0,0], [0,0,0,0.05], [0,0,0,0], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0.1, 0,0,0,0, 0,0,0,0));
+                greenNode.updateTransform(greenNodeTransform);
                 break;        // up arrow
             case 40:
-                greenGraphicNode.update([[0,0,0,0], [0,0,0,-0.05], [0,0,0,0], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,-0.1, 0,0,0,0, 0,0,0,0));
+                greenNode.updateTransform(greenNodeTransform);
                 break;         // down arrow
             case 33: 
-                greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,-0.05], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0, 0,0,0,-0.1, 0,0,0,0));
+                greenNode.updateTransform(greenNodeTransform);
                 break;         // PageUp
             case 34:        
-                greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,0.05], [0,0,0,1]]) 
+                greenNodeTransform = add(greenNodeTransform, mat4(0,0,0,0, 0,0,0,0, 0,0,0,0.1, 0,0,0,0));
+                greenNode.updateTransform(greenNodeTransform); 
                 break;// PageDown
             case 13:                                // return key
             case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
-            default: rotationChanged = false;
+            default: movementChange = false;
         }
-        if (rotationChanged) {
+        if (movementChange) {
                 evt.preventDefault();
-                draw();
+                render();
         }
     }
     window.onload = init;
