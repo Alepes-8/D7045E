@@ -18,16 +18,11 @@ class MonochromeMaterial extends Material{
   }
 
   applyMaterial(transform) {
-
     //send the transform
     let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
-
     this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
-
     this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
-
     let dist = transform[2][3]/10;
-
     let colorChange = [];
     //if distance is 1 the node is up close and it's original color should remain
     if(dist == 1) {
