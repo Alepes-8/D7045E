@@ -85,7 +85,7 @@ const modelview = mat4.create();     // modelview matrix
 const modelviewProj = mat4.create(); // combined transformation matrix
 const normalMatrix = mat3.create(); // matrix, derived from modelview matrix, for transforming normal vectors
 
-var verticesGreen = [
+let verticesGreen = [
     [-0.2, -0.2, 0.2, 1],
     [-0.2, 0.2, 0.2, 1],
     [0.2, 0.2, 0.2, 1],
@@ -97,7 +97,7 @@ var verticesGreen = [
     
 ]
 
-var verticesOverall = [
+let verticesOverall = [
     [-0.2, -0.2, 0.5, 1],
     [-0.2, 0.2, 0.5, 1],
     [0.2, 0.2, 0.5, 1],
@@ -108,7 +108,7 @@ var verticesOverall = [
     [-0.2, -0.2, -0.5, 1]
 ]
 
-var indices = [
+let indices = [
   0, 1, 2, 
   2, 3, 0, 
   0, 1, 6, 
@@ -173,7 +173,7 @@ function render() {
     mat4.multiply( modelviewProj, projection, modelview );
     gl.uniformMatrix4fv(u_modelviewProj, false, modelviewProj );
     
-    /* Get the matrix for transforming normal vectors from the modelview matrix. */
+    /* Get the matrix for transforming normal vectors from the modelview matrix.*/ 
     
     mat3.normalFromMat4(normalMatrix, modelview);
     gl.uniformMatrix3fv(u_normalMatrix, false, normalMatrix);
