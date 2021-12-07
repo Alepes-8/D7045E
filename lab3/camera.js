@@ -24,7 +24,15 @@ class Camera{
   }
 
   //activate the camera view by sending the view matrix and projection matrix to the program
-  activate() {
+  activate(status) {
+    if (status) {
+      this.pMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
+    }
+    else {
+      console.log("hejsan")
+      this.pMatrix = ortho(this.fieldOfView, this.aspect, this.near, this.far, -1);
+    }
+
     var pMatrix = this.gl.getUniformLocation(this.shaderProgram, "pMatrix");
     var vMatrix = this.gl.getUniformLocation(this.shaderProgram, "vMatrix");
     this.gl.uniformMatrix4fv(pMatrix, false, flatten(this.pMatrix));

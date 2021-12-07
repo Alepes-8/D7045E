@@ -97,6 +97,9 @@
 
         camera = new Camera(gl, shader.getProgram());
 
+        document.getElementById("persproj").checked = true;
+        document.getElementById("persproj").onchange = render;
+        document.getElementById("orthproj").onchange = render;       
         document.addEventListener('keydown', doKey, false);
 
         let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
@@ -126,7 +129,7 @@
     function render() {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
-        camera.activate();
+        camera.activate(document.getElementById("persproj").checked);
 
         greenNode.draw();
 
