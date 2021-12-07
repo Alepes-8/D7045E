@@ -21,6 +21,9 @@
 <script src="Classes/shaderProgram.js"></script>
 <script src="Classes/Cuboid.js"></script>
 <script src="Classes/GraphicsNode.js"></script>
+<script src="Classes/Mesh.js"></script>
+<script src="Classes/Matrial.js"></script>
+<script src="Classes/MonochromeMaterial.js"></script>
 
 <script>
  
@@ -63,6 +66,7 @@ const fragmentShaderSource = `
 let gl;   // The webgl context.
 let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,0],[ 0,0,0,1]];
 var greenGraphicNode;
+let shaderProgram;
 
 let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
 let a_coords_buffer;    // Buffer to hold the values for a_coords.
@@ -229,9 +233,9 @@ function draw() {
 /* Initialize the WebGL context.  Called from init() */
 function initGL() {    
 
-    let test = createProgram( gl, vertexShaderSource, fragmentShaderSource );
-    test.activate()
-    let prog = test.getprogram();
+    shaderProgram = createProgram( gl, vertexShaderSource, fragmentShaderSource );
+    shaderProgram.activate()
+    let prog = shaderProgram.getprogram();
     a_coords_loc =  gl.getAttribLocation(prog, "a_coords");
     u_modelviewProj = gl.getUniformLocation(prog, "modelviewProjection");
     u_color =  gl.getUniformLocation(prog, "color");
@@ -329,11 +333,11 @@ function init() {
     document.getElementById("orthproj").onchange = draw;
     document.addEventListener("keydown", doKey, false);
 
-    let mesh = new Mesh(gl, vertices, indices, shaderProgram.getprogram());
+    let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getprogram());
     let chromeRed = new MonochromeMaterial(gl, vec4(0.8, 0.0, 0.4, 1.0), shaderProgram);
     let chromeGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0.0, 1.0), shaderProgram);
     
-    greenGraphicNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
+    greenGraphicNode = new GraphicsNode(gl, mesh, chromeGreen , greenNodeTransform);
 
     draw();
 }
