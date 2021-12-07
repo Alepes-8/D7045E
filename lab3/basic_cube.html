@@ -61,8 +61,8 @@ const fragmentShaderSource = `
     }`;
 
 let gl;   // The webgl context.
-let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,5],[ 0,0,0,1]];
-let testGraphcsNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
+let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,0],[ 0,0,0,1]];
+var greenGraphicNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
 
 let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
 let a_coords_buffer;    // Buffer to hold the values for a_coords.
@@ -148,32 +148,36 @@ function draw() {
        the lighting calculuations. */
     
     let firstCube = new Cuboid(2,1,4);
-
     let height = firstCube.height/2;
     let width = firstCube.width/2;
     let depth = firstCube.depth/2;
+    let coard = [1, -4, -10 ]
+    let changeX = greenGraphicNode.transform[0][3];
+    let changeY = greenGraphicNode.transform[1][3];
+    let changeZ = greenGraphicNode.transform[2][3];
+
     gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
     gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth)
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX, -height+rotateY, depth+rotateZ,  width+rotateX,-height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ,  -width+rotateX, height+rotateY,depth+rotateZ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0], -height+changeY+coard[1], depth+changeZ+coard[2],  +width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], +width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],  -width+changeX+coard[0], height+changeY+coard[1],depth+changeZ+coard[2]]);
 
     gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ ]);
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2] ]);
 
     //gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,height+rotateY,-depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ ] );
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
 
     //gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ ] );
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ] );
 
     //gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+rotateX,-height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,-depth+rotateZ, width+rotateX,height+rotateY,depth+rotateZ, width+rotateX,-height+rotateY,depth+rotateZ] );
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2]] );
 
     //gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+rotateX,-height+rotateY,-depth+rotateZ, -width+rotateX,-height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,depth+rotateZ, -width+rotateX,height+rotateY,-depth+rotateZ ] );
+    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
+    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
 
 
     /* Draw coordinate axes as thick colored lines that extend through the cube.
@@ -191,7 +195,8 @@ function draw() {
 
 
 /* Initialize the WebGL context.  Called from init() */
-function initGL() {
+function initGL() {    
+
     let test = createProgram( gl, vertexShaderSource, fragmentShaderSource );
     test.activate()
     let prog = test.getprogram();
@@ -234,23 +239,23 @@ function createProgram(gl, vShader, fShader) {
 function doKey(evt) {
     let rotationChanged = true;
     switch (evt.keyCode) {
-        case 37: rotateX -= 0.05;
-            testGraphcsNode.update([[0,0,0,-0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
+        case 37:
+            greenGraphicNode.update([[0,0,0,-0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
             break;        // left arrow
-        case 39: rotateX +=  0.05; 
-            testGraphcsNode.update([[0,0,0,0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
+        case 39:
+            greenGraphicNode.update([[0,0,0,0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
             break;       // right arrow
-        case 38: rotateY += 0.05; 
-            testGraphcsNode.update([[0,0,0,0], [0,0,0,0.05], [0,0,0,0], [0,0,0,1]]) 
+        case 38: 
+            greenGraphicNode.update([[0,0,0,0], [0,0,0,0.05], [0,0,0,0], [0,0,0,1]]) 
             break;        // up arrow
-        case 40: rotateY -= 0.05; 
-            testGraphcsNode.update([[0,0,0,0], [0,0,0,-0.05], [0,0,0,0], [0,0,0,1]]) 
+        case 40:
+            greenGraphicNode.update([[0,0,0,0], [0,0,0,-0.05], [0,0,0,0], [0,0,0,1]]) 
             break;         // down arrow
-        case 33: rotateZ -= 0.05;
-            testGraphcsNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,-0.05], [0,0,0,1]]) 
+        case 33: 
+            greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,-0.05], [0,0,0,1]]) 
             break;         // PageUp
-        case 34: rotateZ += 0.05;         
-            testGraphcsNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,0.05], [0,0,0,1]]) 
+        case 34:        
+            greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,0.05], [0,0,0,1]]) 
             break;// PageDown
         case 13:                                // return key
         case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
@@ -291,6 +296,7 @@ function init() {
     document.getElementById("persproj").onchange = draw;
     document.getElementById("orthproj").onchange = draw;
     document.addEventListener("keydown", doKey, false);
+
     draw();
 }
 
