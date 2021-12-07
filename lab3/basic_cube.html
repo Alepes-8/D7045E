@@ -17,13 +17,15 @@
 
 
 <script src="gl_matrix.js"></script>
-<script src="Classes/Shader.js"></script>
+<script src="Classes/mesh.js"></script>
+<script src="Classes/shader.js"></script>
 <script src="Classes/shaderProgram.js"></script>
-<script src="Classes/Cuboid.js"></script>
-<script src="Classes/GraphicsNode.js"></script>
-<script src="Classes/Mesh.js"></script>
-<script src="Classes/Matrial.js"></script>
-<script src="Classes/MonochromeMaterial.js"></script>
+<script src="Classes/matrial.js"></script>
+<script src="Classes/graphicsNode.js"></script>
+<script src="Classes/monochromeMaterial.js"></script>
+<script src="Classes/cuboid.js"></script>
+<script src="camera.js"></script>
+
 
 <script>
  
@@ -311,7 +313,7 @@ function doKey(evt) {
 function init() {
     try {
         let canvas = document.getElementById("webglcanvas");
-        gl = canvas.getContext("webgl");
+        gl = canvas.getContext("webgl2");
         if ( ! gl ) {
             throw "Browser does not support WebGL";
         }
@@ -335,7 +337,7 @@ function init() {
     document.addEventListener("keydown", doKey, false);
 
     let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getprogram());
-    let chromeRed = new MonochromeMaterial(gl, vec4(0.8, 0.0, 0.4, 1.0), shaderProgram);
+    let chromeRed = new MonochromeMaterial(gl, gl.vec4(0.8, 0.0, 0.4, 1.0), shaderProgram);
     let chromeGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0.0, 1.0), shaderProgram);
     
     greenGraphicNode = new GraphicsNode(gl, mesh, chromeGreen , greenNodeTransform);
