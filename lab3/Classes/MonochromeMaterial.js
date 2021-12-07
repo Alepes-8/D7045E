@@ -35,8 +35,5 @@ class MonochromeMaterial extends Material{
             colorChange[3] = 1
             this.gl.unifrom4fv(this.colorLocation, colorChange);
         }
-        
-
-
     }
 }

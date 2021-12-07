@@ -296,6 +296,11 @@ function init() {
     document.getElementById("persproj").onchange = draw;
     document.getElementById("orthproj").onchange = draw;
     document.addEventListener("keydown", doKey, false);
+
+    let mesh = new Mesh(gl, vertices, indices, shaderProgram.getprogram());
+    let chromeRed = new MonochromeMaterial(gl, vec4(0.8, 0.0, 0.4, 1.0), shaderProgram);
+    let chromeGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0.0, 1.0), shaderProgram);
+    
     greenGraphicNode = new GraphicsNode(gl, [1,2,3], [1,2,3,4], greenNodeTransform);
 
     draw();
