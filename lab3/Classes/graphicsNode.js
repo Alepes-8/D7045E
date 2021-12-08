@@ -9,7 +9,7 @@
  *       of the graphics node. The method gets the change in the form of a transform (4x4
  *       matrix) and changes its internal model matrix by multiplying them. 
  * 
- *  @Author Alex Peschel
+ *  @author Alex Peschel, Oliver Olofsson
  */
 
 class GraphicsNode{
