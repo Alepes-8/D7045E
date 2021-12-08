@@ -45,14 +45,14 @@
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
       
-    var canvas;
-    var gl;
-    var nodes = [];
-    var greenNode;
-    var greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
-    var camera;
-    var shader;
-    var vertices = [
+    let canvas;
+    let gl;
+    let nodes = [];
+    let greenNode;
+    let greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
+    let camera;
+    let shader;
+    let vertices = [
         vec4(-0.2, -0.2, 0.5, 1),
         vec4(-0.2, 0.2, 0.5, 1),
         vec4(0.2, 0.2, 0.5, 1),
@@ -63,7 +63,7 @@
         vec4(-0.2, -0.2, -0.5, 1)
     ];
 
-    var indices = [
+    let indices = [
         0, 1, 2, 
         2, 3, 0, 
         0, 1, 6, 
@@ -90,8 +90,8 @@
 
         gl.enable(gl.DEPTH_TEST);
 
-        var fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, "fragment-shader");
-        var vertexShader = new Shader(gl, gl.VERTEX_SHADER, "vertex-shader");
+        let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, "fragment-shader");
+        let vertexShader = new Shader(gl, gl.VERTEX_SHADER, "vertex-shader");
         shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
         //shader.activateShader();
 
@@ -103,21 +103,21 @@
         document.addEventListener('keydown', doKey, false);
 
         let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
-        var monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-        var monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
-        var monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
+        let monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
 
         greenNode = new GraphicsNode(gl, mesh, monoGreen, greenNodeTransform, monoBlack);
 
-        var max = 10;
-        var min = -10;
-        var maxZ = 10;
-        var minZ = -40
-        for (var i = 0; i <= 60; i++) {
-            var x = Math.floor(Math.random() * (max - min)) + min;
-            var y = Math.floor(Math.random() * (max - min)) + min;
-            var z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-            var transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
+        let max = 10;
+        let min = -10;
+        let maxZ = 10;
+        let minZ = -40
+        for (let i = 0; i <= 60; i++) {
+            let x = Math.floor(Math.random() * (max - min)) + min;
+            let y = Math.floor(Math.random() * (max - min)) + min;
+            let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
+            let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
             nodes.push(new GraphicsNode(gl, mesh, monoBlue, transform,monoBlack));
         }
 
@@ -133,7 +133,7 @@
 
         greenNode.draw();
 
-        for(var i = 0; i < nodes.length; i++) {
+        for(let i = 0; i < nodes.length; i++) {
             nodes[i].draw();
         }
     }
