@@ -17,7 +17,7 @@ class Camera{
 
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
-    this.vMatrix = lookAt(this.eye, this.at , this.up);
+    this.modelViewvMatrix = lookAt(this.eye, this.at , this.up);
 
     /*selects a lens for a perspective view and how much of the world the camera should image*/
     this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
@@ -31,15 +31,15 @@ class Camera{
     else {
       this.perspectiveMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
     }
-    this.vMatrix = lookAt(this.eye, this.at , this.up);
+    this.modelViewvMatrix = lookAt(this.eye, this.at , this.up);
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
-    var vMatrix = this.gl.getUniformLocation(this.shaderProgram, "vMatrix");
+    var modelViewvMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelViewvMatrix");
     this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
-    this.gl.uniformMatrix4fv(vMatrix, false, flatten(this.vMatrix));
+    this.gl.uniformMatrix4fv(modelViewvMatrix, false, flatten(this.modelViewvMatrix));
   }
 
   getVMatrix(){
-    return this.mvMatrix;
+    return this.modelViewvMatrix;
   }
 
   getPMatrix() {
