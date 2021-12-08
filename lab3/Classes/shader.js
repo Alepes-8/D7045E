@@ -16,7 +16,7 @@ class Shader {
     /*create the shader*/
     this.shader = gl.createShader(type);
     /*upload the shader source*/
-    gl.shaderSource(this.shader, document.getElementById(source).text);
+    gl.shaderSource(this.shader, source);
     /*compile the shader*/
     gl.compileShader(this.shader)
   }

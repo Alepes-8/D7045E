@@ -9,29 +9,8 @@
             background-color: #ffffff;
         }
     </style>
-    
-    <script id="vertex-shader" type="x-shader/x-vertex">
-    attribute vec4 vertexPos;
-    uniform mat4 cMatrix;
-    uniform mat4 vMatrix;
-    uniform mat4 pMatrix;
-
-    void main()
-    {
-      gl_Position = pMatrix * vMatrix * cMatrix * vertexPos;
-    }
 
     </script>
-
-    <script id="fragment-shader" type="x-shader/x-fragment">
-    precision mediump float;
-    uniform vec4 u_Color;
-
-    void main() {
-        gl_FragColor = u_Color;
-    }
-    </script>
-
     <script type="text/javascript" src="gl_matrix.js"></script>
     <script type="text/javascript" src="MV.js"></script>
     <script type="text/javascript" src="Classes/mesh.js"></script>
@@ -44,7 +23,25 @@
 
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
-      
+    
+    const fragmentShaderSource = `    
+        precision mediump float;
+        uniform vec4 u_Color;
+
+        void main() {
+            gl_FragColor = u_Color;
+        }`;
+    const vertexShaderSource = `
+        attribute vec4 vertexPos;
+        uniform mat4 cMatrix;
+        uniform mat4 vMatrix;
+        uniform mat4 pMatrix;
+
+        void main()
+        {
+        gl_Position = pMatrix * vMatrix * cMatrix * vertexPos;
+        }
+    `;
     let canvas;
     let gl;
     let nodes = [];
@@ -92,8 +89,8 @@
 
         gl.enable(gl.DEPTH_TEST);
 
-        let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, "fragment-shader");
-        let vertexShader = new Shader(gl, gl.VERTEX_SHADER, "vertex-shader");
+        let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+        let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
         shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
         //shader.activateShader();
 
