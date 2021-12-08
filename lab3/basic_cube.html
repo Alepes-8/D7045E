@@ -23,7 +23,6 @@
     <script type="text/javascript" src="camera.js"></script>
     <script type="text/javascript" src="key.js"></script>
 
-
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
     
@@ -36,8 +35,7 @@
         void main()
         {
         gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
-        }
-    `;
+        }`;
 
     const fragmentShaderSource = `    
         precision mediump float;
@@ -54,31 +52,6 @@
     let camera;
     let shader;
     let part = true;
-    /*let vertices = [
-        vec4(-0.2, -0.2, 0.5, 1),   // front/bottom/left
-        vec4(-0.2, 0.2, 0.5, 1),    // front/top/left
-        vec4(0.2, 0.2, 0.5, 1),     // front/top/right
-        vec4(0.2, -0.2, 0.5, 1),    // front/bottom/right
-        vec4(0.2, -0.2, -0.5, 1),   // back/bottom/right
-        vec4(0.2, 0.2, -0.5, 1),    // back/top/right
-        vec4(-0.2, 0.2, -0.5, 1),   // back/top/left
-        vec4(-0.2, -0.2, -0.5, 1)   // back/bottom/left
-    ];
-
-    let indices = [
-        0, 1, 2, 
-        2, 3, 0, 
-        0, 1, 6, 
-        6, 7, 0, 
-        1, 2, 5,
-        5, 6, 1, 
-        2, 5, 4,
-        4, 3, 2,
-        3, 0, 7,
-        7, 4, 3,
-        4, 5, 6,
-        6, 7, 4
-    ];*/
 
     function init() {
 
@@ -106,7 +79,6 @@
         document.getElementById("orthproj").onchange = render;       
         document.addEventListener('keydown', key.doKey, false);
 
-        //let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoGreen = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
@@ -126,7 +98,6 @@
             let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
             nodes.push(new GraphicsNode(gl, cuboid2, monoBlue, transform,monoBlack));
         }
-
 
         render();
     }
