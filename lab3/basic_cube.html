@@ -19,7 +19,8 @@
     <script type="text/javascript" src="Classes/matrial.js"></script>
     <script type="text/javascript" src="Classes/graphicsNode.js"></script>
     <script type="text/javascript" src="Classes/monochromeMaterial.js"></script>
-    <script type="text/javascript" src="Classes/cuboid.js"></script>
+    <script type="text/javascript" src="Shapes/cuboid.js"></script>
+    <script type="text/javascript" src="Shapes/triangle.js"></script>
     <script type="text/javascript" src="camera.js"></script>
     <script type="text/javascript" src="key.js"></script>
 
@@ -54,31 +55,6 @@
     let camera;
     let shader;
     let part = true;
-    /*let vertices = [
-        vec4(-0.2, -0.2, 0.5, 1),   // front/bottom/left
-        vec4(-0.2, 0.2, 0.5, 1),    // front/top/left
-        vec4(0.2, 0.2, 0.5, 1),     // front/top/right
-        vec4(0.2, -0.2, 0.5, 1),    // front/bottom/right
-        vec4(0.2, -0.2, -0.5, 1),   // back/bottom/right
-        vec4(0.2, 0.2, -0.5, 1),    // back/top/right
-        vec4(-0.2, 0.2, -0.5, 1),   // back/top/left
-        vec4(-0.2, -0.2, -0.5, 1)   // back/bottom/left
-    ];
-
-    let indices = [
-        0, 1, 2, 
-        2, 3, 0, 
-        0, 1, 6, 
-        6, 7, 0, 
-        1, 2, 5,
-        5, 6, 1, 
-        2, 5, 4,
-        4, 3, 2,
-        3, 0, 7,
-        7, 4, 3,
-        4, 5, 6,
-        6, 7, 4
-    ];*/
 
     function init() {
 
@@ -110,7 +86,7 @@
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoGreen = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-        let cuboid1 = new Cuboid(gl, 0.4, 0.4, 1, shader.getProgram());
+        let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
         let cuboid2 = new Cuboid(gl, 0.4, 1, 0.4, shader.getProgram());
 
         greenNode = new GraphicsNode(gl, cuboid1, monoGreen, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
@@ -126,8 +102,6 @@
             let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
             nodes.push(new GraphicsNode(gl, cuboid2, monoBlue, transform,monoBlack));
         }
-
-
         render();
     }
 

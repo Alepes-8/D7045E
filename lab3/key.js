@@ -57,7 +57,9 @@ class Key{
                 }
                 break;
             case 13:                                // return key
-            case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
+            case 36: 
+                greenNode.transform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1);
+                break;  // home key
             default: movementChange = false;
         }
         if (movementChange) {
