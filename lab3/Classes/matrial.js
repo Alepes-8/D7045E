@@ -30,7 +30,7 @@ class Material{
     }
 
     /* Abstract method that will be overriden by subclasses */
-    ApplyMaterial(){
+    applyMaterial(){
         throw new Error("Has no implementation yet")
     }
 }
