@@ -9,7 +9,7 @@
 
 class Cuboid extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
-         let x = width / 2; 
+        let x = width / 2; 
         let y = height / 2;
         let z = depth / 2;
         let vertices = [
@@ -39,13 +39,7 @@ class Cuboid extends Mesh{
             6, 7, 4
         ];
         
-        super(gl, vertices, indices, shaderProgram);
-        this.gl = gl;
-       
-        
-       
-
-       
+        super(gl, vertices, indices, shaderProgram);      
     }
 
 }
