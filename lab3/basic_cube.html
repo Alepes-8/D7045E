@@ -24,7 +24,6 @@
     <script type="text/javascript" src="camera.js"></script>
     <script type="text/javascript" src="key.js"></script>
 
-
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
     
@@ -37,8 +36,7 @@
         void main()
         {
         gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
-        }
-    `;
+        }`;
 
     const fragmentShaderSource = `    
         precision mediump float;
@@ -82,7 +80,6 @@
         document.getElementById("orthproj").onchange = render;       
         document.addEventListener('keydown', key.doKey, false);
 
-        //let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoGreen = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
