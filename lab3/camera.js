@@ -12,8 +12,8 @@ class Camera{
     this.eye = vec3(this.radius * Math.sin(this.theta) * Math.cos(Math.PI),
                 this.radius * Math.sin(this.theta) * Math.sin(Math.PI),
                 this.radius * Math.cos(this.theta));
-    this.at = vec3(0.0, 0.0, 0.0);
-    this.up = vec3(0.0, 1.0, 0.0);
+    this.at = [0.0, 0.0, 0.0];
+    this.up = [0.0, 1.0, 0.0];
 
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
