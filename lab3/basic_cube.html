@@ -24,13 +24,6 @@
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
     
-    const fragmentShaderSource = `    
-        precision mediump float;
-        uniform vec4 u_Color;
-
-        void main() {
-            gl_FragColor = u_Color;
-        }`;
     const vertexShaderSource = `
         attribute vec4 vertexPos;
         uniform mat4 cMatrix;
@@ -42,6 +35,15 @@
         gl_Position = pMatrix * vMatrix * cMatrix * vertexPos;
         }
     `;
+
+    const fragmentShaderSource = `    
+        precision mediump float;
+        uniform vec4 u_Color;
+
+        void main() {
+            gl_FragColor = u_Color;
+        }`;
+    
     let canvas;
     let gl;
     let nodes = [];
@@ -128,8 +130,9 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
+        const projection = mat4.create(); 
+        mat4.perspective(projection, Math.PI/5, 1, 4, 80);
 
-        greenNode.draw();
 
         for(let i = 0; i < nodes.length; i++) {
             nodes[i].draw();
