@@ -1,5 +1,4 @@
 class Camera{
-    
   constructor(gl, shaderProgram) {
     this.gl = gl;
     this.shaderProgram = shaderProgram;
@@ -45,6 +44,4 @@ class Camera{
   getPMatrix() {
     return this.perspectiveMatrix;
   }
-
-
 }
