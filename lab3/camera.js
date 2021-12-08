@@ -7,13 +7,13 @@ class Camera{
     this.theta = 0.0;
     this.fieldOfView = 45;
     this.aspect = (gl.canvas.width/gl.canvas.height);
-    this.near = 1;
-    this.far = 1000;
+    this.near = 1;  //when does the cubes disepear from the screen if the are to close
+    this.far = 1000; // How large is the area which things can be seen within
     this.eye = vec3(this.radius * Math.sin(this.theta) * Math.cos(Math.PI),
                 this.radius * Math.sin(this.theta) * Math.sin(Math.PI),
                 this.radius * Math.cos(this.theta));
-    this.at = [0.0, 0.0, 0.0];
-    this.up = [0.0, 1.0, 0.0];
+    this.at = [0, 0, 0];  // how the camera is looking. (first = left or right) (secound = upp and down) ( last = unsure, but thinks it moves the camera up and down)
+    this.up = [0, 1.0, 0];
 
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
@@ -29,8 +29,7 @@ class Camera{
       this.pMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
     }
     else {
-      console.log("hejsan")
-      this.pMatrix = ortho(this.fieldOfView, this.aspect, this.near, this.far, -1);
+      this.pMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
     }
 
     var pMatrix = this.gl.getUniformLocation(this.shaderProgram, "pMatrix");

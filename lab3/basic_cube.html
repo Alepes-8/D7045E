@@ -49,18 +49,17 @@
     let nodes = [];
     let greenNode;
     let greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
-    let test = [[1,0,0,0],[0,1,0,-0.5],[0,0,1,8],[0,0,0,1]];
     let camera;
     let shader;
     let vertices = [
-        [-0.2, -0.2, 0.5, 1],
-        [-0.2, 0.2, 0.5, 1],
-        [0.2, 0.2, 0.5, 1],
-        [0.2, -0.2, 0.5, 1],
-        [0.2, -0.2, -0.5, 1],
-        [0.2, 0.2, -0.5, 1],
-        [-0.2, 0.2, -0.5, 1],
-        [-0.2, -0.2, -0.5, 1]
+        vec4(-0.2, -0.2, 0.5, 1),
+        vec4(-0.2, 0.2, 0.5, 1),
+        vec4(0.2, 0.2, 0.5, 1),
+        vec4(0.2, -0.2, 0.5, 1),
+        vec4(0.2, -0.2, -0.5, 1),
+        vec4(0.2, 0.2, -0.5, 1),
+        vec4(-0.2, 0.2, -0.5, 1),
+        vec4(-0.2, -0.2, -0.5, 1)
     ];
 
     let indices = [
@@ -104,9 +103,9 @@
         document.addEventListener('keydown', doKey, false);
 
         let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
-        let monoBlue = new MonochromeMaterial(gl, [0,1, 1, 1.0], shader);
-        let monoGreen = new MonochromeMaterial(gl, [0.0, 1.0, 0, 1.0], shader);
-        let monoBlack = new MonochromeMaterial(gl, [0, 0, 0, 1.0], shader);
+        let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
+        let monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
 
         greenNode = new GraphicsNode(gl, mesh, monoGreen, greenNodeTransform, monoBlack);
 
@@ -130,8 +129,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
-        const projection = mat4.create(); 
-        mat4.perspective(projection, Math.PI/5, 1, 4, 80);
+        greenNode.draw();
 
 
         for(let i = 0; i < nodes.length; i++) {
