@@ -52,14 +52,14 @@
     let camera;
     let shader;
     let vertices = [
-        vec4(-0.2, -0.2, 0.5, 1),
-        vec4(-0.2, 0.2, 0.5, 1),
-        vec4(0.2, 0.2, 0.5, 1),
-        vec4(0.2, -0.2, 0.5, 1),
-        vec4(0.2, -0.2, -0.5, 1),
-        vec4(0.2, 0.2, -0.5, 1),
-        vec4(-0.2, 0.2, -0.5, 1),
-        vec4(-0.2, -0.2, -0.5, 1)
+        vec4(-0.2, -0.2, 0.5, 1),   // front/bottom/left
+        vec4(-0.2, 0.2, 0.5, 1),    // front/top/left
+        vec4(0.2, 0.2, 0.5, 1),     // front/top/right
+        vec4(0.2, -0.2, 0.5, 1),    // front/bottom/right
+        vec4(0.2, -0.2, -0.5, 1),   // back/bottom/right
+        vec4(0.2, 0.2, -0.5, 1),    // back/top/right
+        vec4(-0.2, 0.2, -0.5, 1),   // back/top/left
+        vec4(-0.2, -0.2, -0.5, 1)   // back/bottom/left
     ];
 
     let indices = [

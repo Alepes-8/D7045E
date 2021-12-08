@@ -7,10 +7,20 @@
  * @author Alex Peschel, Oliver Olofsson
  */
 
-class Cuboid{
-    constructor(height,width,depth){
-        this.height =height;
-        this.width =width; 
-        this.depth =depth;
+class Cuboid extends Mesh{
+    constructor(width,depth,height){
+        this.width = width; 
+        this.depth = depth;
+        this.height = height;
+    }
+
+    getWidth(){
+        return this.width;
+    }
+    getDepth(){
+        return this.depth;
+    }
+    getHeight(){
+        return this.height;
     }
 }
