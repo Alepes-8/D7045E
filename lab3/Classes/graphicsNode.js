@@ -36,36 +36,11 @@ class GraphicsNode{
     this.materialBlack.applyMaterial(this.transform);
 
     this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
-
   }
 
   //if you move a node around the transform needs to be updated
   updateTransform(m2) {
-    /*    var result = [];
-    var m1 = this.transform;
-    console.log(m1);
-    console.log(m2);
-
-
-    for (var i = 0; i < m1.length; i++) {
-        result[i] = [];
-        for (var j = 0; j < m2[0].length; j++) {
-
-            var sum = 0;
-            for (var k = 0; k < m1[0].length; k++) {
-                sum += m1[i][k] * m2[k][j];
-            }
-            result[i][j] = sum;
-        }
-    }
-    result[0][0] = 1
-    result[1][1] = 1
-    result[2][2] = 1
-    this.transform = result;
-    console.log("hejsan")
-    console.log(this.transform);
-    */
-   this.transform = add(this.transform, m2);
+   this.transform =mult(this.transform, m2);
   }
 
 }

@@ -20,6 +20,8 @@
     <script type="text/javascript" src="Classes/graphicsNode.js"></script>
     <script type="text/javascript" src="Classes/monochromeMaterial.js"></script>
     <script type="text/javascript" src="camera.js"></script>
+    <script type="text/javascript" src="key.js"></script>
+
 
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
@@ -28,11 +30,11 @@
         attribute vec4 vertexPos;
         uniform mat4 cMatrix;
         uniform mat4 vMatrix;
-        uniform mat4 pMatrix;
+        uniform mat4 perspectiveMatrix;
 
         void main()
         {
-        gl_Position = pMatrix * vMatrix * cMatrix * vertexPos;
+        gl_Position = perspectiveMatrix * vMatrix * cMatrix * vertexPos;
         }
     `;
 
@@ -48,9 +50,9 @@
     let gl;
     let nodes = [];
     let greenNode;
-    let greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
     let camera;
     let shader;
+    let part = true;
     let vertices = [
         vec4(-0.2, -0.2, 0.5, 1),   // front/bottom/left
         vec4(-0.2, 0.2, 0.5, 1),    // front/top/left
@@ -79,14 +81,14 @@
 
     function init() {
 
-        canvas = document.getElementById("gl-canvas");
+        canvas = document.getElementById("webglcanvas");
         gl = canvas.getContext("webgl2");
 
         if (!gl) {alert("WebGL isn't available");}
 
         //webgl configurations
         gl.viewport( 0, 0, canvas.width, canvas.height );
-        gl.clearColor(0.8, 1, 1, 1.0 );
+        gl.clearColor(0, 0, 0, 1 );
 
         gl.enable(gl.DEPTH_TEST);
 
@@ -96,18 +98,19 @@
         //shader.activateShader();
 
         camera = new Camera(gl, shader.getProgram());
+        let key = new Key();
 
         document.getElementById("persproj").checked = true;
         document.getElementById("persproj").onchange = render;
         document.getElementById("orthproj").onchange = render;       
-        document.addEventListener('keydown', doKey, false);
+        document.addEventListener('keydown', key.doKey, false);
 
         let mesh = new Mesh(gl, vertices, indices, shader.getProgram());
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-        let monoGreen = new MonochromeMaterial(gl, vec4(0.0, 1.0, 0, 1.0), shader);
+        let monoGreen = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
 
-        greenNode = new GraphicsNode(gl, mesh, monoGreen, greenNodeTransform, monoBlack);
+        greenNode = new GraphicsNode(gl, mesh, monoGreen, mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1), monoBlack);
 
         let max = 10;
         let min = -10;
@@ -137,42 +140,6 @@
         }
     }
 
-    
-    function doKey(evt) {
-        let movementChange = true;
-        switch (evt.keyCode) {
-            case 37:
-                greenNode.updateTransform(mat4(0,0,0,-0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
-                break;        // left arrow
-            case 39:
-                
-            greenNode.updateTransform( mat4(0,0,0,0.1, 0,0,0,0, 0,0,0,0, 0,0,0,0));
-                break;       // right arrow
-            case 38: 
-                
-                greenNode.updateTransform( mat4(0,0,0,0, 0,0,0,0.1, 0,0,0,0, 0,0,0,0));
-                break;        // up arrow
-            case 40:
-                
-                greenNode.updateTransform(mat4(0,0,0,0, 0,0,0,-0.1, 0,0,0,0, 0,0,0,0));
-                break;         // down arrow
-            case 33: 
-            
-                greenNode.updateTransform(mat4(0,0,0,0, 0,0,0,0, 0,0,0,-0.1, 0,0,0,0));
-                break;         // PageUp
-            case 34:        
-            
-                greenNode.updateTransform(mat4(0,0,0,0, 0,0,0,0, 0,0,0,0.1, 0,0,0,0)); 
-                break;// PageDown
-            case 13:                                // return key
-            case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
-            default: movementChange = false;
-        }
-        if (movementChange) {
-                evt.preventDefault();
-                render();
-        }
-    }
     window.onload = init;
     
 
@@ -192,7 +159,7 @@
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
 
     <div id="canvas-holder">
-    <canvas width=1700px height=900px id="gl-canvas" style="background-color:red"></canvas>
+    <canvas width=2500px height=1200px id="webglcanvas" style="background-color:rgb(104, 0, 179)"></canvas>
     </div>
 
 </body>

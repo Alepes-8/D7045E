@@ -8,7 +8,7 @@ class Camera{
     this.fieldOfView = 45;
     this.aspect = (gl.canvas.width/gl.canvas.height);
     this.near = 1;  //when does the cubes disepear from the screen if the are to close
-    this.far = 1000; // How large is the area which things can be seen within
+    this.far = 100; // How large is the area which things can be seen within
     this.eye = vec3(this.radius * Math.sin(this.theta) * Math.cos(Math.PI),
                 this.radius * Math.sin(this.theta) * Math.sin(Math.PI),
                 this.radius * Math.cos(this.theta));
@@ -20,21 +20,21 @@ class Camera{
     this.vMatrix = lookAt(this.eye, this.at , this.up);
 
     /*selects a lens for a perspective view and how much of the world the camera should image*/
-    this.pMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
+    this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
   }
 
   //activate the camera view by sending the view matrix and projection matrix to the program
   activate(status) {
     if (status) {
-      this.pMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
+      this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
     }
     else {
-      this.pMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
+      this.perspectiveMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
     }
-
-    var pMatrix = this.gl.getUniformLocation(this.shaderProgram, "pMatrix");
+    this.vMatrix = lookAt(this.eye, this.at , this.up);
+    var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
     var vMatrix = this.gl.getUniformLocation(this.shaderProgram, "vMatrix");
-    this.gl.uniformMatrix4fv(pMatrix, false, flatten(this.pMatrix));
+    this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
     this.gl.uniformMatrix4fv(vMatrix, false, flatten(this.vMatrix));
   }
 
@@ -43,7 +43,7 @@ class Camera{
   }
 
   getPMatrix() {
-    return this.pMatrix;
+    return this.perspectiveMatrix;
   }
 
 
