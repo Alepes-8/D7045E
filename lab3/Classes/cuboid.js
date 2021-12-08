@@ -8,21 +8,22 @@
  */
 
 class Cuboid extends Mesh{
-    constructor(gl,shaderProgram,width,depth,height){
+    constructor(width, height, depth, shaderProgram){
         this.gl = gl;
-        this.width = width/2; 
-        this.depth = depth/2;
-        this.height = height/2;
-        console.log("hellå eller")
+        let x = width / 2; 
+        let y = height / 2;
+        let z = depth / 2;
+        
         let vertices = [
-            vec4(-(this.width), -(this.height), (this.depth), 1),   // front/bottom/left
-            vec4(-(this.width), (this.height), (this.depth), 1),    // front/top/left
-            vec4((this.width), (this.height), (this.depth), 1),     // front/top/right
-            vec4((this.width), -(this.height), (this.depth), 1),    // front/bottom/right
-            vec4((this.width), -(this.height), -(this.depth), 1),   // back/bottom/right
-            vec4((this.width), (this.height), -(this.depth), 1),    // back/top/right
-            vec4(-(this.width), (this.height), -(this.depth), 1),   // back/top/left
-            vec4(-(this.width), -(this.height), -(this.depth), 1)   // back/bottom/left
+            vec4( -x, -y,  z, 1 ),   // front/bottom/left
+            vec4( -x,  y,  z, 1 ),   // front/top/left
+            vec4(  x,  y,  z, 1 ),   // front/top/right
+            vec4(  x, -y,  z, 1) ,   // front/bottom/right
+
+            vec4(  x, -y, -z, 1 ),   // back/bottom/right
+            vec4(  x,  y, -z, 1 ),   // back/top/right
+            vec4( -x,  y, -z, 1 ),   // back/top/left
+            vec4( -x, -y, -z, 1 )    // back/bottom/left
         ];
     
         let indices = [
@@ -40,7 +41,7 @@ class Cuboid extends Mesh{
             6, 7, 4
         ];
 
-        Mesh(this.gl, vertices, indices, shaderProgram);
+        super(gl, vertices, indices, shaderProgram);
     }
 
 }
