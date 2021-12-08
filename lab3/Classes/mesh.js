@@ -12,7 +12,6 @@
 */ 
 
   class Mesh {
-
     constructor(gl, vertices, indices, shaderProgram) {
       this.gl = gl;
       this.vertices = vertices;
