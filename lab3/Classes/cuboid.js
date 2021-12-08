@@ -8,12 +8,10 @@
  */
 
 class Cuboid extends Mesh{
-    constructor(width, height, depth, shaderProgram){
-        this.gl = gl;
-        let x = width / 2; 
+    constructor(gl, width, height, depth, shaderProgram){
+         let x = width / 2; 
         let y = height / 2;
         let z = depth / 2;
-        
         let vertices = [
             vec4( -x, -y,  z, 1 ),   // front/bottom/left
             vec4( -x,  y,  z, 1 ),   // front/top/left
@@ -40,8 +38,14 @@ class Cuboid extends Mesh{
             4, 5, 6,
             6, 7, 4
         ];
-
+        
         super(gl, vertices, indices, shaderProgram);
+        this.gl = gl;
+       
+        
+       
+
+       
     }
 
 }
