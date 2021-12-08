@@ -45,15 +45,15 @@
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
       
-    var canvas;
-    var gl;
-    var nodes = [];
-    var greenNode;
-    var greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
-    var test = [[1,0,0,0],[0,1,0,-0.5],[0,0,1,8],[0,0,0,1]];
-    var camera;
-    var shader;
-    var vertices = [
+    let canvas;
+    let gl;
+    let nodes = [];
+    let greenNode;
+    let greenNodeTransform = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,8, 0,0,0,1);
+    let test = [[1,0,0,0],[0,1,0,-0.5],[0,0,1,8],[0,0,0,1]];
+    let camera;
+    let shader;
+    let vertices = [
         [-0.2, -0.2, 0.5, 1],
         [-0.2, 0.2, 0.5, 1],
         [0.2, 0.2, 0.5, 1],
@@ -64,7 +64,7 @@
         [-0.2, -0.2, -0.5, 1]
     ];
 
-    var indices = [
+    let indices = [
         0, 1, 2, 
         2, 3, 0, 
         0, 1, 6, 
