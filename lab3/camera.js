@@ -12,7 +12,7 @@ class Camera{
     this.eye = vec3(this.radius * Math.sin(this.theta) * Math.cos(Math.PI),
                 this.radius * Math.sin(this.theta) * Math.sin(Math.PI),
                 this.radius * Math.cos(this.theta));
-    this.at = [0.0, 0.0, 0.0];
+    this.at = [0.0, 0.0, 0.0]; //changes the camera angle in following directions: [left/right , up/down , ]
     this.up = [0.0, 1.0, 0.0];
 
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
@@ -33,8 +33,8 @@ class Camera{
       this.pMatrix = ortho(this.fieldOfView, this.aspect, this.near, this.far, -1);
     }
 
-    var pMatrix = this.gl.getUniformLocation(this.shaderProgram, "pMatrix");
-    var vMatrix = this.gl.getUniformLocation(this.shaderProgram, "vMatrix");
+    let pMatrix = this.gl.getUniformLocation(this.shaderProgram, "pMatrix");
+    let vMatrix = this.gl.getUniformLocation(this.shaderProgram, "vMatrix");
     this.gl.uniformMatrix4fv(pMatrix, false, flatten(this.pMatrix));
     this.gl.uniformMatrix4fv(vMatrix, false, flatten(this.vMatrix));
   }
