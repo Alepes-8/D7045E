@@ -13,7 +13,6 @@
     </script>
     <script type="text/javascript" src="gl_matrix.js"></script>
     <script type="text/javascript" src="MV.js"></script>
-    <script type="text/javascript" src="Classes/cuboid.js"></script>
     <script type="text/javascript" src="Classes/mesh.js"></script>
     <script type="text/javascript" src="Classes/shader.js"></script>
     <script type="text/javascript" src="Classes/shaderProgram.js"></script>
@@ -122,7 +121,7 @@
             let y = Math.floor(Math.random() * (max - min)) + min;
             let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
             let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-            nodes.push(new GraphicsNode(gl, cuboid.getMesh(), monoBlue, transform,monoBlack));
+            nodes.push(new GraphicsNode(gl, mesh, monoBlue, transform,monoBlack));
         }
 
 
@@ -134,6 +133,7 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
         greenNode.draw();
+
 
         for(let i = 0; i < nodes.length; i++) {
             nodes[i].draw();
