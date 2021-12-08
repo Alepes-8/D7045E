@@ -2,15 +2,11 @@ class Camera{
   constructor(gl, shaderProgram) {
     this.gl = gl;
     this.shaderProgram = shaderProgram;
-    this.radius = 10;
-    this.theta = 0.0;
     this.fieldOfView = 45;
     this.aspect = (gl.canvas.width/gl.canvas.height);
     this.near = 1;  //when does the cubes disepear from the screen if the are to close
     this.far = 100; // How large is the area which things can be seen within
-    this.eye = vec3(this.radius * Math.sin(this.theta) * Math.cos(Math.PI),
-                this.radius * Math.sin(this.theta) * Math.sin(Math.PI),
-                this.radius * Math.cos(this.theta));
+    this.eye = vec3(0,0,8); //first, right and left. secound is move up and down , third is move back and forth
     this.at = [0, 0, 0];  // how the camera is looking. (first = left or right) (secound = upp and down) ( last = unsure, but thinks it moves the camera up and down)
     this.up = [0, 1.0, 0];
 

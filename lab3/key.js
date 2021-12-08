@@ -27,35 +27,38 @@ class Key{
                 greenNode.updateTransform(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1)); 
                 break;// PageDown
 
-            case 65: //A
+            case 81: //A
                 camera.at[0] -= 0.2;
                 break;
 
-            case 68: //D
-                    camera.at[0] += 0.2;
-                    break;
+            case 69: //D
+                camera.at[0] += 0.2;
+                break;
 
-            case 87: //W
-                camera.at[1] += 0.2;
+            case 68: //e
+                camera.eye[0] += 0.1;
+                break;
+
+            case 65: //q
+                camera.eye[0] -= 0.1;
                 break;
 
             case 83: //s
-                camera.at[1] -= 0.2;
-                break;
-            
-            case 69: //e
-                if(camera.up[0] > -1){
-                    camera.up[0] -= 0.1;
-                    camera.up[1] += 0.1;
-                }
+                camera.eye[2] += 0.2;
                 break;
 
-            case 81: //q
-                if(camera.up[0] < 1){
-                    camera.up[0] += 0.1;
-                    camera.up[1] -= 0.1;
-                }
+            case 87: //w
+                camera.eye[2 ] -= 0.2;
                 break;
+            
+            case 32: //space
+                camera.eye[1] += 0.1;
+                break;
+
+            case 17: //ctrl
+                camera.eye[1] -= 0.1;
+                break;
+            
             case 13:                                // return key
             case 36: 
                 greenNode.transform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1);
