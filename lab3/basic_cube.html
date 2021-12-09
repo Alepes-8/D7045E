@@ -11,18 +11,18 @@
     </style>
 
     </script>
-    <script type="text/javascript" src="gl_matrix.js"></script>
-    <script type="text/javascript" src="MV.js"></script>
-    <script type="text/javascript" src="Classes/mesh.js"></script>
-    <script type="text/javascript" src="Classes/shader.js"></script>
-    <script type="text/javascript" src="Classes/shaderProgram.js"></script>
-    <script type="text/javascript" src="Classes/matrial.js"></script>
-    <script type="text/javascript" src="Classes/graphicsNode.js"></script>
-    <script type="text/javascript" src="Classes/monochromeMaterial.js"></script>
-    <script type="text/javascript" src="Shapes/cuboid.js"></script>
-    <script type="text/javascript" src="Shapes/diamond.js"></script>
-    <script type="text/javascript" src="camera.js"></script>
-    <script type="text/javascript" src="key.js"></script>
+    <script src="gl_matrix.js"></script>
+    <script src="MV.js"></script>
+    <script src="Classes/mesh.js"></script>
+    <script src="Classes/shader.js"></script>
+    <script src="Classes/shaderProgram.js"></script>
+    <script src="Classes/matrial.js"></script>
+    <script src="Classes/graphicsNode.js"></script>
+    <script src="Classes/monochromeMaterial.js"></script>
+    <script src="Shapes/cuboid.js"></script>
+    <script src="Shapes/diamond.js"></script>
+    <script src="camera.js"></script>
+    <script src="key.js"></script>
 
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
@@ -35,7 +35,7 @@
 
         void main()
         {
-        gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
+            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
         }`;
 
     const fragmentShaderSource = `    
@@ -62,7 +62,7 @@
         if (!gl) {alert("WebGL isn't available");}
 
         //webgl configurations
-        gl.viewport( 0, 0, canvas.width, canvas.height );
+        gl.viewport( 0, 0, canvas.width, canvas.height ); //delete
         gl.clearColor(0, 0, 0, 1 );
 
         gl.enable(gl.DEPTH_TEST);
@@ -81,12 +81,12 @@
         document.addEventListener('keydown', key.doKey, false);
 
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-        let monoGreen = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
+        let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
         let cuboid2 = new Cuboid(gl, 0.4, 1, 0.4, shader.getProgram());
 
-        greenNode = new GraphicsNode(gl, cuboid1, monoGreen, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
+        greenNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
 
         let max = 10;
         let min = -10;
