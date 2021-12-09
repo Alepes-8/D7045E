@@ -7,7 +7,7 @@
  * @author Alex Peschel, Oliver Olofsson
  */
 
-class Triangle extends Mesh{
+class Diamond extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
         let x = width / 2; 
         let y = height / 2;

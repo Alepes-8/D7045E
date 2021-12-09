@@ -42,4 +42,8 @@ class GraphicsNode{
   updateTransform(m2) {
    this.transform = mult(this.transform, m2);
   }
+
+  getTransform() {
+    return this.transform;
+   }
 }
