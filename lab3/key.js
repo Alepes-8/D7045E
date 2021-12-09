@@ -36,27 +36,27 @@ class Key{
                 break;
 
             case 68: //e
-                camera.eye[0] += 0.1;
+                camera.position[0] += 0.1;
                 break;
 
             case 65: //q
-                camera.eye[0] -= 0.1;
+                camera.position[0] -= 0.1;
                 break;
 
             case 83: //s
-                camera.eye[2] += 0.2;
+                camera.position[2] += 0.2;
                 break;
 
             case 87: //w
-                camera.eye[2 ] -= 0.2;
+                camera.position[2 ] -= 0.2;
                 break;
             
             case 32: //space
-                camera.eye[1] += 0.1;
+                camera.position[1] += 0.1;
                 break;
 
             case 17: //ctrl
-                camera.eye[1] -= 0.1;
+                camera.position[1] -= 0.1;
                 break;
             
             case 13:                                // return key
