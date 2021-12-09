@@ -12,6 +12,8 @@ class Cuboid extends Mesh{
         let x = width / 2; 
         let y = height / 2;
         let z = depth / 2;
+
+        /*The vector positions for each point relative to each other in the 3D space*/
         let vertices = [
             vec4( -x, -y,  z, 1 ),   // front/bottom/left
             vec4( -x,  y,  z, 1 ),   // front/top/left
@@ -24,6 +26,7 @@ class Cuboid extends Mesh{
             vec4( -x, -y, -z, 1 )    // back/bottom/left
         ];
     
+        /*The connections between the vertices*/
         let indices = [
             0, 1, 2, 
             2, 3, 0, 

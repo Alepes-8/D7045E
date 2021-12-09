@@ -26,7 +26,6 @@
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
   
       /*send the array of vertices to the GPU*/
-      //this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertices), this.gl.STATIC_DRAW);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten(this.vertices), this.gl.STATIC_DRAW);
   
       this.ibo = this.gl.createBuffer();   //'ibo' = 'index buffer object'
@@ -35,11 +34,13 @@
       /*send the array of indices to the GPU*/
       this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(this.indices), this.gl.STATIC_DRAW);
   
-      this.vertexPos =  this.gl.getAttribLocation(shaderProgram, "vertexPos"); //Fix a call to ShaderProgram
-      this.gl.vertexAttribPointer(this.vertexPos, 4, this.gl.FLOAT, false, 0, 0); 
+
+      /*Set up vertex attribute pointers*/
+      this.vertexPos =  this.gl.getAttribLocation(shaderProgram, "vertexPos"); //Fix a call to ShaderProgram      
+      this.gl.vertexAttribPointer(this.vertexPos, 4, this.gl.FLOAT, false, 0, 0);
       this.gl.enableVertexAttribArray(this.vertexPos);
     }
-
+    
     getVertexArray() {
       return this.vao;
     }
