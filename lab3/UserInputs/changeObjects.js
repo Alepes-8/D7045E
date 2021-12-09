@@ -1,3 +1,6 @@
+/**
+ * @author Alex Peschel, Oliver Olofsson
+ */
 class ChangeObjects{
     mainNode(){
         let form = document.getElementById("mainForm").value;

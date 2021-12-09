@@ -1,3 +1,6 @@
+/**
+ * @author Alex Peschel, Oliver Olofsson
+ */
 class Camera{
   constructor(gl, shaderProgram) {
     this.gl = gl;
