@@ -12,7 +12,7 @@
 
     </script>
     <script src="gl_matrix.js"></script>
-    <script src="MV.js"></script>
+    <script src="Library/MV.js"></script>
     <script src="Classes/mesh.js"></script>
     <script src="Classes/shader.js"></script>
     <script src="Classes/shaderProgram.js"></script>
@@ -21,8 +21,11 @@
     <script src="Classes/monochromeMaterial.js"></script>
     <script src="Shapes/cuboid.js"></script>
     <script src="Shapes/diamond.js"></script>
+    <script src="Shapes/pyramid.js"></script>
     <script src="camera.js"></script>
-    <script src="key.js"></script>
+    <script src="UserInputs/key.js"></script>
+    <script src="UserInputs/changeObjects.js"></script>
+
 
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
@@ -81,13 +84,13 @@
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-        let cuboid2 = new Cuboid(gl, 0.4, 1, 0.4, shader.getProgram());
+        let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
 
         greenNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
 
-        let max = 10;
-        let min = -10;
-        let maxZ = 10;
+        let max = 15;
+        let min = -15;
+        let maxZ = 40;
         let minZ = -40
         for (let i = 0; i <= 60; i++) {
             let x = Math.floor(Math.random() * (max - min)) + min;
@@ -101,21 +104,22 @@
 
     function optionListiners(){
         let key = new Key();
+        let changeObjects = new ChangeObjects();
 
         //buttons
         document.getElementById("persproj").checked = true;
         document.getElementById("mainForm").value = "1";
         document.getElementById("secoundaryForm").value = "1";
-        document.getElementById("mainForm").onchange = mainNode;
-        document.getElementById("mainwidth").onchange = mainNode;
-        document.getElementById("mainheight").onchange = mainNode;
-        document.getElementById("maindepth").onchange = mainNode;
+        document.getElementById("mainForm").onchange = changeObjects.mainNode;
+        document.getElementById("mainwidth").onchange = changeObjects.mainNode;
+        document.getElementById("mainheight").onchange = changeObjects.mainNode;
+        document.getElementById("maindepth").onchange = changeObjects.mainNode;
 
-        document.getElementById("secwidth").onchange = secoundChange;
-        document.getElementById("secheight").onchange = secoundChange;
-        document.getElementById("secdepth").onchange = secoundChange;
+        document.getElementById("secwidth").onchange = changeObjects.secoundChange;
+        document.getElementById("secheight").onchange = changeObjects.secoundChange;
+        document.getElementById("secdepth").onchange = changeObjects.secoundChange;
 
-        document.getElementById("secoundaryForm").onchange = secoundChange;
+        document.getElementById("secoundaryForm").onchange = changeObjects.secoundChange;
 
         
         //camera
@@ -138,78 +142,8 @@
         }
     }
 
-    function mainNode(){
-        let form = document.getElementById("mainForm").value;
-        let width = document.getElementById("mainwidth").value;
-        let height = document.getElementById("mainheight").value;
-        let depth = document.getElementById("maindepth").value;
-        let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-        let cuboid1;
+   
 
-        cuboid1 = objectForm(form, width, height, depth);
-        greenNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
-        render();
-    }
-
-
-    function secoundChange(){
-        let form = document.getElementById("secoundaryForm").value;
-        let width = document.getElementById("secwidth").value;
-        let height = document.getElementById("secheight").value;
-        let depth = document.getElementById("secdepth").value;
-
-        let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-        let cuboid1;
-        nodes = []
-        
-        if(form == "5"){
-            let max = 10;
-            let min = -10;
-            let maxZ = 10;
-            let minZ = -40
-            for (let i = 0; i <= 60; i++) {
-                let choice =  Math.floor(Math.random() * 3) + 1;
-                cuboid1 = objectForm(choice, 0.5, 0.5, 0.5);
-                let x = Math.floor(Math.random() * (max - min)) + min;
-                let y = Math.floor(Math.random() * (max - min)) + min;
-                let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-                let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-                nodes.push(new GraphicsNode(gl, cuboid1, monoBlue, transform,monoBlack));
-            }
-        }else{
-            cuboid1 = objectForm(form, width, height, depth);
-            let max = 10;
-            let min = -10;
-            let maxZ = 10;
-            let minZ = -40
-            for (let i = 0; i <= 60; i++) {
-                let x = Math.floor(Math.random() * (max - min)) + min;
-                let y = Math.floor(Math.random() * (max - min)) + min;
-                let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-                let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-                nodes.push(new GraphicsNode(gl, cuboid1, monoBlue, transform,monoBlack));
-            }
-        }
-        
-        render();
-    }
-
-    function objectForm(form, width, height, depth){
-        if(form == "1"){
-            return new Cuboid(gl, width, height, depth, shader.getProgram());
-        }
-        else if(form == "2"){
-            return new Diamond(gl, width, height, depth, shader.getProgram());
-        }
-        else if(form == "3"){
-            return new Cuboid(gl, width, height, depth, shader.getProgram());
-        }
-        else if(form == "4"){
-            return new Diamond(gl, width, height, depth, shader.getProgram());
-        }
-    }
     window.onload = init;
     
 
@@ -228,11 +162,10 @@
         <option value="1">square</option>
         <option value="2">diamond</option>
         <option value="3">pyramid</option>
-        <option value="4">cirkle</option>
     </select></label>
-    <label><b>width<input type="number" size= "1" id="mainwidth" value="0.5" min="0.1"></b></label> 
-    <label><b>height<input type="number" size= "1" id="mainheight" value="0.5" min="0.1"></b></label> 
-    <label><b>depth<input type="number" size= "1" id="maindepth" value="0.5" min="0.1"></b></label> 
+    <label><b>width<input type="number"  id="mainwidth" value="0.5" min="0.1" step="0.1"></b></label> 
+    <label><b>height<input type="number"  id="mainheight" value="0.5" min="0.1" step="0.1"></b></label> 
+    <label><b>depth<input type="number" id="maindepth" value="0.5" min="0.1" step="0.1"></b></label> 
     <style>
         input {
             resize: horizontal;
@@ -244,13 +177,12 @@
         <option value="1">square</option>
         <option value="2">diamond</option>
         <option value="3">pyramid</option>
-        <option value="4">cirkle</option>
-        <option value="5">random</option>
+        <option value="4">random</option>
 
     </select></label>
-    <label><b>width<input type="number" size= "1" id="secwidth" value="0.5" min="0.1"></b></label> 
-    <label><b>height<input type="number" size= "1" id="secheight" value="0.5" min="0.1"></b></label> 
-    <label><b>depth<input type="number" size= "1" id="secdepth" value="0.5" min="0.1"></b></label> 
+    <label><b>width<input type="number"  id="secwidth" value="0.5" min="0.1" step="0.1"></b></label> 
+    <label><b>height<input type="number"  id="secheight" value="0.5" min="0.1" step="0.1"></b></label> 
+    <label><b>depth<input type="number"  id="secdepth" value="0.5" min="0.1" step="0.1"></b></label> 
     <style>
         input {
             resize: horizontal;
