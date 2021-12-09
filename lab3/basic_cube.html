@@ -26,7 +26,6 @@
     <script src="UserInputs/key.js"></script>
     <script src="UserInputs/changeObjects.js"></script>
 
-
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
     
@@ -52,7 +51,7 @@
     let canvas;
     let gl;
     let nodes = [];
-    let greenNode;
+    let movingNode;
     let camera;
     let shader;
     let part = true;
@@ -73,12 +72,10 @@
         let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
         let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
         shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
-        //shader.activateShader();
 
         camera = new Camera(gl, shader.getProgram());
 
         optionListiners();
-
 
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
@@ -86,7 +83,7 @@
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
         let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
 
-        greenNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
+        movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
 
         let max = 15;
         let min = -15;
@@ -121,7 +118,6 @@
 
         document.getElementById("secoundaryForm").onchange = changeObjects.secoundChange;
 
-        
         //camera
         document.getElementById("persproj").onchange = render;
         document.getElementById("orthproj").onchange = render; 
@@ -134,7 +130,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
-        greenNode.draw();
+        movingNode.draw();
 
 
         for(let i = 0; i < nodes.length; i++) {
@@ -142,11 +138,8 @@
         }
     }
 
-   
-
     window.onload = init;
     
-
 </script>
 </head>
 <body>
