@@ -11,6 +11,7 @@
  *  @author Alex Peschel, Oliver Olofsson
  */
 
+
 class Shader {
   constructor(gl, type, source) {
     this.type = type;
