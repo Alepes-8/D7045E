@@ -24,16 +24,12 @@ class MonochromeMaterial extends Material{
     this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
     let dist = transform[2][3]/10;
     let colorChange = [];
-    //if distance is 1 the node is up close and it's original color should remain
-    if(dist == 1) {
-      this.gl.uniform4fv(this.colorLocation,this.color);
-    } else {
-      //if the node is far away the RBG variables gets multiplied with lower values => darker color
-      colorChange[0] = this.color[0] * (1/(1-dist));
-      colorChange[1] = this.color[1] * (1/(1-dist));
-      colorChange[2] = this.color[2] * (1/(1-dist));
-      colorChange[3] = 1;
-      this.gl.uniform4fv(this.colorLocation, colorChange);
-    }
+    
+    //if the node is far away the RBG variables gets multiplied with lower values => darker color
+    colorChange[0] = this.color[0] * (1/(1-dist));
+    colorChange[1] = this.color[1] * (1/(1-dist));
+    colorChange[2] = this.color[2] * (1/(1-dist));
+    colorChange[3] = 1;
+    this.gl.uniform4fv(this.colorLocation, colorChange);
   }
 }
