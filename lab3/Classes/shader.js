@@ -21,6 +21,9 @@ class Shader {
     gl.shaderSource(this.shader, source);
     /*compile the shader*/
     gl.compileShader(this.shader)
+    if ( ! gl.getShaderParameter(this.shader, gl.COMPILE_STATUS) ) {
+      throw new Error("Error in vertex shader:  " + gl.getShaderInfoLog(this.shader));
+    }
   }
 
   gettype() {

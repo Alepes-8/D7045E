@@ -43,8 +43,5 @@ class Cuboid extends Mesh{
         ];
         
         super(gl, vertices, indices, shaderProgram);      
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
     }
 }
