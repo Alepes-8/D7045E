@@ -14,7 +14,7 @@
 
 class GraphicsNode{
    /*holds a mesh resource, material and an instance specific transform*/
-   constructor(gl, mesh, material, transform, materialBlack) {
+  constructor(gl, mesh, material, transform, materialBlack) {
     this.gl = gl;
     this.mesh = mesh;
     this.material = material;
@@ -40,7 +40,6 @@ class GraphicsNode{
 
   //if you move a node around the transform needs to be updated
   updateTransform(m2) {
-   this.transform =mult(this.transform, m2);
+   this.transform = mult(this.transform, m2);
   }
-
 }

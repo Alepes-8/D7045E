@@ -34,12 +34,13 @@
       /*send the array of indices to the GPU*/
       this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(this.indices), this.gl.STATIC_DRAW);
   
+
       /*Set up vertex attribute pointers*/
-      this.vertexPos =  this.gl.getAttribLocation(shaderProgram, "vertexPos"); 
+      this.vertexPos =  this.gl.getAttribLocation(shaderProgram, "vertexPos"); //Fix a call to ShaderProgram      
       this.gl.vertexAttribPointer(this.vertexPos, 4, this.gl.FLOAT, false, 0, 0);
       this.gl.enableVertexAttribArray(this.vertexPos);
     }
-  
+    
     getVertexArray() {
       return this.vao;
     }

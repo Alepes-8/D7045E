@@ -18,13 +18,16 @@ class MonochromeMaterial extends Material{
   }
 
   applyMaterial(transform) {
-    //send the transform
+    //The cMatrix gives us the possition of the figure. 
     let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
     this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
+
     this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
-    let dist = transform[2][3]/10;
+
+    //the smaller the number the longer the light will reach
+    let dist = transform[2][3]/8;
     let colorChange = [];
-    
+
     //if the node is far away the RBG variables gets multiplied with lower values => darker color
     colorChange[0] = this.color[0] * (1/(1-dist));
     colorChange[1] = this.color[1] * (1/(1-dist));

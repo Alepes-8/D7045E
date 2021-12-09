@@ -1,10 +1,12 @@
 /**
- * Class: ShaderProgram
- *       ● Implement a class ShaderProgram that takes a vertex shader instance and a
- *       fragment shader instance (both being Shader objects), and links them into a GL
- *       Shader program.
- *       ● Add a method, called activate, that, when called, activates the GL shader program
- *       (via glUseProgram).
+ * Class: Shader
+ *      Implement a shader class that takes a shader source code and a shader type, and
+*        compiles it.
+*            ● The resulting GL Shader handle should be retrievable by a getter method.
+*            ● The shader code should be either a vertex shader or a fragment shader.
+*            ● The shader type states whether the code stands for a vertex shader or a fragment
+*            shader. There should be a method that returns the type ((for instance, as an enum).
+*            ● Include error checking so a failed compile does not go unnoticed.
  * 
  *  @author Alex Peschel, Oliver Olofsson
  */
