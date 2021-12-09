@@ -39,7 +39,6 @@
       this.gl.vertexAttribPointer(this.vertexPos, 4, this.gl.FLOAT, false, 0, 0); 
       this.gl.enableVertexAttribArray(this.vertexPos);
     }
-  
 
     getVertexArray() {
       return this.vao;
