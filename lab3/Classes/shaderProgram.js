@@ -9,25 +9,26 @@
  *  @author Alex Peschel, Oliver Olofsson
  */
 
-class ShaderProgram{
+ class ShaderProgram {
+  constructor(gl, vertexShader, fragmentShader) {
+    this.gl = gl;        
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
 
-    constructor(gl, vertexShader, fragmentShader) {
-        this.gl = gl;        
-        this.vertexShader = vertexShader;
-        this.fragmentShader = fragmentShader;
+
+    this.prog = gl.createProgram();
+    this.gl.attachShader(this.prog, this.fragmentShader);
+    this.gl.attachShader(this.prog, this.vertexShader);
+    this.gl.linkProgram(this.prog);
     
-        this.prog = gl.createProgram();
-        this.gl.attachShader(this.prog, this.fragmentShader);
-        this.gl.attachShader(this.prog, this.vertexShader);
-        this.gl.linkProgram(this.prog);
-    }
+  }
 
-    /*a method that activates the GL shader program (via glUseProgram)*/
-    activate() {
+  /*a method that activates the GL shader program (via glUseProgram)*/
+  activate() {
     this.gl.useProgram(this.prog);
-    }
+  }
 
-    getProgram() {
+  getProgram() {
     return this.prog;
-    }
+  }
 }
