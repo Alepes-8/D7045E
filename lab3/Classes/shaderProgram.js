@@ -15,6 +15,7 @@
     this.vertexShader = vertexShader;
     this.fragmentShader = fragmentShader;
 
+
     this.prog = gl.createProgram();
     this.gl.attachShader(this.prog, this.fragmentShader);
     this.gl.attachShader(this.prog, this.vertexShader);
@@ -31,4 +32,3 @@
     return this.prog;
   }
 }
-
