@@ -9,30 +9,26 @@
  *  @author Alex Peschel, Oliver Olofsson
  */
 
-class ShaderProgram{
+ class ShaderProgram {
+  constructor(gl, vertexShader, fragmentShader) {
+    this.gl = gl;        
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
 
-    constructor(){
-        this.comboProg;
-        this.gl;
-    }
+    this.prog = gl.createProgram();
+    this.gl.attachShader(this.prog, this.fragmentShader);
+    this.gl.attachShader(this.prog, this.vertexShader);
+    this.gl.linkProgram(this.prog);
+    
+  }
 
-    combineShaders(gl, shader1, shader2){ //links them into a GL Shader program
-        let prog = gl.createProgram();
-        gl.attachShader(prog,shader1);
-        gl.attachShader(prog, shader2);   
-        gl.linkProgram(prog);
-        if ( ! gl.getProgramParameter( prog, gl.LINK_STATUS) ) {
-        throw new Error("Link error in program:  " + gl.getProgramInfoLog(prog));
-        }
-        this.comboProg = prog;
-        this.gl = gl;
-    }
+  /*a method that activates the GL shader program (via glUseProgram)*/
+  activate() {
+    this.gl.useProgram(this.prog);
+  }
 
-    activate(){ //activates the GL shader program
-        this.gl.useProgram(this.comboProg);
-    }
-
-    getProgram(){
-        return this.comboProg;
-    }
+  getProgram() {
+    return this.prog;
+  }
 }
+

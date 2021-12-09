@@ -8,32 +8,31 @@
 */
 
 class MonochromeMaterial extends Material{
-    constructor(gl, color, shaderProgram){
-        super(shaderProgram)
-        this.gl = gl;
-        this.color = color;
-        this.colorLocation = null
-        this.shaderProgram = shaderProgram;
-    }
- 
-    applyMaterial(transform){
-        let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
-        this.gl.uniformMatrix4fv(cMatrix, false, transform);
 
-        this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), 'u_color');
+  constructor(gl, color, shaderProgram) {
+    super(shaderProgram.getProgram());
+    this.gl = gl;
+    this.color = color;
+    this.colorLocation = null;
+    this.shaderProgram = shaderProgram;
+  }
 
-        let dist = transform[2][3]/10;
-        let colorChange = [];
+  applyMaterial(transform) {
+    //The cMatrix gives us the possition of the figure. 
+    let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
+    this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
 
-        if(dist == 1){ // if the distance is 1 the cubes should have their original color as they are close to the camera.
-            this.gl.uniform4fv(this.colorLocation, this.color);
-        }else{
-            //Make the color of the cubes darker the farther away they are from the camera.
-            colorChange[0] = this.color[0] * (1/(1-dist));
-            colorChange[1] = this.color[1] * (1/(1-dist));
-            colorChange[2] = this.color[2] * (1/(1-dist));  
-            colorChange[3] = 1
-            this.gl.uniform4fv(this.colorLocation, colorChange);
-        }
-    }
+    this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
+
+    //the smaller the number the longer the light will reach
+    let dist = transform[2][3]/8;
+    let colorChange = [];
+
+    //if the node is far away the RBG variables gets multiplied with lower values => darker color
+    colorChange[0] = this.color[0] * (1/(1-dist));
+    colorChange[1] = this.color[1] * (1/(1-dist));
+    colorChange[2] = this.color[2] * (1/(1-dist));
+    colorChange[3] = 1;
+    this.gl.uniform4fv(this.colorLocation, colorChange);
+  }
 }

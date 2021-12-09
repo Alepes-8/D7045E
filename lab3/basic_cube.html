@@ -2,377 +2,139 @@
 <meta charset="UTF-8">
 <html>
 <head>
-<title>Lit Cube Using glMatrix and WebGL</title>
-<style>
-    body {
-        background-color: #EEEEEE;
-    }
-</style>
+    <title>Laboration 3</title>
 
-<!--
-    Shows a cube drawn using very basic lighting:  A white
-    light shining in the direction of the negative z-axis,
-    in eye coordinates, with diffuse color only.
--->
-
-
-<script src="gl_matrix.js"></script>
-<script src="Classes/mesh.js"></script>
-<script src="Classes/shader.js"></script>
-<script src="Classes/shaderProgram.js"></script>
-<script src="Classes/matrial.js"></script>
-<script src="Classes/graphicsNode.js"></script>
-<script src="Classes/monochromeMaterial.js"></script>
-<script src="Classes/cuboid.js"></script>
-<script src="camera.js"></script>
-
-
-<script>
- 
-"use strict";
-
-
-const vertexShaderSource = `
-    attribute vec3 a_coords;
-    uniform mat4 modelviewProjection;
-    uniform bool lit;
-    uniform vec3 normal;
-    uniform mat3 normalMatrix;
-    uniform vec4 color;
-    varying vec4 v_color;
-    void main() {
-        vec4 coords = vec4(a_coords,1.0);
-        gl_Position = modelviewProjection * coords;
-        if (lit) {
-           vec3 N = normalize(normalMatrix*normal);  // Transformed unit normal
-           float dotProduct = abs(N.z);  // cosine of angle of incidence of light with surface
-           v_color = vec4( dotProduct*color.rgb, color.a );
+    <style>
+        body {
+            background-color: #ffffff;
         }
-        else {
-            v_color = color;
-        }
-    }`;
+    </style>
 
+    </script>
+    <script src="gl_matrix.js"></script>
+    <script src="MV.js"></script>
+    <script src="Classes/mesh.js"></script>
+    <script src="Classes/shader.js"></script>
+    <script src="Classes/shaderProgram.js"></script>
+    <script src="Classes/matrial.js"></script>
+    <script src="Classes/graphicsNode.js"></script>
+    <script src="Classes/monochromeMaterial.js"></script>
+    <script src="Shapes/cuboid.js"></script>
+    <script src="Shapes/diamond.js"></script>
+    <script src="camera.js"></script>
+    <script src="key.js"></script>
 
-const fragmentShaderSource = `
-    #ifdef GL_FRAGMENT_PRECISION_HIGH
-       precision highp float;
-    #else
-       precision mediump float;
-    #endif
-    varying vec4 v_color;
-    void main() {
-        gl_FragColor = v_color;
-    }`;
-
-let gl;   // The webgl context.
-let greenNodeTransform = [[1,0,0,0],[ 0,1,0,0],[ 0,0,1,0],[ 0,0,0,1]];
-var greenGraphicNode;
-let shaderProgram;
-
-let a_coords_loc;       // Location of the a_coords attribute variable in the shader program.
-let a_coords_buffer;    // Buffer to hold the values for a_coords.
-let u_color;            // Location of the uniform vec4 specifying a color for the primitive
-let u_modelviewProj;    // Location of the uniform mat4 representing the modelview and projection transformation
-let u_lit;              // Location of the uniform bool that says whether lighting should be applied
-let u_normal;           // Location of the uniform vec3 representing the normal vector
-let u_normalMatrix;     // Location of the unifrom mat3 representing the transform to be applied to normal vectors
-
-const projection = mat4.create();    // projection matrix
-const modelview = mat4.create();     // modelview matrix
-const modelviewProj = mat4.create(); // combined transformation matrix
-const normalMatrix = mat3.create(); // matrix, derived from modelview matrix, for transforming normal vectors
-
-let verticesGreen = [
-    [-0.2, -0.2, 0.2, 1],
-    [-0.2, 0.2, 0.2, 1],
-    [0.2, 0.2, 0.2, 1],
-    [0.2, -0.2, 0.2, 1],
-    [0.2, -0.2, -0.2, 1],
-    [0.2, 0.2, -0.2, 1],
-    [-0.2, 0.2, -0.2, 1],
-     [-0.2, -0.2, -0.2, 1]
+    <script>
+        //id vertex shader and id fragmen shader is the shaders we have
     
-]
+    const vertexShaderSource = `
+        attribute vec4 vertexPos;
+        uniform mat4 cMatrix;
+        uniform mat4 modelViewvMatrix;
+        uniform mat4 perspectiveMatrix;
 
-let verticesOverall = [
-    [-0.2, -0.2, 0.5, 1],
-    [-0.2, 0.2, 0.5, 1],
-    [0.2, 0.2, 0.5, 1],
-    [0.2, -0.2, 0.5, 1],
-    [0.2, -0.2, -0.5, 1],
-    [0.2, 0.2, -0.5, 1],
-    [-0.2, 0.2, -0.5, 1],
-    [-0.2, -0.2, -0.5, 1]
-]
+        void main()
+        {
+            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
+        }`;
 
-let indices = [
-  0, 1, 2, 
-  2, 3, 0, 
-  0, 1, 6, 
-  6, 7, 0, 
-  1, 6, 2, 
-  2, 6, 5, 
-  7, 6, 5, 
-  5, 7, 4, 
-  5, 4, 3, 
-  3, 2, 5, 
-  7, 4, 3, 
-  7, 3, 0
-];
+    const fragmentShaderSource = `    
+        precision mediump float;
+        uniform vec4 u_Color;
 
-/* Draws a WebGL primitive.  The first parameter must be one of the constants
- * that specifiy primitives:  gl.POINTS, gl.LINES, gl.LINE_LOOP, gl.LINE_STRIP,
- * gl.TRIANGLES, gl.TRIANGLE_STRIP, gl.TRIANGLE_FAN.  The second parameter must
- * be an array of 4 numbers in the range 0.0 to 1.0, giving the RGBA color of
- * the color of the primitive.  The third parameter must be an array of numbers.
- * The length of the array must be amultiple of 3.  Each triple of numbers provides
- * xyz-coords for one vertex for the primitive.  This assumes that u_color is the
- * location of a color uniform in the shader program, a_coords_loc is the location of
- * the coords attribute, and a_coords_buffer is a VBO for the coords attribute.
- */
-function drawPrimitive( primitiveType, color, vertices ) {
-     gl.enableVertexAttribArray(a_coords_loc);
-     gl.bindBuffer(gl.ARRAY_BUFFER,a_coords_buffer);
-     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STREAM_DRAW);
-     gl.uniform4fv(u_color, color);
-     gl.vertexAttribPointer(a_coords_loc, 3, gl.FLOAT, false, 0, 0);
-     gl.drawArrays(primitiveType, 0, vertices.length/3);
-}
-
-
-/* Draws a colored cube, along with a set of coordinate axes.
- * (Note that the use of the above drawPrimitive function is not an efficient
- * way to draw with WebGL.  Here, the geometry is so simple that it doesn't matter.)
- */
-function draw() { 
+        void main() {
+            gl_FragColor = u_Color;
+        }`;
     
-    gl.clearColor(0.7,0.7,0.7,1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
-    /* Set the value of projection to represent the projection transformation. */
+    let canvas;
+    let gl;
+    let nodes = [];
+    let greenNode;
+    let camera;
+    let shader;
+    let part = true;
 
-    /*This is to determain the size of the board*/
-    if (document.getElementById("persproj").checked) {
-         mat4.perspective(projection, Math.PI/5, 1, 4, 80);
-    }
-    else {
-         mat4.ortho(projection,-2, 2, -2, 2, 4, 8);
-    }
-    
-    /* Set the value of modelview to represent the viewing transform. */
+    function init() {
 
-    mat4.lookAt(modelview, [0,2,6], [0,0,0], [0,1,0]);
-    
-    /* Apply the modeling tranformation to modelview, and send modelview
-       to the corresponding uniform variable in the shader program. */
-    
-    //mat4.rotateX(modelview, modelview, rotateX);
-    //mat4.rotateY(modelview, modelview, rotateY);
-    //mat4.rotateZ(modelview, modelview, rotateZ);
-    
-    /* Multiply the modelview and projection transformss to get the combined
-       transform, and send it to the shader program. */
-    
-    mat4.multiply( modelviewProj, projection, modelview );
-    gl.uniformMatrix4fv(u_modelviewProj, false, modelviewProj );
-    
-    /* Get the matrix for transforming normal vectors from the modelview matrix.*/ 
-    
-    mat3.normalFromMat4(normalMatrix, modelview);
-    gl.uniformMatrix3fv(u_normalMatrix, false, normalMatrix);
-
-    /* Draw the six faces of a cube, with different colors.  The faces are drawn
-       with lighting turned on, and with the normal vectors that are needed for
-       the lighting calculuations. */
-    
-    let firstCube = new Cuboid(2,1,4);
-    let height = firstCube.height/2;
-    let width = firstCube.width/2;
-    let depth = firstCube.depth/2;
-    let coard = [1, -4, -10 ]
-    let changeX = greenGraphicNode.transform[0][3];
-    let changeY = greenGraphicNode.transform[1][3];
-    let changeZ = greenGraphicNode.transform[2][3];
-    greenGraphicNode.draw();
-
-    
-    gl.uniform1i( u_lit, 1 );  // Turn on lighting calculations for the cube.
-    gl.uniform3f( u_normal, 0, 0, 1 ); // send normal vector to shader program (height,width,depth)
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0], -height+changeY+coard[1], depth+changeZ+coard[2],  +width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], +width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],  -width+changeX+coard[0], height+changeY+coard[1],depth+changeZ+coard[2]]);
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2],width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [-width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2],-width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2], width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2]] );
-
-    gl.uniform3f( u_normal, 0, 0, 1 );    
-    drawPrimitive( gl.TRIANGLE_FAN, [0,1,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ]);
-    drawPrimitive( gl.LINE_LOOP, [0,0,0,1], [ -width+changeX+coard[0],-height+changeY+coard[1],-depth+changeZ+coard[2], -width+changeX+coard[0],-height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],depth+changeZ+coard[2], -width+changeX+coard[0],height+changeY+coard[1],-depth+changeZ+coard[2] ] );
-
-
-    /* Draw coordinate axes as thick colored lines that extend through the cube.
-       The lines are drawn with lighting disabled. */
-       
-    gl.uniform1i( u_lit, 0 );  // Turn off lighting
-    /*
-    gl.lineWidth(4);
-    drawPrimitive( gl.LINES, [1,0,0,1], [ -2,0,0, 2,0,0] );
-    drawPrimitive( gl.LINES, [0,1,0,1], [ 0,-2,0, 0,2,0] );
-    drawPrimitive( gl.LINES, [0,0,1,1], [ 0,0,-2, 0,0,2] );
-    gl.lineWidth(1);
-    */
-}
-
-
-/* Initialize the WebGL context.  Called from init() */
-function initGL() {    
-
-    shaderProgram = createProgram( gl, vertexShaderSource, fragmentShaderSource );
-    shaderProgram.activate()
-    let prog = shaderProgram.getProgram();
-    a_coords_loc =  gl.getAttribLocation(prog, "a_coords");
-    u_modelviewProj = gl.getUniformLocation(prog, "modelviewProjection");
-    u_color =  gl.getUniformLocation(prog, "color");
-    u_lit =  gl.getUniformLocation(prog, "lit");
-    u_normal =  gl.getUniformLocation(prog, "normal");
-    u_normalMatrix =  gl.getUniformLocation(prog, "normalMatrix");
-    a_coords_buffer = gl.createBuffer();
-    gl.enable(gl.DEPTH_TEST);
-}
-
-
-/* Creates a program for use in the WebGL context gl, and returns the
- * identifier for that program.  If an error occurs while compiling or
- * linking the program, an exception of type Error is thrown.  The error
- * string contains the compilation or linking error.  If no error occurs,
- * the program identifier is the return value of the function.
- *    The second and third parameters are strings that contain the
- * source code for the vertex shader and for the fragment shader.
- */
-function createProgram(gl, vShader, fShader) {
-    var obj1 = new Shader();
-    var obj2 = new Shader();
-    var combine = new ShaderProgram();
-    obj1.combindShaders(gl, vShader, gl.VERTEX_SHADER )
-    obj2.combindShaders(gl, fShader, gl.FRAGMENT_SHADER)
-    combine.combineShaders(gl, obj1.getter(), obj2.getter());
-    return combine;
-}
-
-
-/**
- *  An event listener for the keydown event.  It is installed by the init() function.
- *  The arrow keys, PageUp, and PageDown will rotate the cube by modifying the
- *  modeling transformation.  Home and Return key resets the modeling transform
- *  to the identity.
- */
-function doKey(evt) {
-    let rotationChanged = true;
-    switch (evt.keyCode) {
-        case 37:
-            greenGraphicNode.update([[0,0,0,-0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
-            break;        // left arrow
-        case 39:
-            greenGraphicNode.update([[0,0,0,0.05], [0,0,0,0], [0,0,0,0], [0,0,0,1]]) 
-            break;       // right arrow
-        case 38: 
-            greenGraphicNode.update([[0,0,0,0], [0,0,0,0.05], [0,0,0,0], [0,0,0,1]]) 
-            break;        // up arrow
-        case 40:
-            greenGraphicNode.update([[0,0,0,0], [0,0,0,-0.05], [0,0,0,0], [0,0,0,1]]) 
-            break;         // down arrow
-        case 33: 
-            greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,-0.05], [0,0,0,1]]) 
-            break;         // PageUp
-        case 34:        
-            greenGraphicNode.update([[0,0,0,0], [0,0,0,0], [0,0,0,0.05], [0,0,0,1]]) 
-            break;// PageDown
-        case 13:                                // return key
-        case 36: rotateX = rotateY = rotateZ = 0; break;  // home key
-        default: rotationChanged = false;
-    }
-    if (rotationChanged) {
-              evt.preventDefault();
-             draw();
-    }
-}
-
-
-/**
- * initialization function that will be called when the page has loaded.
- */
-function init() {
-    try {
-        let canvas = document.getElementById("webglcanvas");
+        canvas = document.getElementById("webglcanvas");
         gl = canvas.getContext("webgl2");
-        if ( ! gl ) {
-            throw "Browser does not support WebGL";
+
+        if (!gl) {alert("WebGL isn't available");}
+
+        //webgl configurations
+        gl.viewport( 0, 0, canvas.width, canvas.height ); //delete
+        gl.clearColor(0, 0, 0, 1 );
+
+        gl.enable(gl.DEPTH_TEST);
+
+        let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+        let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+        shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
+        //shader.activateShader();
+
+        camera = new Camera(gl, shader.getProgram());
+        let key = new Key();
+
+        document.getElementById("persproj").checked = true;
+        document.getElementById("persproj").onchange = render;
+        document.getElementById("orthproj").onchange = render;       
+        document.addEventListener('keydown', key.doKey, false);
+
+        let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
+        let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        let cuboid2 = new Cuboid(gl, 0.4, 1, 0.4, shader.getProgram());
+
+        greenNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
+
+        let max = 10;
+        let min = -10;
+        let maxZ = 10;
+        let minZ = -40
+        for (let i = 0; i <= 60; i++) {
+            let x = Math.floor(Math.random() * (max - min)) + min;
+            let y = Math.floor(Math.random() * (max - min)) + min;
+            let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
+            let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
+            nodes.push(new GraphicsNode(gl, cuboid2, monoBlue, transform,monoBlack));
+        }
+        render();
+    }
+
+    function render() {
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        shader.activate();
+        camera.activate(document.getElementById("persproj").checked);
+        greenNode.draw();
+
+
+        for(let i = 0; i < nodes.length; i++) {
+            nodes[i].draw();
         }
     }
-    catch (e) {
-        document.getElementById("canvas-holder").innerHTML =
-            "<p>Sorry, could not get a WebGL graphics context.</p>";
-        return;
-    }
-    try {
-        initGL();  // initialize the WebGL graphics context
-    }
-    catch (e) {
-        document.getElementById("canvas-holder").innerHTML =
-            "<p>Sorry, could not initialize the WebGL graphics context:" + e.message + "</p>";
-        return;
-    }
-    document.getElementById("persproj").checked = true;
-    document.getElementById("persproj").onchange = draw;
-    document.getElementById("orthproj").onchange = draw;
-    document.addEventListener("keydown", doKey, false);
 
-    let mesh = new Mesh(gl, verticesGreen, indices, shaderProgram.getProgram());
-    let chromeRed = new MonochromeMaterial(gl, [0.8, 0.0, 0.4, 1.0], shaderProgram);
-    let chromeGreen = new MonochromeMaterial(gl, [0.0, 1.0, 0.0, 1.0], shaderProgram);
+    window.onload = init;
     
-    greenGraphicNode = new GraphicsNode(gl, mesh, chromeGreen , greenNodeTransform);
-
-    console.log(greenGraphicNode);
-
-    draw();
-}
-
-
-window.onload = init;
 
 </script>
 </head>
 <body>
+        <h2>A Cube with Basic Lighting</h2>
 
-<h2>A Cube with Basic Lighting</h2>
+    <p id=message>Use arrow keys, PageUp, and PageDown to rotate the cube.<br>
+    Home or Return key resets rotations to zero.</p>
 
-<p id=message>Use arrow keys, PageUp, and PageDown to rotate the cube.<br>
-Home or Return key resets rotations to zero.</p>
+    <p>
+    <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
+    <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
+    </p>
 
-<p>
-  <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
-  <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
-</p>
+    <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
 
-<noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
-
-<div id="canvas-holder">
-   <canvas width=600 height=600 id="webglcanvas" style="background-color:red"></canvas>
-</div>
-
+    <div id="canvas-holder">
+    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(104, 0, 179)"></canvas>
+    </div>
 
 </body>
 </html>
-
