@@ -33,6 +33,9 @@ class Camera{
     
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
     var modelViewvMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelViewvMatrix");
+    var cameraPos = this.gl.getUniformLocation(this.shaderProgram, "cameraPos");
+
+    this.gl.uniform4fv(cameraPos, flatten(vec4(this.position,1)));
     this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
     this.gl.uniformMatrix4fv(modelViewvMatrix, false, flatten(this.modelViewvMatrix));
   }

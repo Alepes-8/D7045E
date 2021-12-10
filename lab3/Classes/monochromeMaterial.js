@@ -24,16 +24,8 @@ class MonochromeMaterial extends Material{
     this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
 
     this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
-
-    //the smaller the number the longer the light will reach
-    let dist = transform[2][3]/8;
-    let colorChange = [];
-
     //if the node is far away the RBG variables gets multiplied with lower values => darker color
-    colorChange[0] = this.color[0] * (1/(1-dist));
-    colorChange[1] = this.color[1] * (1/(1-dist));
-    colorChange[2] = this.color[2] * (1/(1-dist));
-    colorChange[3] = 1;
-    this.gl.uniform4fv(this.colorLocation, colorChange);
+
+    this.gl.uniform4fv(this.colorLocation, this.color);
   }
 }

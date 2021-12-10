@@ -31,23 +31,30 @@
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
     
-    const vertexShaderSource = `
-        attribute vec4 vertexPos;
+    const vertexShaderSource = `#version 300 es
+        layout(location=0) in vec4 vertexPos;
         uniform mat4 cMatrix;
         uniform mat4 modelViewvMatrix;
         uniform mat4 perspectiveMatrix;
+        uniform vec4 cameraPos;
+        
+        out float distance;
 
         void main()
         {
             gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
+            distance = length((cMatrix * vertexPos) - cameraPos) ;
+;
         }`;
 
-    const fragmentShaderSource = `    
+    const fragmentShaderSource = `#version 300 es
         precision mediump float;
         uniform vec4 u_Color;
+        in float distance;
+        out vec4 fragColor;
 
         void main() {
-            gl_FragColor = u_Color;
+            fragColor = vec4(u_Color.xyz * (3.0/(distance)),1);
         }`;
     
     let canvas;
@@ -189,7 +196,7 @@
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
 
     <div id="canvas-holder">
-    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(104, 0, 179)"></canvas>
+    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
     </div>
 
 </body>
