@@ -3,6 +3,7 @@
  */
 class ChangeObjects{
     mainNode(){
+        console.log("hejsan");
         let form = document.getElementById("mainForm").value;
         let width = document.getElementById("mainwidth").value;
         let height = document.getElementById("mainheight").value;
@@ -19,7 +20,7 @@ class ChangeObjects{
         else if(form == "3"){
             cuboid1 = new Pyramid(gl, width, height, depth, shader.getProgram());
         }
-        greenNode = new GraphicsNode(gl, cuboid1, monoNode, greenNode.getTransform(), monoBlack);
+        movingNode = new GraphicsNode(gl, cuboid1, monoNode, movingNode.getTransform(), monoBlack);
         render();
     }
 
