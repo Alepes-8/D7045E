@@ -50,15 +50,30 @@ class Cylinder extends Mesh{
                 1));
         }
 
-        for(let i = 1; i <= points;i++ )
+        for(let i2 = 1; i2 <= points;i2++ )
         {
-            if(i == points){
-                indices.push(points+1,points+1+i,points+1)
+            if(i2 == points){
+                indices.push(points+1,points+1+i2,points+2)
+            }else{
+                indices.push(points+1,points+1+i2,points+i2+2)
             }
-            else{
-                indices.push(points+1,points+1+i,points+i+2)
-            }
+                
         }
+
+        for(let side = 1; side <= points;side++ )
+        {
+            if(side == points){
+                indices.push(side,1,points+2)
+                indices.push(points+1+side,1,points+2)
+            }else{
+                indices.push(side,side+1,points+1+side)
+                indices.push(points+1+side,side+1,points+2+side)
+            }
+
+
+        }
+
+
         
         super(gl, vertices, indices, shaderProgram);      
     }
