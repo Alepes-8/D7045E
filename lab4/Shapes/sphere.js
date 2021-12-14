@@ -9,39 +9,83 @@
 
 class Sphere extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
-        let x = width / 2; 
+        let r = width / 2; 
         let y = height / 2;
         let z = depth / 2;
 
-        /*The vector positions for each point relative to each other in the 3D space*/
-        let vertices = [
-            vec4( -x, -y,  z, 1 ),   // front/bottom/left
-            vec4( -x,  y,  z, 1 ),   // front/top/left
-            vec4(  x,  y,  z, 1 ),   // front/top/right
-            vec4(  x, -y,  z, 1) ,   // front/bottom/right
+        let points= 10;
+        let au, su, cu;
+        let av, sv, cv;
+        let p1, p2;
 
-            vec4(  x, -y, -z, 1 ),   // back/bottom/right
-            vec4(  x,  y, -z, 1 ),   // back/top/right
-            vec4( -x,  y, -z, 1 ),   // back/top/left
-            vec4( -x, -y, -z, 1 )    // back/bottom/left
-        ];
+        /*The vector positions for each point relative to each other in the 3D space*/
+        let vertices = [];
+        
+        for(let u = 0; u <= points; u++){
+            au = u * Math.PI / points;
+            su = Math.sin(au);
+            cu = Math.cos(au);
+            for(let v = 0; v <= points; v++){
+                av = v * 2 * Math.PI / points;
+                sv = Math.sin(av);
+                cv = Math.cos(av);
+                vertices.push(vec4(
+                    sv*su,
+                    -y+cu,
+                    cv*su,
+                    1));
+            }
+        }
+            
+
+        
+        /*for (j = 0; j <= SPHERE_DIV; j++) 
+        {
+            aj = j * Math.PI / SPHERE_DIV;
+            sj = Math.sin(aj);
+            cj = Math.cos(aj);
+            for (i = 0; i <= SPHERE_DIV; i++) 
+            {
+                ai = i * 2 * Math.PI / SPHERE_DIV;
+                si = Math.sin(ai);
+                ci = Math.cos(ai);
+                vertices.push(si * sj);  // X
+                vertices.push(cj);       // Y
+                vertices.push(ci * sj);  // Z
+            }
+        }*/
     
         /*The connections between the vertices*/
-        let indices = [
-            0, 1, 2, 
-            2, 3, 0, 
-            0, 1, 6, 
-            6, 7, 0, 
-            1, 2, 5,
-            5, 6, 1, 
-            2, 5, 4,
-            4, 3, 2,
-            3, 0, 7,
-            7, 4, 3,
-            4, 5, 6,
-            6, 7, 4
-        ];
-        
+        let indices = [];
+        //create the circle indices
+        for(let j = 0; j <= points; j++){
+            for(let i = 0; i <= points; i++){
+                p1 = j * (points + 1) + i;
+                p2 = p1 + (points + 1);
+                indices.push(p1);
+                indices.push(p2);
+                indices.push(p1 + 1);
+                indices.push(p1 + 1);
+                indices.push(p2);
+                indices.push(p2 + 1);
+            }
+        }    
+
+        /*for (j = 0; j < SPHERE_DIV; j++)
+        {
+            for (i = 0; i < SPHERE_DIV; i++)
+            {
+                p1 = j * (SPHERE_DIV+1) + i;
+                p2 = p1 + (SPHERE_DIV+1);
+                indices.push(p1);
+                indices.push(p2);
+                indices.push(p1 + 1);
+                indices.push(p1 + 1);
+                indices.push(p2);
+                indices.push(p2 + 1);
+            }
+        }*/
+
         super(gl, vertices, indices, shaderProgram);      
     }
 }
