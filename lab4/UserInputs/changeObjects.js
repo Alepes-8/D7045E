@@ -15,15 +15,20 @@ class ChangeObjects{
             cuboid1 = new Cuboid(gl, width, height, depth, shader.getProgram());
         }
         else if(form == "2"){
-            cuboid1 = new Diamond(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Sphere(gl, width, height, depth, shader.getProgram());
         }
         else if(form == "3"){
-            cuboid1 = new Pyramid(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Cone(gl, width, height, depth, shader.getProgram());
+        }
+        else if(form == "4"){
+            cuboid1 = new Torus(gl, width, height, depth, shader.getProgram());
+        }
+        else if(form == "5"){
+            cuboid1 = new Cylinder(gl, width, height, depth, shader.getProgram());
         }
         movingNode = new GraphicsNode(gl, cuboid1, monoNode, movingNode.getTransform(), monoBlack);
         render();
     }
-
 
     secoundChange(){
         let form = document.getElementById("secoundaryForm").value;
@@ -49,10 +54,16 @@ class ChangeObjects{
                     cuboid1 = new Cuboid(gl, width, height, depth, shader.getProgram());
                 }
                 else if(choice == "2"){
-                    cuboid1 = new Diamond(gl, width, height, depth, shader.getProgram());
+                    cuboid1 = new Sphere(gl, width, height, depth, shader.getProgram());
                 }
                 else if(choice == "3"){
-                    cuboid1 = new Pyramid(gl, width, height, depth, shader.getProgram());
+                    cuboid1 = new Cone(gl, width, height, depth, shader.getProgram());
+                }
+                else if(choice == "4"){
+                    cuboid1 = new Torus(gl, width, height, depth, shader.getProgram());
+                }
+                else if(choice == "5"){
+                    cuboid1 = new Cylinder(gl, width, height, depth, shader.getProgram());
                 }
                 let x = Math.floor(Math.random() * (max - min)) + min;
                 let y = Math.floor(Math.random() * (max - min)) + min;
@@ -66,10 +77,16 @@ class ChangeObjects{
                 cuboid1 = new Cuboid(gl, width, height, depth, shader.getProgram());
             }
             else if(form == "2"){
-                cuboid1 = new Diamond(gl, width, height, depth, shader.getProgram());
+                cuboid1 = new Sphere(gl, width, height, depth, shader.getProgram());
             }
             else if(form == "3"){
-                cuboid1 = new Pyramid(gl, width, height, depth, shader.getProgram());
+                cuboid1 = new Cone(gl, width, height, depth, shader.getProgram());
+            }
+            else if(form == "4"){
+                cuboid1 = new Torus(gl, width, height, depth, shader.getProgram());
+            }
+            else if(form == "5"){
+                cuboid1 = new Cylinder(gl, width, height, depth, shader.getProgram());
             }
             let max = 10;
             let min = -10;
