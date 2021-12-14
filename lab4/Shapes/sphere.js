@@ -9,82 +9,59 @@
 
 class Sphere extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
-        let r = width / 2; 
+        let radius = width / 2; 
         let y = height / 2;
         let z = depth / 2;
+  
 
-        let points= 10;
-        let au, su, cu;
-        let av, sv, cv;
-        let p1, p2;
-
-        /*The vector positions for each point relative to each other in the 3D space*/
-        let vertices = [];
-        
-        for(let u = 0; u <= points; u++){
-            au = u * Math.PI / points;
-            su = Math.sin(au);
-            cu = Math.cos(au);
-            for(let v = 0; v <= points; v++){
-                av = v * 2 * Math.PI / points;
-                sv = Math.sin(av);
-                cv = Math.cos(av);
-                vertices.push(vec4(
-                    sv*su,
-                    -y+cu,
-                    cv*su,
-                    1));
-            }
-        }
-            
-
-        
-        /*for (j = 0; j <= SPHERE_DIV; j++) 
-        {
-            aj = j * Math.PI / SPHERE_DIV;
-            sj = Math.sin(aj);
-            cj = Math.cos(aj);
-            for (i = 0; i <= SPHERE_DIV; i++) 
-            {
-                ai = i * 2 * Math.PI / SPHERE_DIV;
-                si = Math.sin(ai);
-                ci = Math.cos(ai);
-                vertices.push(si * sj);  // X
-                vertices.push(cj);       // Y
-                vertices.push(ci * sj);  // Z
-            }
-        }*/
-    
-        /*The connections between the vertices*/
+        let heightSegments  = 10;
+        let widthSegments = 10;
+        let arc = Math.PI * 2; // the whole loop. If we place Math.PI will the system only draw half a cirkle 
         let indices = [];
-        //create the circle indices
-        for(let j = 0; j <= points; j++){
-            for(let i = 0; i <= points; i++){
-                p1 = j * (points + 1) + i;
-                p2 = p1 + (points + 1);
-                indices.push(p1);
-                indices.push(p2);
-                indices.push(p1 + 1);
-                indices.push(p1 + 1);
-                indices.push(p2);
-                indices.push(p2 + 1);
-            }
-        }    
+		let vertices = [];
 
-        /*for (j = 0; j < SPHERE_DIV; j++)
-        {
-            for (i = 0; i < SPHERE_DIV; i++)
-            {
-                p1 = j * (SPHERE_DIV+1) + i;
-                p2 = p1 + (SPHERE_DIV+1);
-                indices.push(p1);
-                indices.push(p2);
-                indices.push(p1 + 1);
-                indices.push(p1 + 1);
-                indices.push(p2);
-                indices.push(p2 + 1);
-            }
-        }*/
+		// generate vertices, normals and uvs
+
+		for ( let j = 0; j <= heightSegments ; j ++ ) {
+
+			for ( let i = 0; i <= widthSegments; i ++ ) {
+
+				const u = i / widthSegments * arc;
+				const v = j / heightSegments * arc;
+
+				// vertex
+
+				let verX = -( radius) * Math.sin( v ) * Math.cos( u );
+				let verY = ( radius) * Math.cos( v );
+				let verZ = radius * Math.sin( v ) * Math.sin( u );
+
+				vertices.push( vec4(verX, verY, verZ, 1));
+
+			}
+
+		}
+
+		// generate indices
+
+		for ( let j = 1; j <= heightSegments ; j ++ ) {
+
+			for ( let i = 1; i <= widthSegments; i ++ ) {
+
+				// indices
+
+				let a = ( widthSegments + 1 ) * j + i - 1;
+				let b = ( widthSegments + 1 ) * ( j - 1 ) + i - 1;
+				let c = ( widthSegments + 1 ) * ( j - 1 ) + i;
+				let d = ( widthSegments + 1 ) * j + i;
+
+				// faces
+
+				indices.push( a, b, d );
+				indices.push( b, c, d );
+
+			}
+
+		}
 
         super(gl, vertices, indices, shaderProgram);      
     }
