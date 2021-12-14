@@ -14,20 +14,19 @@ class Sphere extends Mesh{
         let z = depth / 2;
   
 
-        let heightSegments  = 10;
-        let widthSegments = 10;
+        let points  = 10;
         let arc = Math.PI * 2; // the whole loop. If we place Math.PI will the system only draw half a cirkle 
         let indices = [];
 		let vertices = [];
 
 		// generate vertices, normals and uvs
 
-		for ( let j = 0; j <= heightSegments ; j ++ ) {
+		for ( let j = 0; j <= points ; j ++ ) {
 
-			for ( let i = 0; i <= widthSegments; i ++ ) {
+			for ( let i = 0; i <= points; i ++ ) {
 
-				const u = i / widthSegments * arc;
-				const v = j / heightSegments * arc;
+				const u = i / points * arc;
+				const v = j / points * arc;
 
 				// vertex
 
@@ -36,31 +35,24 @@ class Sphere extends Mesh{
 				let verZ = radius * Math.sin( v ) * Math.sin( u );
 
 				vertices.push( vec4(verX, verY, verZ, 1));
-
 			}
-
 		}
 
 		// generate indices
 
-		for ( let j = 1; j <= heightSegments ; j ++ ) {
-
-			for ( let i = 1; i <= widthSegments; i ++ ) {
+		for ( let j = 1; j <= points ; j ++ ) {
+			for ( let i = 1; i <= points; i ++ ) {
 
 				// indices
-
-				let a = ( widthSegments + 1 ) * j + i - 1;
-				let b = ( widthSegments + 1 ) * ( j - 1 ) + i - 1;
-				let c = ( widthSegments + 1 ) * ( j - 1 ) + i;
-				let d = ( widthSegments + 1 ) * j + i;
+				let a = ( points + 1 ) * j + i - 1;
+				let b = ( points + 1 ) * ( j - 1 ) + i - 1;
+				let c = ( points + 1 ) * ( j - 1 ) + i;
+				let d = ( points + 1 ) * j + i;
 
 				// faces
-
 				indices.push( a, b, d );
 				indices.push( b, c, d );
-
 			}
-
 		}
 
         super(gl, vertices, indices, shaderProgram);      
