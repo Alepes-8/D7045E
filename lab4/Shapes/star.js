@@ -7,7 +7,7 @@
  * @author Alex Peschel, Oliver Olofsson
  */
 
-class Cuboid extends Mesh{
+class Star extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
         let x = width / 2; 
         let y = height / 2;
@@ -22,26 +22,35 @@ class Cuboid extends Mesh{
             vec4( 0,  0,  -z, 1 ),   // front/top/left
         ];
 
-        
+        for(let i = 0; i < spikes; i++){
+            vertices.push(vec4(
+                outer_Vertices*Math.cos((2*i) * 2 * Math.PI / (spikes*2)),
+                outer_Vertices*Math.sin( (i*2)* 2 * Math.PI / (spikes*2)),
+                0,
+                1));
+            vertices.push(vec4(
+                inner_Vertices*Math.cos((i*2+1) * 2 * Math.PI / (spikes*2)),
+                inner_Vertices*Math.sin((i*2+1) * 2 * Math.PI / (spikes*2)),
+                0,
+                1));
+        }
 
 
     
         /*The connections between the vertices*/
-        let indices = [
-            0, 1, 2, 
-            2, 3, 0, 
-            0, 1, 6, 
-            6, 7, 0, 
-            1, 2, 5,
-            5, 6, 1, 
-            2, 5, 4,
-            4, 3, 2,
-            3, 0, 7,
-            7, 4, 3,
-            4, 5, 6,
-            6, 7, 4
-        ];
-        
+        let indices = [];
+        console.log(vertices.length);
+        for(let start = 0; start < 2; start++){
+            for(let i = 2; i <= spikes*2+1; i++){
+                if(i == spikes*2 + 1 ){
+                    indices.push(start, i, 2);
+                    console.log(i); 
+                }else{
+                    indices.push(start, i, i+1);
+                    console.log(i); 
+                }     
+            }
+        }
         super(gl, vertices, indices, shaderProgram);      
     }
 }
