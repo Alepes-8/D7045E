@@ -42,7 +42,7 @@ class ChangeObjects{
         let cuboid1;
         let temp = [];
         
-        if(form == "4"){
+        if(form == "6"){
             let max = 10;
             let min = -10;
             let maxZ = 10;
