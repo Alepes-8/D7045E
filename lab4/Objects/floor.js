@@ -19,8 +19,11 @@ class Floor{
             for(let j = 0; j < this.sideSizeX; j++){
                 let parent  = this.findParent(j);
                 let lockalMatrix;
-                if(j == 0 && i != 0){
-                    lockalMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,this.cubeLength, 0,0,0,1)
+                if(j == 0 && i == 0){
+                    lockalMatrix = this.firstPlacement;
+                }
+                else if(j == 0 && i != 0){
+                    lockalMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,this.cubeLength, 0,0,0,1);
                 }else{
                     lockalMatrix = mat4(1,0,0,this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
                 }
