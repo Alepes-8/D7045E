@@ -98,12 +98,12 @@
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
         let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-
+        
         //movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
         let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
         floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);
         floor.createFloor(gl, shader);
-
+        /*
         //add a cone
         let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
         let cone = new Cone(gl, 1, 1, shader.getProgram());
@@ -130,7 +130,7 @@
         let robotPlacement = mat4(1,0,0,-4, 0,1,0,0, 0,0,1,-4, 0,0,0,1)
         robot = new Robot(floor.movingNode[0]);
         robot.createRobot();
-
+        */
         /*
         let max = 15;
         let min = -15;
