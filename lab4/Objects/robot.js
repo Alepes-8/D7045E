@@ -3,6 +3,7 @@ class Robot{
         
         this.worldMatrix = referenceStart;
         this.parts = [];
+        this.star;
     }
 
 
@@ -62,6 +63,7 @@ class Robot{
         this.parts.push(new GraphicsNode(gl, topCone, monoGreen, topConeTransformer,monoBlack, middle)); 
         let head = this.parts[this.parts.length-1]
         this.parts.push(new GraphicsNode(gl, star, monoYellow, starTransformer,monoBlack, head)); 
+        this.star = this.parts[this.parts.length-1];
         this.parts.push(new GraphicsNode(gl, eye, monoRed, eyeTransformer1,monoBlack, head)); 
         this.parts.push(new GraphicsNode(gl, eye, monoRed, eyeTransformer2,monoBlack, head)); 
 
@@ -84,6 +86,14 @@ class Robot{
         this.parts.push(new GraphicsNode(gl, hand, monoRed, handTransformer,monoBlack, leftArm));
 
         
+    }
+
+    rotateHead(){
+        let rotation = rotate(3, [0,0,1]);
+        let starMatrix = this.star.transform;
+        let matrix = mult(starMatrix, rotation);
+        this.star.transform=matrix;
+
     }
 
     draw(){
