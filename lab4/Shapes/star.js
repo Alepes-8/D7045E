@@ -8,11 +8,10 @@
  */
 
 class Star extends Mesh{
-    constructor(gl, width, height, depth, shaderProgram){
+    constructor(gl, width, depth, spike, shaderProgram){
         let x = width / 2; 
-        let y = height / 2;
         let z = depth / 2;
-        let spikes = 8;
+        let spikes = spike;
         let outer_Vertices = x;
         let inner_Vertices = x/3;
 

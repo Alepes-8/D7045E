@@ -28,6 +28,7 @@
     <script src="Shapes/sphere.js"></script>
     <script src="Shapes/star.js"></script>
     <script src="Objects/floor.js"></script>
+    <script src="Objects/robot.js"></script>
     <script src="camera.js"></script>
     <script src="UserInputs/key.js"></script>
     <script src="UserInputs/changeObjects.js"></script>
@@ -66,6 +67,7 @@
     let nodes = [];
     let movingNode;
     let floor;
+    let robot;
     let camera;
     let shader;
     let part = true;
@@ -79,7 +81,7 @@
 
         //webgl configurations
         gl.viewport( 0, 0, canvas.width, canvas.height ); //delete
-        gl.clearColor(0, 0, 0, 1 );
+        gl.clearColor(0.2, 0.2, .2, 1 );
 
         gl.enable(gl.DEPTH_TEST);
 
@@ -99,8 +101,35 @@
 
         //movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
         let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
-        floor = new Floor(8, 0.1,8, 8, 8, boardPlacement,monoBlue,monoNode);
+        floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);
         floor.createFloor(gl, shader);
+
+        //add a cone
+        let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
+        let cone = new Cone(gl, 1, 1, 1, shader.getProgram());
+        let extraTransform = mat4(1,0,0,0, 0,1,0,0.5, 0,0,1,0, 0,0,0,1);
+        nodes.push(new GraphicsNode(gl, cone, monoYellow, extraTransform,monoBlack, floor.movingNode[3]));
+
+        // add cylinder
+        let cylinder = new Cylinder(gl, 1, 1, 1, shader.getProgram());
+        nodes.push(new GraphicsNode(gl, cylinder, monoYellow, extraTransform,monoBlack, floor.movingNode[9]));
+
+        // add sqhere
+        let sqhere = new Sphere(gl, 1, 1, 1, shader.getProgram());
+        nodes.push(new GraphicsNode(gl, sqhere, monoYellow, extraTransform,monoBlack, floor.movingNode[5]));
+
+        // add torus
+        let torus = new Torus(gl, 1, 0.2, 1, shader.getProgram());
+        nodes.push(new GraphicsNode(gl, torus, monoYellow, extraTransform,monoBlack, floor.movingNode[16]));
+        
+        // add cube
+        let cube = new Cuboid(gl, 1, 1, 1, shader.getProgram());
+        nodes.push(new GraphicsNode(gl, cube, monoYellow, extraTransform,monoBlack, floor.movingNode[30]));
+        
+        //create a robot
+        let robotPlacement = mat4(1,0,0,-4, 0,1,0,0, 0,0,1,-4, 0,0,0,1)
+        robot = new Robot(floor.movingNode[0]);
+        robot.createRobot();
 
         let max = 15;
         let min = -15;
@@ -149,7 +178,8 @@
         camera.activate(document.getElementById("persproj").checked);
 
         floor.draw();
-
+        robot.draw();
+        
         for(let i = 0; i < nodes.length; i++) {
             nodes[i].draw();
         }
