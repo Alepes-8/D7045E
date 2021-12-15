@@ -91,9 +91,9 @@ class Robot{
     rotateHead(){
         let degree  = 45 ;
         let rotation = rotate(degree,[0,1,0]); 
-
-        let newMatrix = mult(this.star.transform, rotation);
-        this.star.transform=newMatrix;
+        let change = mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1)
+        let newMatrix = mult(this.star.localMatrix, rotation);
+        this.star.localMatrix=newMatrix;
 
     }
 
