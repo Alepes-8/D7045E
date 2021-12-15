@@ -19,16 +19,15 @@ class GraphicsNode{
     this.mesh = mesh;
     this.material = material;
     this.materialBlack = materialBlack;
-    
-    this.transform = transform;
+    this.localMatrix = transform;
     if(worldMatrix == null){
       this.start = true;
       this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
-      this.lockalMatrix = mult(transform,this.worldMatrix);
+      this.transform = mult(this.localMatrix,this.worldMatrix);
     }else{
       this.start = false;
       this.worldMatrix = worldMatrix;
-      this.lockalMatrix = mult(transform,this.worldMatrix.transform);
+      this.transform = mult(this.localMatrix,this.worldMatrix.transform);
     }
     
     this.children = [];
@@ -41,10 +40,14 @@ class GraphicsNode{
     /*call the apply material method of the material*/
     let matrix;
     if(this.start){
-      matrix = mult(this.transform,this.worldMatrix);
+      matrix = this.transform;
     }else{
-      matrix = mult(this.transform,this.worldMatrix.transform);
+      matrix =  mult(this.localMatrix,this.worldMatrix.transform)
+      if(matrix != this.transform){
+        this.transform = matrix;
+      }
     }
+
     this.material.applyMaterial(matrix);
 
     /*execute a draw call*/
@@ -62,9 +65,5 @@ class GraphicsNode{
 
   getTransform() {
     return this.transform;
-   }
-
-   addChild(child){
-     this.children.push(child);
    }
 }
