@@ -8,7 +8,7 @@
  */
 
 class Star extends Mesh{
-    constructor(gl, width, depth, shaderProgram){
+    constructor(gl, width, depth, spike, shaderProgram){
 
         let x = width / 2; 
         let z = depth / 2;

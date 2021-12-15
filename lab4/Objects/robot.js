@@ -14,18 +14,18 @@ class Robot{
         let monoGrey = new MonochromeMaterial(gl, vec4(0.4, 0.4, 0.4, 1), shader);
 
         //body
-        let botCone = new Cone(gl, 2.5, 2.5, 2.5, shader.getProgram());
-        let midCone1 = new Cone(gl, 2, 2, 2, shader.getProgram());
-        let midCone2 = new Cone(gl, 1.5, 1.5, 1.5, shader.getProgram());
+        let botCone = new Cone(gl, 2.5, 2.5, shader.getProgram());
+        let midCone1 = new Cone(gl, 2, 2, shader.getProgram());
+        let midCone2 = new Cone(gl, 1.5, 1.5, shader.getProgram());
 
         let botConeTransformer = mat4(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
         let mid1ConeTransformer = mat4(1,0,0,0, 0,1,0,0.6, 0,0,1,0, 0,0,0,1);
         let mid2ConeTransformer = mat4(1,0,0,0, 0,1,0,.5, 0,0,1,0, 0,0,0,1); 
 
         //head
-        let topCone = new Cone(gl, 1, 1, 1, shader.getProgram());
+        let topCone = new Cone(gl, 1, 1, shader.getProgram());
         let star = new Star(gl, 1, 1, 6, shader.getProgram());
-        let eye = new Sphere(gl, 0.2, .2, .2, shader.getProgram());
+        let eye = new Sphere(gl, .2, shader.getProgram());
 
         let topConeTransformer = mat4(1,0,0,0, 0,1,0,.4, 0,0,1,0, 0,0,0,1);
         let starTransformer = mat4(1,0,0,0, 0,1,0,.7, 0,0,1,0, 0,0,0,1);
@@ -33,16 +33,16 @@ class Robot{
         let eyeTransformer2 = mat4(1,0,0, .25, 0,1,0,0, 0,0,1,.1, 0,0,0,1);
 
         //leg
-        let thigh = new Cylinder(gl, 0.5, 0.7, 1, shader.getProgram());
-        let foot = new Cone(gl, 0.7, .5, 1, shader.getProgram());
+        let thigh = new Cylinder(gl, 0.5, 0.7, shader.getProgram());
+        let foot = new Cone(gl, 0.7, .5, shader.getProgram());
 
         let thighTransformer1 = mat4(1,0,0, -.5, 0,1,0,-1.5, 0,0,1,0, 0,0,0,1);
         let thighTransformer2 = mat4(1,0,0,.5, 0,1,0,-1.5, 0,0,1,0, 0,0,0,1);
         let footTransformer = mat4(1,0,0,0, 0,1,0,-0.2, 0,0,1,0, 0,0,0,1);
 
         //arm
-        let arm = new Cylinder(gl, 0.3, 0.7, 1, shader.getProgram());
-        let hand = new Sphere(gl, 0.35, 0, 0, shader.getProgram());
+        let arm = new Cylinder(gl, 0.3, 0.7,  shader.getProgram());
+        let hand = new Sphere(gl, 0.35, shader.getProgram());
         let armTransformer1 = mat4(1,0,0, -1, 0,1,0,0, 0,0,1,0, 0,0,0,1);
         let armTransformer2 = mat4(1,0,0, 1, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 
