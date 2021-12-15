@@ -14,37 +14,43 @@ class Floor{
     createFloor(gl,  shader){
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid = new Cuboid(gl,this.cubeWidth, this.cubeHight, this.cubeLength, shader.getProgram());
-        for(let i = 0; i < this.sideSizeZ; i++){
+        let monoNode;
+        for(let i = 0;  i < this.sideSizeZ;  i++ ){
             for(let j = 0; j < this.sideSizeX; j++){
-                let matrix2 = mat4(1,0,0,this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
-                let matrix3 = this.addChildren(matrix2, j);
-                let monoNode;
-                let sum = (j+i) % 2;
-                if(sum == 1){
+                let parent  = this.findParent(j);
+                let lockalMatrix;
+                if(j == 0 && i != 0){
+                    lockalMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,this.cubeLength, 0,0,0,1)
+                }else{
+                    lockalMatrix = mat4(1,0,0,this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
+                }
+                if( (j+i) % 2 == 1){
                     monoNode = this.color1;
                 }else{
                     monoNode = this.color2;
                 }
-                this.movingNode.push(new GraphicsNode(gl, cuboid, monoNode, matrix3, monoBlack));
+                this.movingNode.push(new GraphicsNode(gl, cuboid, monoNode, lockalMatrix, monoBlack , parent));
             }
         }
-        return this.movingNode;
     }
 
-    addChildren(currentCube,cube){
-        let parrentCube;
-        if(this.movingNode.length == 0){
-            return mult(currentCube,this.firstPlacement);
-        }else if(cube == 0){
-            let movementZ = mat4(1,0,0,0, 0,1,0,0, 0,0,1,this.cubeLength, 0,0,0,1)
-            let movementMinX = mat4(1,0,0,-this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
-            let totMovment = mult(movementZ,movementMinX);
-            currentCube = mult(currentCube,totMovment);
-            parrentCube = this.movingNode[this.movingNode.length-8].transform;
-        }else{
-            parrentCube = this.movingNode[this.movingNode.length-1].transform;
-        }
-        return mult(currentCube,parrentCube);
 
+    draw(){
+        for(let i = 0; i < this.movingNode.length; i++) {
+            this.movingNode[i].draw();
+        }
+    }
+
+    move(m){
+        this.movingNode[0].updateTransform(m);
+    }
+
+    findParent(cube){
+        if(this.movingNode.length == 0){
+            return null;
+        }else if(cube == 0){
+            return this.movingNode[this.movingNode.length - this.sideSizeX];
+        }
+        return this.movingNode[this.movingNode.length - 1];
     }
 }

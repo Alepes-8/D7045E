@@ -7,27 +7,27 @@ class Key{
         let movementChange = true;
         switch (evt.keyCode) {
             case 37:
-                movingNode.updateTransform(mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                floor.move(mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
                 break;        // left arrow
 
             case 39:
-                movingNode.updateTransform( mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                floor.move( mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
                 break;       // right arrow
 
             case 38: 
-                movingNode.updateTransform( mat4(1,0,0,0, 0,1,0,0.1, 0,0,1,0, 0,0,0,1));
+                floor.move( mat4(1,0,0,0, 0,1,0,0.1, 0,0,1,0, 0,0,0,1));
                 break;        // up arrow
 
             case 40:
-                movingNode.updateTransform(mat4(1,0,0,0, 0,1,0,-0.1, 0,0,1,0, 0,0,0,1));
+                floor.move(mat4(1,0,0,0, 0,1,0,-0.1, 0,0,1,0, 0,0,0,1));
                 break;         // down arrow
 
             case 33: 
-                movingNode.updateTransform(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
+                floor.move(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
                 break;         // PageUp
 
             case 34:        
-                movingNode.updateTransform(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1)); 
+                floor.move(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1)); 
                 break;// PageDown
 
             case 81: //A
