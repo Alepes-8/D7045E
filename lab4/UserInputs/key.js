@@ -70,7 +70,7 @@ class Key{
         }
         if (movementChange) {
                 evt.preventDefault();
-                render();
+                //render();
         }
     }
 }

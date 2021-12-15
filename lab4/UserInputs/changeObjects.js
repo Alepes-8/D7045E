@@ -30,7 +30,7 @@ class ChangeObjects{
             cuboid1 = new Star(gl, width, depth, shader.getProgram());
         }
         movingNode = new GraphicsNode(gl, cuboid1, monoNode, movingNode.getTransform(), monoBlack);
-        render();
+        //render();
     }
 
     secoundChange(){
@@ -107,6 +107,6 @@ class ChangeObjects{
             }
         }
         nodes = temp;
-        render();
+        //render();
     }
 }
