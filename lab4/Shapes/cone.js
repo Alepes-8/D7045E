@@ -8,10 +8,9 @@
  */
 
 class Cone extends Mesh{
-    constructor(gl, width, height, depth, shaderProgram){
+    constructor(gl, width, height, shaderProgram){
         let r = width / 2; 
         let y = height / 2;
-        let z = depth / 2;
         let points= 30;
         /*The vector positions for e+ach point relative to each other in the 3D space*/
 

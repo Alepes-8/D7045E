@@ -8,12 +8,10 @@
  */
 
 class Torus extends Mesh{
-    constructor(gl, width, height, depth, shaderProgram){
+    constructor(gl, width, height, shaderProgram){
         let radius = width / 2; 
         let tube = height / 2;
-        let z = depth / 2;
   
-
         let radialSegments = 8
         let tubularSegments = 8
         let arc = Math.PI * 2 // the whole loop. If we place Math.PI will the system only draw half a cirkle 

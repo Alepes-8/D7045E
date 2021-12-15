@@ -15,19 +15,19 @@ class ChangeObjects{
             cuboid1 = new Cuboid(gl, width, height, depth, shader.getProgram());
         }
         else if(form == "2"){
-            cuboid1 = new Sphere(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Sphere(gl, width, shader.getProgram());
         }
         else if(form == "3"){
-            cuboid1 = new Cone(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Cone(gl, width, height, shader.getProgram());
         }
         else if(form == "4"){
-            cuboid1 = new Torus(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Torus(gl, width, height, shader.getProgram());
         }
         else if(form == "5"){
-            cuboid1 = new Cylinder(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Cylinder(gl, width, height, shader.getProgram());
         }
         else if(form == "6"){
-            cuboid1 = new Star(gl, width, height, depth, shader.getProgram());
+            cuboid1 = new Star(gl, width, depth, shader.getProgram());
         }
         movingNode = new GraphicsNode(gl, cuboid1, monoNode, movingNode.getTransform(), monoBlack);
         render();
