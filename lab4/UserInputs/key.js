@@ -7,7 +7,7 @@ class Key{
         let movementChange = true;
         switch (evt.keyCode) {
             case 37:
-                movingNode.updateTransform(mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                floor.move(mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
                 break;        // left arrow
 
             case 39:

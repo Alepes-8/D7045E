@@ -14,13 +14,24 @@
 
 class GraphicsNode{
    /*holds a mesh resource, material and an instance specific transform*/
-  constructor(gl, mesh, material, transform, materialBlack) {
+  constructor(gl, mesh, material, transform, materialBlack , worldMatrix = null) {
     this.gl = gl;
     this.mesh = mesh;
     this.material = material;
     this.materialBlack = materialBlack;
-
+    
     this.transform = transform;
+    if(worldMatrix == null){
+      this.start = true;
+      this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+      this.lockalMatrix = mult(transform,this.worldMatrix);
+    }else{
+      this.start = false;
+      this.worldMatrix = worldMatrix;
+      this.lockalMatrix = mult(transform,this.worldMatrix.transform);
+    }
+    
+    this.children = [];
   }
 
   draw() {
@@ -28,12 +39,18 @@ class GraphicsNode{
     this.gl.bindVertexArray(this.mesh.getVertexArray());
 
     /*call the apply material method of the material*/
-    this.material.applyMaterial(this.transform);
+    let matrix;
+    if(this.start){
+      matrix = mult(this.transform,this.worldMatrix);
+    }else{
+      matrix = mult(this.transform,this.worldMatrix.transform);
+    }
+    this.material.applyMaterial(matrix);
 
     /*execute a draw call*/
     this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
 
-    this.materialBlack.applyMaterial(this.transform);
+    this.materialBlack.applyMaterial(matrix);
 
     this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
   }
@@ -45,5 +62,9 @@ class GraphicsNode{
 
   getTransform() {
     return this.transform;
+   }
+
+   addChild(child){
+     this.children.push(child);
    }
 }
