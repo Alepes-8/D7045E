@@ -8,14 +8,10 @@
  */
 
 class Sphere extends Mesh{
-    constructor(gl, width, height, depth, shaderProgram){
-        let radius = width / 2; 
-        let y = height / 2;
-        let z = depth / 2;
-  
+    constructor(gl, width, shaderProgram){
+        let radius = width / 2;   
 
         let points  = 10;
-        let arc = Math.PI * 2; // the whole loop. If we place Math.PI will the system only draw half a cirkle 
         let indices = [];
 		let vertices = [];
 
@@ -25,9 +21,9 @@ class Sphere extends Mesh{
 
 			for ( let i = 0; i <= points; i ++ ) {
 
-				const u = i / points * arc;
-				const v = j / points * arc;
-
+				const v = j / points * Math.PI;
+				const u = i / points * Math.PI * 2;
+				
 				// vertex
 
 				let verX = -( radius) * Math.sin( v ) * Math.cos( u );

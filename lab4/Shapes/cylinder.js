@@ -8,10 +8,9 @@
  */
 
 class Cylinder extends Mesh{
-    constructor(gl, width, height, depth, shaderProgram){
+    constructor(gl, width, height, shaderProgram){
         let r = width / 2; 
         let y = height / 2;
-        let z = depth / 2;
         let points= 30;
         let vertices = [
             vec4( 0, -y,  0, 1 ),   // front/bottom/left
