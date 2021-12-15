@@ -92,8 +92,9 @@ class ChangeObjects{
             else if(form == "5"){
                 cuboid1 = new Cylinder(gl, width, height, depth, shader.getProgram());
             }               
-            else if(choice == "6"){
-                cuboid1 = new Star(gl, width, height, depth, shader.getProgram());
+            else if(form == "6"){
+                let spikes = height
+                cuboid1 = new Star(gl, width, depth, spikes, shader.getProgram());
             }
             let max = 10;
             let min = -10;
