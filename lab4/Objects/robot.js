@@ -89,10 +89,11 @@ class Robot{
     }
 
     rotateHead(){
-        let rotation = rotate(3, [0,0,1]);
-        let starMatrix = this.star.transform;
-        let matrix = mult(starMatrix, rotation);
-        this.star.transform=matrix;
+        let degree  = 45 ;
+        let rotation = rotate(degree,[0,1,0]); 
+
+        let newMatrix = mult(this.star.transform, rotation);
+        this.star.transform=newMatrix;
 
     }
 
