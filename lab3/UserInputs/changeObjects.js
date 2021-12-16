@@ -3,7 +3,6 @@
  */
 class ChangeObjects{
     mainNode(){
-        console.log("hejsan");
         let form = document.getElementById("mainForm").value;
         let width = document.getElementById("mainwidth").value;
         let height = document.getElementById("mainheight").value;

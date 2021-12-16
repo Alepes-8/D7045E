@@ -28,6 +28,7 @@ class GraphicsNode{
       this.start = false;
       this.worldMatrix = worldMatrix;
       this.transform = mult(this.localMatrix,this.worldMatrix.transform);
+      this.worldMatrix.children.push(this);
     }
     
     this.children = [];
@@ -60,7 +61,7 @@ class GraphicsNode{
 
   //if you move a node around the transform needs to be updated
   updateTransform(m2) {
-   this.transform = mult(this.transform, m2);
+   this.localMatrix = mult(this.localMatrix, inverse(m2));
   }
 
   getTransform() {

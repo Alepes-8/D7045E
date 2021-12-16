@@ -39,15 +39,12 @@ class Star extends Mesh{
     
         /*The connections between the vertices*/
         let indices = [];
-        console.log(vertices.length);
         for(let start = 0; start < 2; start++){
             for(let i = 2; i <= spikes*2+1; i++){
                 if(i == spikes*2 + 1 ){
                     indices.push(start, i, 2);
-                    console.log(i); 
                 }else{
                     indices.push(start, i, i+1);
-                    console.log(i); 
                 }     
             }
         }

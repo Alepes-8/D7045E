@@ -1,18 +1,17 @@
 class Floor{
-    constructor(totalX, totalY, totalZ, sideSizeX, sideSizeZ,firstMatrix, color1, color2, centerNode){
+    constructor(boardWeith, boardHight,boardLength, sideSizeX, sideSizeZ, color1, color2, centerNode){
         this.centerNode = centerNode;
-        this.cubeWidth =totalX/sideSizeX;
-        this.cubeHight = totalY;
-        this.cubeLength = totalZ/sideSizeZ;
+        this.cubeWidth =boardWeith/sideSizeX;
+        this.cubeHight = boardHight;
+        this.cubeLength = boardLength/sideSizeZ;
         this.sideSizeX = sideSizeX;
         this.sideSizeZ = sideSizeZ;
-        this.firstPlacement = firstMatrix;
         this.color1 = color1;
         this.color2 = color2;
         this.movingNode = [];
     }
 
-    createFloor(gl,  shader){
+    createFloor(gl,  shader){  
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid = new Cuboid(gl,this.cubeWidth, this.cubeHight, this.cubeLength, shader.getProgram());
         let monoNode;
@@ -21,13 +20,15 @@ class Floor{
                 let parent  = this.findParent(j);
                 let lockalMatrix;
                 if(j == 0 && i == 0){
-                    lockalMatrix = this.firstPlacement;
+                    this.movingNode.push(this.centerNode);
+                    continue;
                 }
                 else if(j == 0 && i != 0){
-                    lockalMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,this.cubeLength, 0,0,0,1);
+                    lockalMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,-this.cubeLength, 0,0,0,1);
                 }else{
                     lockalMatrix = mat4(1,0,0,this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
                 }
+
                 if( (j+i) % 2 == 1){
                     monoNode = this.color1;
                 }else{
@@ -48,14 +49,8 @@ class Floor{
         }
     }
 
-    move(m){
-        this.movingNode[0].updateTransform(m);
-    }
-
     findParent(cube){
-        if(this.movingNode.length == 0){
-            return null;
-        }else if(cube == 0){
+        if(cube == 0){
             return this.movingNode[this.movingNode.length - this.sideSizeX];
         }
         return this.movingNode[this.movingNode.length - 1];
