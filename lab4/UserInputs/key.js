@@ -7,18 +7,19 @@ class Key{
         let movementChange = true;
         switch (evt.keyCode) {
             case 37:
-                floor.move(mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                rotateWorld(2);
                 break;        // left arrow
 
             case 39:
-                floor.move( mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                rotateWorld(-2);
                 break;       // right arrow
 
             case 38: 
-                floor.move( mat4(1,0,0,0, 0,1,0,0.1, 0,0,1,0, 0,0,0,1));
+                console.log("not implemented")
                 break;        // up arrow
 
             case 40:
+
                 floor.move(mat4(1,0,0,0, 0,1,0,-0.1, 0,0,1,0, 0,0,0,1));
                 break;         // down arrow
 

@@ -1,5 +1,6 @@
 class Floor{
-    constructor(totalX, totalY, totalZ, sideSizeX, sideSizeZ,firstMatrix, color1, color2){
+    constructor(totalX, totalY, totalZ, sideSizeX, sideSizeZ,firstMatrix, color1, color2, centerNode){
+        this.centerNode = centerNode;
         this.cubeWidth =totalX/sideSizeX;
         this.cubeHight = totalY;
         this.cubeLength = totalZ/sideSizeZ;
@@ -37,6 +38,9 @@ class Floor{
         }
     }
 
+    getItem(item){
+        return this.movingNode[item];
+    }
 
     draw(){
         for(let i = 0; i < this.movingNode.length; i++) {
