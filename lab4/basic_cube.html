@@ -71,6 +71,8 @@
     let camera;
     let shader;
     let part = true;
+    let centerNode;
+    let test;
 
     function init() {
 
@@ -93,65 +95,37 @@
 
         optionListiners();
 
+        //colors
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
 
+        //shapes
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
         let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-        
-        //movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
+        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
+
+        //Positions
+        let center = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+        let extraTransform = mat4(1,0,0,3, 0,1,0,0, 0,0,1,2, 0,0,0,1);
         let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
-        floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);
+
+        // changes to the poition, mostly rotation if needed.
+        extraTransform = rotateObject(extraTransform)
+
+        //creation of nodes
+        centerNode = new GraphicsNode(gl, cuboid2, monoYellow, center ,monoBlack);
+        movingNode = new GraphicsNode(gl, torus, monoYellow, extraTransform ,monoBlack,centerNode);
+        test = new GraphicsNode(gl, torus, monoNode, extraTransform ,monoBlack,movingNode);
+        
+        //creation of objects
+        floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode, center);
         floor.createFloor(gl, shader);
-
-        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
-        let extraTransform = mat4(1,0,0,0, 0,1,0,0.5, 0,0,1,0, 0,0,0,1);
-        movingNode = new GraphicsNode(gl, torus, monoYellow, extraTransform ,monoBlack);
-
-        /*
-        //add a cone
-        let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
-        let cone = new Cone(gl, 1, 1, shader.getProgram());
-        let extraTransform = mat4(1,0,0,0, 0,1,0,0.5, 0,0,1,0, 0,0,0,1);
-        nodes.push(new GraphicsNode(gl, cone, monoYellow, extraTransform,monoBlack, floor.movingNode[3]));
-
-        // add cylinder
-        let cylinder = new Cylinder(gl, 1, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, cylinder, monoYellow, extraTransform,monoBlack, floor.movingNode[9]));
-
-        // add sqhere
-        let sqhere = new Sphere(gl, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, sqhere, monoYellow, extraTransform,monoBlack, floor.movingNode[5]));
-
-        // add torus
-        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, torus, monoYellow, extraTransform,monoBlack, floor.movingNode[16]));
         
-        // add cube
-        let cube = new Cuboid(gl, 1, 1, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, cube, monoYellow, extraTransform,monoBlack, floor.movingNode[30]));
-        
-        //create a robot
-        let robotPlacement = mat4(1,0,0,-4, 0,1,0,0, 0,0,1,-4, 0,0,0,1)
-        robot = new Robot(floor.movingNode[0]);
-        robot.createRobot();
-        */
-        /*
-        let max = 15;
-        let min = -15;
-        let maxZ = 0;
-        let minZ = -40
-        for (let i = 0; i <= 60; i++) {
-            let x = Math.floor(Math.random() * (max - min)) + min;
-            let y = Math.floor(Math.random() * (max - min)) + min;
-            let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-            let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-            nodes.push(new GraphicsNode(gl, cuboid2, monoBlue, transform,monoBlack));
-        }
-        */
-        
+        //store parts connected to the center
+        nodes.push(movingNode);
+
         
         render();
     }
@@ -189,20 +163,75 @@
         camera.activate(document.getElementById("persproj").checked);
 
         floor.draw();
-        //robot.draw();
-        movingNode.draw();
 
-        for(let i = 0; i < nodes.length; i++) {
+        centerNode.draw();
+        //movingNode.draw();
+
+        test.draw();
+
+        for(let i = 0; i< nodes.length; i++){
+
             nodes[i].draw();
         }
+
     } 
 
     function addRotation(){
         let degree = 2;
         let rotation = rotate(degree, [0,1,0]);
-        let matrix = mult(rotation, movingNode.transform);
+        let matrix = mult( movingNode.transform, rotation);
+        movingNode.localMatrix = matrix;
+        movingNode.transform = mult(movingNode.localMatrix,movingNode.worldMatrix.transform)
     }
 
+    function rotateWorld(degree){
+        let rotation = rotate(degree, [0,1,0]);
+        let matrix = mult( centerNode.transform, rotation);
+        centerNode.localMatrix = matrix;
+        centerNode.transform = matrix;
+
+        let a = movingNode.transform[2][3];
+        let b = movingNode.transform[0][3];
+        let hyp = Math.sqrt(a*a + b*b);
+        let angle = Math.atan(a/b) * (180/Math.PI);
+
+        if(angle - degree < -90){
+            angle = 90 + (angle -degree +90);
+            if(b>0){
+                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+            }else{
+                b = hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }
+        else{
+            angle -=degree;
+        }
+
+        if(b > 0){
+            b = hyp * Math.cos(angle * (Math.PI/180) );
+            a = hyp * Math.sin(angle * (Math.PI/180));
+        }else{
+            b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+            a = -(hyp * Math.sin(angle * (Math.PI/180)));
+        }
+        
+        movingNode.localMatrix[2][3] = a;
+        movingNode.localMatrix[0][3] = b;
+        
+    }
+
+    function rotateObject(matrix){
+        let a = matrix[2][3];
+        let b = matrix[0][3];
+        let hyp = Math.sqrt(a*a + b*b);
+        let angle = Math.atan(a/b) * (180/Math.PI);
+        let rotation = rotate(-angle,[0,1,0]);
+        return mult(matrix, rotation);
+
+    }
+
+
+   
     window.onload = init;
     
 </script>
