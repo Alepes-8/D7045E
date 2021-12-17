@@ -66,11 +66,10 @@
     let gl;
     let nodes = [];
     let movingNode;
-    let floor;
-    let robot;
     let camera;
     let shader;
     let centerNode;
+    let itemArray = [];
 
 
     function init() {
@@ -101,6 +100,7 @@
         let tilesX = 8;
         let tilesY = 8;
         let ballRadien = 3;
+        let itemHights = 3;
 
 
         //colors
@@ -113,18 +113,27 @@
         //shapes
         let center = new Sphere(gl, 0.5, shader.getProgram());
         let boardFirstSquare = new Cuboid(gl, boardWeith/tilesX, boardHight, boardLength/tilesY, shader.getProgram());
-        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
         let sphereForm = new Sphere(gl, ballRadien, shader.getProgram());
+        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
+        let cone = new Cone(gl, 1, itemHights, shader.getProgram());
+        let cube = new Cuboid(gl, 1, itemHights, 1, shader.getProgram());
+        let cylinder = new Cylinder(gl, 1, itemHights, shader.getProgram());
 
 
         //Positions
         let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
         let firstBoardPiece = mat4(1,0,0,-((boardWeith/5) *2), 0,1,0,-2, 0,0,1,boardLength/2, 0,0,0,1);
-        let ballTransform = mat4(1,0,0,0, 0,1,0,ballRadien/2, 0,0,1,0, 0,0,0,1)
+        let ballTransform = mat4(1,0,0,0, 0,1,0,ballRadien/2, 0,0,1,0, 0,0,0,1);
+        let torusTransform = mat4(1,0,0,0, 0,1,0,1, 0,0,1,0, 0,0,0,1);
+        let cubeTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
+        let coneTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
+        let cylinderTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
 
 
         // changes to the poition, mostly rotation if needed.
-        
+       
+
+
         //creation of center
         centerNode = new GraphicsNode(gl, center, monoYellow, centerTransform ,monoBlack);
 
@@ -133,14 +142,18 @@
         nodes.push(new GraphicsNode(gl, boardFirstSquare, monoBlack, firstBoardPiece ,monoBlack,centerNode));
         nodes.push(new GraphicsNode(gl, sphereForm, monoYellow, ballTransform ,monoBlack,nodes[0]));
 
-        
-        //creation of nodes
-        //ball = new GraphicsNode(gl, sphereForm, monoYellow, ballTransform ,monoBlack,nodes[0]);
-
-       
         //creation of objects
         floor = new Floor(boardWeith, boardHight,boardLength, tilesX, tilesY,monoWhite,monoBlack, nodes[0]);
         floor.createFloor(gl, shader);
+
+        //creation of nodes
+        itemArray.push(new GraphicsNode(gl, torus, monoYellow, torusTransform ,monoBlack,floor.movingNode[5]));
+        itemArray.push(new GraphicsNode(gl, cone, monoYellow, coneTransform ,monoBlack,floor.movingNode[20]));
+        itemArray.push(new GraphicsNode(gl, cube, monoYellow, cubeTransform ,monoBlack,floor.movingNode[40]));
+        itemArray.push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform ,monoBlack,floor.movingNode[50]));
+
+
+        rotateWorldY(-0.01);
         render(); 
     }
 
@@ -179,23 +192,33 @@
         centerNode.draw();
 
         for(let i = 0; i< nodes.length; i++){
-
             nodes[i].draw();
         } 
-        //ball.draw();
+
         floor.draw();
+
+        for(let i = 0; i< itemArray.length; i++){
+            itemArray[i].draw();
+        } 
+        //ball.draw();
+        
     } 
 
     function move(m){
         nodes[0].updateTransform(m);
     }
 
-    function addRotation(){
-        let degree = 2;
-        let rotation = rotate(degree, [0,1,0]);
-        let matrix = mult( movingNode.transform, rotation);
-        movingNode.localMatrix = matrix;
-        movingNode.transform = mult(movingNode.localMatrix,movingNode.worldMatrix.transform)
+    function addRotation(matrix, degree, way){
+        let rotation;
+        if(way == 0){
+            rotation = rotate(degree, [1,0,0])
+        }else if(way == 1){
+            rotation = rotate(degree, [0,1,0])
+        }else if(way == 2){
+            rotation = rotate(degree, [0,0,1])
+        }
+        
+        return mult( matrix, rotation);
     }
 
     function forSpecificNodeY(object,degree){
