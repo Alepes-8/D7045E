@@ -95,9 +95,9 @@
         optionListiners();
 
         //init values
-        let boardWeith = 16;
+        let boardWeith = 20;
         let boardHight = 0.1;
-        let boardLength = 16;
+        let boardLength = 20;
         let tilesX = 8;
         let tilesY = 8;
         let ballRadien = 3;
@@ -107,6 +107,7 @@
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
         let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
 
         //shapes
@@ -119,7 +120,7 @@
         //Positions
         let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
         let firstBoardPiece = mat4(1,0,0,-((boardWeith/5) *2), 0,1,0,-2, 0,0,1,boardLength/2, 0,0,0,1);
-        let ballTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1)
+        let ballTransform = mat4(1,0,0,0, 0,1,0,ballRadien/2, 0,0,1,0, 0,0,0,1)
 
 
         // changes to the poition, mostly rotation if needed.
@@ -129,17 +130,17 @@
 
 
         //store parts connected to the center
-        nodes.push(new GraphicsNode(gl, boardFirstSquare, monoYellow, firstBoardPiece ,monoBlack,centerNode));
+        nodes.push(new GraphicsNode(gl, boardFirstSquare, monoBlack, firstBoardPiece ,monoBlack,centerNode));
+        nodes.push(new GraphicsNode(gl, sphereForm, monoYellow, ballTransform ,monoBlack,nodes[0]));
 
         
         //creation of nodes
-        ball = new GraphicsNode(gl, sphereForm, monoYellow, ballTransform ,monoBlack,nodes[0]);
+        //ball = new GraphicsNode(gl, sphereForm, monoYellow, ballTransform ,monoBlack,nodes[0]);
 
        
         //creation of objects
-        floor = new Floor(boardWeith, boardHight,boardLength, tilesX, tilesY,monoBlue,monoNode, nodes[0]);
+        floor = new Floor(boardWeith, boardHight,boardLength, tilesX, tilesY,monoWhite,monoBlack, nodes[0]);
         floor.createFloor(gl, shader);
-        rotateWorldY(-2);
         render(); 
     }
 
@@ -181,7 +182,7 @@
 
             nodes[i].draw();
         } 
-        ball.draw();
+        //ball.draw();
         floor.draw();
     } 
 
@@ -202,54 +203,10 @@
         let b = object.localMatrix[0][3];
         let hyp = Math.sqrt(a*a + b*b);
         let angle = Math.atan(a/b) * (180/Math.PI);
-
-        if(angle - degree < -90){
-            angle = 90 + (angle -degree +90);
-            if(b>0){
-                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
-            }else{
-                b = hyp * Math.cos(angle * (Math.PI/180) );
-            }
-        }
-        else{
-            angle -=degree;
-        }
-
-        if(b > 0){
-            b = hyp * Math.cos(angle * (Math.PI/180) );
-            a = hyp * Math.sin(angle * (Math.PI/180));
-        }else if(b==0){
-            if(a > 0){
-                a = hyp * Math.sin(angle * (Math.PI/180));
-            }
-            if(a > 0){
-                a = -(hyp * Math.sin(angle * (Math.PI/180)));
-            }
-            b = (hyp * Math.cos(angle * (Math.PI/180) ));
-        }
-        else{
-            b = -(hyp * Math.cos(angle * (Math.PI/180) ));
-            a = -(hyp * Math.sin(angle * (Math.PI/180)));
-        }
-        
-        object.localMatrix[2][3] = a;
-        object.localMatrix[0][3] = b;
-        for(let j = 0; j < object.children.length; j++){
-            forSpecificNodeY(object.children[j],degree);
-        }
-    }
-
-    function rotateWorldY(degree){
-        let rotation = rotate(degree, [0,1,0]);
-        let matrix = mult( centerNode.transform, rotation);
-        centerNode.transform = matrix;
-        for(let i = 0; i < nodes.length; i++){
-            let item = nodes[i];
-            let a = item.localMatrix[2][3];
-            let b = item.localMatrix[0][3];
-            let hyp = Math.sqrt(a*a + b*b);
-            let angle = Math.atan(a/b) * (180/Math.PI);
-
+        if(a == 0 && b == 0){
+            object.localMatrix[2][3] = 0;
+            object.localMatrix[0][3] = 0;
+        }else{
             if(angle - degree < -90){
                 angle = 90 + (angle -degree +90);
                 if(b>0){
@@ -265,20 +222,75 @@
             if(b > 0){
                 b = hyp * Math.cos(angle * (Math.PI/180) );
                 a = hyp * Math.sin(angle * (Math.PI/180));
-            }
-            else if(b==0){
+            }else if(b==0){
                 if(a > 0){
                     a = hyp * Math.sin(angle * (Math.PI/180));
                 }
                 if(a > 0){
                     a = -(hyp * Math.sin(angle * (Math.PI/180)));
                 }
-                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                b = (hyp * Math.cos(angle * (Math.PI/180) ));
             }
             else{
                 b = -(hyp * Math.cos(angle * (Math.PI/180) ));
                 a = -(hyp * Math.sin(angle * (Math.PI/180)));
             }
+            object.localMatrix[2][3] = a;
+            object.localMatrix[0][3] = b;
+        }
+        
+       
+        for(let j = 0; j < object.children.length; j++){
+            forSpecificNodeY(object.children[j],degree);
+        }
+    }
+
+    function rotateWorldY(degree){
+        let rotation = rotate(degree, [0,1,0]);
+        let matrix = mult( nodes[0].transform, rotation);
+        nodes[0].localMatrix = matrix;
+        
+        for(let i = 0; i < nodes.length; i++){
+            let item = nodes[i];
+            let a = item.localMatrix[2][3];
+            let b = item.localMatrix[0][3];
+            let hyp = Math.sqrt(a*a + b*b);
+            let angle = Math.atan(a/b) * (180/Math.PI);
+
+           if(a == 0 && b==0){
+               a=0;
+               b=0;
+            }else{
+                if(angle - degree < -90){
+                    angle = 90 + (angle -degree +90);
+                    if(b>0){
+                        b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                    }else{
+                        b = hyp * Math.cos(angle * (Math.PI/180) );
+                    }
+                }
+                else{
+                    angle -=degree;
+                }
+
+                if(b > 0){
+                    b = hyp * Math.cos(angle * (Math.PI/180) );
+                    a = hyp * Math.sin(angle * (Math.PI/180));
+                }
+                else if(b==0){
+                    if(a > 0){
+                        a = hyp * Math.sin(angle * (Math.PI/180));
+                    }
+                    if(a > 0){
+                        a = -(hyp * Math.sin(angle * (Math.PI/180)));
+                    }
+                    b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                }
+                else{
+                    b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                    a = -(hyp * Math.sin(angle * (Math.PI/180)));
+                }
+           }
             
             item.localMatrix[2][3] = a;
             item.localMatrix[0][3] = b;
