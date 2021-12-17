@@ -125,13 +125,12 @@
         let firstBoardPiece = mat4(1,0,0,-((boardWeith/5) *2), 0,1,0,-2, 0,0,1,boardLength/2, 0,0,0,1);
         let ballTransform = mat4(1,0,0,0, 0,1,0,ballRadien/2, 0,0,1,0, 0,0,0,1);
         let torusTransform = mat4(1,0,0,0, 0,1,0,1, 0,0,1,0, 0,0,0,1);
-        let cubeTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
-        let coneTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
-        let cylinderTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1)
-
+        let cubeTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
+        let coneTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
+        let cylinderTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
+        let testTransform = mat4(1,0,0,0, 0,1,0,3, 0,0,1,0, 0,0,0,1)
 
         // changes to the poition, mostly rotation if needed.
-       
 
 
         //creation of center
@@ -147,11 +146,13 @@
         floor.createFloor(gl, shader);
 
         //creation of nodes
-        itemArray.push(new GraphicsNode(gl, torus, monoYellow, torusTransform ,monoBlack,floor.movingNode[5]));
+        itemArray.push(new GraphicsNode(gl, torus, monoYellow, mult(torusTransform,rotate(90,[1,0,0])) ,monoBlack,floor.movingNode[5]));
         itemArray.push(new GraphicsNode(gl, cone, monoYellow, coneTransform ,monoBlack,floor.movingNode[20]));
         itemArray.push(new GraphicsNode(gl, cube, monoYellow, cubeTransform ,monoBlack,floor.movingNode[40]));
         itemArray.push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform ,monoBlack,floor.movingNode[50]));
 
+        //test rotate around axis
+        test = new GraphicsNode(gl, torus, monoYellow, mult(testTransform,rotate(90,[1,0,0])) ,monoBlack);
 
         rotateWorldY(-0.01);
         render(); 
@@ -200,7 +201,7 @@
         for(let i = 0; i< itemArray.length; i++){
             itemArray[i].draw();
         } 
-        //ball.draw();
+        test.draw();
         
     } 
 
