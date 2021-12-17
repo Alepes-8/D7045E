@@ -128,9 +128,9 @@
         let cubeTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
         let coneTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
         let cylinderTransform = mat4(1,0,0,0, 0,1,0,itemHights/2, 0,0,1,0, 0,0,0,1);
-        let testTransform = mat4(1,0,0,0, 0,1,0,3, 0,0,1,0, 0,0,0,1)
+        let testTransform = mat4(1,0,0,3, 0,1,0,0, 0,0,1,2, 0,0,0,1)
+        let test2Transform = mat4(1,0,0,3, 0,1,0,0, 0,0,1,2, 0,0,0,1)
 
-        // changes to the poition, mostly rotation if needed.
 
 
         //creation of center
@@ -146,13 +146,13 @@
         floor.createFloor(gl, shader);
 
         //creation of nodes
-        itemArray.push(new GraphicsNode(gl, torus, monoYellow, mult(torusTransform,rotate(90,[1,0,0])) ,monoBlack,floor.movingNode[5]));
+        itemArray.push(new GraphicsNode(gl, torus, monoYellow, torusTransform ,monoBlack,floor.movingNode[5]));
         itemArray.push(new GraphicsNode(gl, cone, monoYellow, coneTransform ,monoBlack,floor.movingNode[20]));
         itemArray.push(new GraphicsNode(gl, cube, monoYellow, cubeTransform ,monoBlack,floor.movingNode[40]));
         itemArray.push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform ,monoBlack,floor.movingNode[50]));
 
-        //test rotate around axis
-        test = new GraphicsNode(gl, torus, monoYellow, mult(testTransform,rotate(90,[1,0,0])) ,monoBlack);
+        // changes to the poition, mostly rotation if needed.        
+        addRotation(itemArray[0], 34, "y");
 
         rotateWorldY(-0.01);
         render(); 
@@ -201,7 +201,7 @@
         for(let i = 0; i< itemArray.length; i++){
             itemArray[i].draw();
         } 
-        test.draw();
+
         
     } 
 
@@ -209,17 +209,35 @@
         nodes[0].updateTransform(m);
     }
 
-    function addRotation(matrix, degree, way){
-        let rotation;
-        if(way == 0){
-            rotation = rotate(degree, [1,0,0])
-        }else if(way == 1){
-            rotation = rotate(degree, [0,1,0])
-        }else if(way == 2){
-            rotation = rotate(degree, [0,0,1])
+    function addRotation(object,degree, axes){
+        object.transform = mult(object.localMatrix, object.worldMatrix.transform);
+        let x = object.transform[0][3];
+        let y = object.transform[1][3];
+        let z = object.transform[2][3];
+
+        object.transform[0][3] = 0;
+        object.transform[1][3] = 0;
+        object.transform[2][3] = 0;
+        console.log("before", object.transform)
+
+        if(axes == "x"){
+            object.transform = mult(object.transform, rotate(degree,[1,0,0]));
+        }else if(axes == "y"){
+            object.transform = mult(object.transform, rotate(degree,[0,1,0]));
+        }else if(axes == "z"){
+            object.transform = mult(object.transform, rotate(degree,[0,0,1]));
         }
-        
-        return mult( matrix, rotation);
+        console.log(object.transform)
+        console.log(x,y,z)
+
+        object.transform[0][3] = x;
+        object.transform[1][3] = y;
+        object.transform[2][3] = z;
+        console.log("after adding x", object.transform)
+
+        invMatrix = inverse4(object.worldMatrix.transform);
+        object.localMatrix = mult(object.transform,invMatrix);
+        console.log(object.localMatrix)
     }
 
     function forSpecificNodeY(object,degree){
@@ -326,7 +344,7 @@
         
         
     }
-
+/*
     function rotateObject(matrix){
         let a = matrix[2][3];
         let b = matrix[0][3];
@@ -336,7 +354,7 @@
         return mult(matrix, rotation);
 
     }
-
+*/
 
    
     window.onload = init;
