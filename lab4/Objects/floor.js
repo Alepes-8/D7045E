@@ -40,7 +40,6 @@ class Floor{
                 this.objectArray.push(new GraphicsNode(gl, cuboid, monoNode, lockalMatrix, monoBlack, cubeTranslate, parent));
             }
         }
-        
     }
 
     draw(){
