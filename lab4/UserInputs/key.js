@@ -31,11 +31,11 @@ class Key{
                 break;// PageDown
 
             case 81: //A
-                rotateWorld(-0.2);
+                rotateWorld(-2);
                 break;
 
             case 69: //D
-                rotateWorld(0.2);
+                rotateWorld(2);
                 break;
 
             case 68: //e

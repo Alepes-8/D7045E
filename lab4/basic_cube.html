@@ -96,7 +96,7 @@
 
         // translatons
         let centerTranslation = translate(0,0,0)
-        let cubeTranslate1 = translate(2,0,0);
+        let cubeTranslate1 = translate(0,0,0);
         let cubeTranslate2 = translate(1,0,1);
 
         //transform
@@ -105,7 +105,7 @@
         let cubeTransform2 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 
         //rotation
-        cubeTranslate1 = mult(cubeTranslate1, rotate(45,[0,1,0]));
+        //cubeTranslate1 = mult(cubeTranslate1, rotate(45,[0,1,0]));
 
         //shapes
         let centerNode = new Sphere(gl, 0.5, shader.getProgram());
@@ -119,6 +119,7 @@
         arrayWorld[1].push(new GraphicsNode(gl, cuboid1, monoBlue, cubeTransform2, monoBlack,cubeTranslate2, arrayWorld[0][0]));
 
         //move item
+
 
 
         render();
@@ -175,6 +176,59 @@
 
     function rotateWorld(degree){
         console.log(degree);
+        arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
+        
+        for(let i = 0; i < arrayWorld[0].length; i++){
+            rotateObject(arrayWorld[0][i],degree);
+        }
+    }
+
+    function rotateObject(item,degree){
+        let a = item.localMatrix[2][3]; //z
+        let b = item.localMatrix[0][3]; //x
+        let hyp = Math.sqrt(a*a + b*b);
+        let angle = Math.atan(a/b) * (180/Math.PI);
+
+        if(a == 0 && b==0){
+            a=0;
+            b=0;
+        }else{
+            if(angle - degree < -90){
+                angle = 90 + (angle -degree +90);
+                if(b>0){
+                    b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                }else{
+                    b = hyp * Math.cos(angle * (Math.PI/180) );
+                }
+            }
+            else{
+                angle -=degree;
+            }
+
+            if(b > 0){
+                b = hyp * Math.cos(angle * (Math.PI/180) );
+                a = hyp * Math.sin(angle * (Math.PI/180));
+            }
+            else if(b==0){
+                if(a > 0){
+                    a = hyp * Math.sin(angle * (Math.PI/180));
+                }
+                if(a > 0){
+                    a = -(hyp * Math.sin(angle * (Math.PI/180)));
+                }
+                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+            }
+            else{
+                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                a = -(hyp * Math.sin(angle * (Math.PI/180)));
+            }
+        }
+            
+        item.localMatrix[2][3] = a;
+        item.localMatrix[0][3] = b;
+        for(let i = 0; i < item.children.length; i++){
+            rotateObject(item.children[i],degree)
+        }
     }
 
     window.onload = init;
