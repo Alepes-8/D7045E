@@ -89,42 +89,52 @@
 
         optionListiners();
 
+        let boardWeith = 3;
+        let boardHight = 0.1;
+        let boardLength = 8;
+        let sideSizeX = 6;
+        let sideSizeZ = 6;
+
         //colors
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
 
         // translatons
-        let centerTranslation = translate(0,0,0)
+        let centerTranslation = translate(0,0,0);
         let cubeTranslate1 = translate(0,0,0);
         let cubeTranslate2 = translate(0,0,0);
         let cylinderTranslate1 = translate(0,0,0);
+        let floorCuboidTest = translate(0,0,0);
 
         //transform
         let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
-        let cubeTransform = mat4(1,0,0,2, 0,1,0,0, 0,0,1,1, 0,0,0,1);
-        let cubeTransform2 = mat4(1,0,0,0.5, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+        let firstCubeTransform = mat4(1,0,0,-boardWeith/4, 0,1,0,0, 0,0,1,boardLength/2, 0,0,0,1);
         let cylinderTransform = mat4(1,0,0,1, 0,1,0,0, 0,0,1,1, 0,0,0,1);
+        let testTransform = mat4(1,0,0,2, 0,1,0,0, 0,0,1,1, 0,0,0,1);
 
         //rotation
         //cubeTranslate1 = mult(cubeTranslate1, rotate(45,[0,1,0]));
 
         //shapes
         let centerNode = new Sphere(gl, 0.5, shader.getProgram());
-        let cuboid = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
         let cylinder = new Cylinder(gl, 0.5, 0.5, shader.getProgram());
+        let cube = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
 
         //center
         center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, centerTranslation);
 
         //nodes
-        arrayWorld[0].push(new GraphicsNode(gl, cuboid, monoBlue, cubeTransform, monoBlack,cubeTranslate1, center));
+        arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack,cubeTranslate1, center));
         arrayWorld[1].push(new GraphicsNode(gl, cylinder, monoBlue, cylinderTransform, monoBlack,cylinderTranslate1, arrayWorld[0][0]));
-        arrayWorld[1].push(new GraphicsNode(gl, cuboid, monoBlue, cubeTransform2, monoBlack,cubeTranslate2, arrayWorld[0][0]));
+
 
         //move item
-
-
+        floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
+        floor.createFloor(gl,shader);
+        arrayWorld[1].push(floor);
 
         render();
     }
@@ -162,7 +172,6 @@
         camera.activate(document.getElementById("persproj").checked);
 
         center.draw();
-
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
                 arrayWorld[i][j].draw();
@@ -196,8 +205,27 @@
         if(a == 0 && b==0){
             a=0;
             b=0;
-        }else{
-            if(angle - degree < -90){
+        }
+        else if(a > 0 && b == 0){ // 90
+            if(degree > 0){
+                angle = -90 + degree;
+                b = ( hyp * Math.cos(angle * (Math.PI/180) ));
+            }else if(degree < 0){
+                angle = angle + degree;
+                b =  -hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }else if(a < 0 && b == 0){ // -90
+
+            if(degree > 0){
+                angle = -90 + degree;
+                b = -hyp * Math.cos(angle * (Math.PI/180) );
+            }else if(degree < 0){
+                angle = angle + degree;
+                b = -hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }
+        else{
+           if(angle - degree < -90){
                 angle = 90 + (angle -degree +90);
                 if(b>0){
                     b = -(hyp * Math.cos(angle * (Math.PI/180) ));
