@@ -63,13 +63,10 @@
     
     let canvas;
     let gl;
-    let nodes = [];
-    let movingNode;
-    let floor;
-    let robot;
     let camera;
     let shader;
     let part = true;
+    let arrayWorld = [[],[]];
 
     function init() {
 
@@ -92,59 +89,37 @@
 
         optionListiners();
 
+        //colors
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+
+        // translatons
+        let centerTranslation = translate(0,0,0)
+        let cubeTranslate1 = translate(2,0,0);
+        let cubeTranslate2 = translate(1,0,1);
+
+        //transform
+        let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+        let cubeTransform1 = mat4(1,0,0,2, 0,1,0,0, 0,0,1,1, 0,0,0,1);
+        let cubeTransform2 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+
+        //rotation
+        cubeTranslate1 = mult(cubeTranslate1, rotate(45,[0,1,0]));
+
+        //shapes
+        let centerNode = new Sphere(gl, 0.5, shader.getProgram());
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-        let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
 
-        //movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
-        let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
-        floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);
-        floor.createFloor(gl, shader);
+        //center
+        center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, centerTranslation);
 
-        //add a cone
-        let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
-        let cone = new Cone(gl, 1, 1, shader.getProgram());
-        let extraTransform = mat4(1,0,0,0, 0,1,0,0.5, 0,0,1,0, 0,0,0,1);
-        nodes.push(new GraphicsNode(gl, cone, monoYellow, extraTransform,monoBlack, floor.movingNode[3]));
+        //nodes
+        arrayWorld[0].push(new GraphicsNode(gl, cuboid1, monoBlue, cubeTransform1, monoBlack,cubeTranslate1, center));
+        arrayWorld[1].push(new GraphicsNode(gl, cuboid1, monoBlue, cubeTransform2, monoBlack,cubeTranslate2, arrayWorld[0][0]));
 
-        // add cylinder
-        let cylinder = new Cylinder(gl, 1, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, cylinder, monoYellow, extraTransform,monoBlack, floor.movingNode[9]));
+        //move item
 
-        // add sqhere
-        let sqhere = new Sphere(gl, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, sqhere, monoYellow, extraTransform,monoBlack, floor.movingNode[5]));
-
-        // add torus
-        let torus = new Torus(gl, 1, 0.2, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, torus, monoYellow, extraTransform,monoBlack, floor.movingNode[16]));
-        
-        // add cube
-        let cube = new Cuboid(gl, 1, 1, 1, shader.getProgram());
-        nodes.push(new GraphicsNode(gl, cube, monoYellow, extraTransform,monoBlack, floor.movingNode[30]));
-        
-        //create a robot
-        let robotPlacement = mat4(1,0,0,-4, 0,1,0,0, 0,0,1,-4, 0,0,0,1)
-        robot = new Robot(floor.movingNode[0]);
-        robot.createRobot();
-
-        /*
-        let max = 15;
-        let min = -15;
-        let maxZ = 0;
-        let minZ = -40
-        for (let i = 0; i <= 60; i++) {
-            let x = Math.floor(Math.random() * (max - min)) + min;
-            let y = Math.floor(Math.random() * (max - min)) + min;
-            let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-            let transform = mat4(1,0,0,x, 0,1,0,y, 0,0,1,z, 0,0,0,1);
-            nodes.push(new GraphicsNode(gl, cuboid2, monoBlue, transform,monoBlack));
-        }
-
-        */
-        
 
         render();
     }
@@ -181,15 +156,25 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
 
-        floor.draw();
-        robot.draw();
-        
-        for(let i = 0; i < nodes.length; i++) {
-            nodes[i].draw();
+        center.draw();
+
+        for(let i = 0; i < arrayWorld.length; i++){
+            for(let j = 0; j < arrayWorld[i].length; j++){
+                arrayWorld[i][j].draw();
+            }
         }
 
-        robot.rotateHead();
         requestAnimationFrame(render);
+    }
+
+    function moveWorld(m){
+        for(let i = 0; i < arrayWorld[0].length; i++){
+            arrayWorld[0][i].updateLocalMatrix(m);
+        }
+    }
+
+    function rotateWorld(){
+
     }
 
     window.onload = init;
