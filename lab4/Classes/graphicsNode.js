@@ -30,8 +30,8 @@ class GraphicsNode{
       this.start = false;
       this.worldMatrix = worldMatrix;
       this.transform = mult(mult(this.localMatrix,this.translate),this.worldMatrix.transform);
+      this.worldMatrix.children.push(this);
     }
-   
     this.children = [];
   }
 

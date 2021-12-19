@@ -109,14 +109,15 @@
 
         //shapes
         let centerNode = new Sphere(gl, 0.5, shader.getProgram());
-        let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        let cuboid = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        let cylinder = new Cylinder(gl, 0.5, 0.5, shader.getProgram());
 
         //center
         center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, centerTranslation);
 
         //nodes
-        arrayWorld[0].push(new GraphicsNode(gl, cuboid1, monoBlue, cubeTransform1, monoBlack,cubeTranslate1, center));
-        arrayWorld[1].push(new GraphicsNode(gl, cuboid1, monoBlue, cubeTransform2, monoBlack,cubeTranslate2, arrayWorld[0][0]));
+        arrayWorld[0].push(new GraphicsNode(gl, cuboid, monoBlue, cubeTransform1, monoBlack,cubeTranslate1, center));
+        arrayWorld[1].push(new GraphicsNode(gl, cylinder, monoBlue, cubeTransform2, monoBlack,cubeTranslate2, arrayWorld[0][0]));
 
         //move item
 
@@ -184,6 +185,7 @@
     }
 
     function rotateObject(item,degree){
+        console.log("item", item);
         let a = item.localMatrix[2][3]; //z
         let b = item.localMatrix[0][3]; //x
         let hyp = Math.sqrt(a*a + b*b);
@@ -226,8 +228,9 @@
             
         item.localMatrix[2][3] = a;
         item.localMatrix[0][3] = b;
+        console.log("children",item.children);
         for(let i = 0; i < item.children.length; i++){
-            rotateObject(item.children[i],degree)
+            rotateObject(item.children[i],degree);
         }
     }
 
