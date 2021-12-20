@@ -12,7 +12,7 @@ class Key{
                 break;        // left arrow
 
             case 39:
-                moveWorld( mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                moveWorld( mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
                 break;       // right arrow
 
             case 38: 
@@ -44,19 +44,19 @@ class Key{
                 moveWorld(mat4(1,0,0,0, 0,1,0,-0.1, 0,0,1,0, 0,0,0,1));   
                 break;// PageDown
 
-            case 81: //A
+            case 81: //q
                 rotateWorldY(-2);
                 break;
 
-            case 69: //D
+            case 69: //e
                 rotateWorldY(2);
                 break;
 
-            case 68: //e
+            case 68: //d
                 //camera.position[0] += 0.1;
                 break;
 
-            case 65: //q
+            case 65: //a
                 //camera.position[0] -= 0.1;
                 break;
 

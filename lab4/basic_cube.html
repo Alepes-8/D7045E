@@ -95,44 +95,58 @@
         let boardLength = 30;
         let sideSizeX = 8;
         let sideSizeZ = 8;
+        let objectsHights = 4;
 
         //colors
         let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
         let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
+        let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
+
 
         // translatons
         let centerTranslation = translate(0,0,0);
-        let cubeTranslate = translate(0,0,0);
-        let sphereTranslate = translate(0,0,0);
+        let translation = translate(0,0,0);
 
         //transform
         let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
         let firstCubeTransform = mat4(1,0,0,-boardWeith/2+boardWeith/sideSizeX/2, 0,1,0,-3, 0,0,1,boardLength/2-boardLength/sideSizeZ/2, 0,0,0,1);
-        let testSphereTransform1 = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
-        let testSphereTransform2 = mat4(1,0,0,0, 0,1,0,1.5, 0,0,1,-1.5, 0,0,0,1);
-        let testSphereTransform3 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,-2, 0,0,0,1);
+        let sphereTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
+        let cubeTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
+        let torusTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
+        let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
+        let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
 
         //shapes
         let centerNode = new Sphere(gl, 0.5, shader.getProgram());
         let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
-        let testSphere = new Sphere(gl, 0.2, shader.getProgram());
-
+        let sphere = new Sphere(gl, objectsHights, shader.getProgram());
+        let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
+        let torus = new Torus(gl, objectsHights, 1, shader.getProgram());
+        let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
+        let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
 
         //center
-        center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, centerTranslation);
+        center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, translation);
+        arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, center));
 
-        //nodes
-        arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, cubeTranslate, center));
-        arrayWorld[0].push(new GraphicsNode(gl, testSphere, monoRed, testSphereTransform1, monoBlack, cubeTranslate, center));
-        arrayWorld[0].push(new GraphicsNode(gl, testSphere, monoBlack, testSphereTransform2, monoBlack, cubeTranslate, center));
-        arrayWorld[0].push(new GraphicsNode(gl, testSphere, monoWhite, testSphereTransform3, monoBlack, cubeTranslate, center));
 
         //move item
         floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
         floor.createFloor(gl,shader);
         arrayWorld[1].push(floor);
+
+        //nodes
+
+        arrayWorld[1].push(new GraphicsNode(gl, sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][0].objectArray[4]));
+        arrayWorld[1].push(new GraphicsNode(gl, cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][0].objectArray[15]));
+        arrayWorld[1].push(new GraphicsNode(gl, torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][0].objectArray[60]));
+        arrayWorld[1].push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform, monoBlack, translation, arrayWorld[1][0].objectArray[32]));
+        arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][0].objectArray[46]));
+
+
+        arrayWorld[1][2].translate = mult(arrayWorld[1][2].translate, rotate(45,[1,1,1]));
 
         render();
     }
@@ -258,7 +272,6 @@
         item.localMatrix[0][3] = b;
         for(let i = 0; i < item.children.length; i++){
             rotateObjectY(item.children[i],degree);
-            item.children[i].translate = mult(item.children[i].translate, rotate(degree,[0,1,0]));    
         }
     }
 
