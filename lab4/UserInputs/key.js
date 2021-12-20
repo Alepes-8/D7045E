@@ -31,11 +31,11 @@ class Key{
                 break;// PageDown
 
             case 81: //A
-                rotateWorld(-2);
+                rotateWorldY(-2);
                 break;
 
             case 69: //D
-                rotateWorld(2);
+                rotateWorldY(2);
                 break;
 
             case 68: //e
@@ -47,11 +47,11 @@ class Key{
                 break;
 
             case 83: //s
-                camera.position[2] += 0.2;
+                rotateWorldX(2);
                 break;
 
             case 87: //w
-                camera.position[2 ] -= 0.2;
+                rotateWorldX(-2);
                 break;
             
             case 32: //space
