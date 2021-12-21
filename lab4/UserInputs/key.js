@@ -108,7 +108,7 @@ class Key{
                 }
                 console.log(lookDirectionDegree);
                 break;
-            
+            /*
             case 32: //space
                 camera.position[1] += 0.1;
                 break;
@@ -116,7 +116,7 @@ class Key{
             case 17: //ctrl
                 camera.position[1] -= 0.1;
                 break;
-            
+            */
             case 13:                                // return key
             case 36: 
                 movingNode.transform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1);
