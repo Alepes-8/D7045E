@@ -27,8 +27,11 @@
     <script src="Shapes/cone.js"></script>
     <script src="Shapes/sphere.js"></script>
     <script src="Shapes/star.js"></script>
+    <script src="Shapes/treeBody.js"></script>
     <script src="Objects/floor.js"></script>
     <script src="Objects/robot.js"></script>
+    <script src="Objects/laborint.js"></script>
+
     <script src="camera.js"></script>
     <script src="UserInputs/key.js"></script>
     <script src="UserInputs/changeObjects.js"></script>
@@ -58,7 +61,7 @@
         out vec4 fragColor;
 
         void main() {
-            fragColor = vec4(u_Color.xyz * (10.0/(distance)),1);
+            fragColor = vec4(u_Color.xyz * (20.0/(distance)),1);
         }`;
     
     let canvas;
@@ -121,14 +124,14 @@
         //shapes
         let centerNode = new Sphere(gl, 0.5, shader.getProgram());
         let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
-        let sphere = new Sphere(gl, objectsHights, shader.getProgram());
+        let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
         let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
-        let torus = new Torus(gl, objectsHights, 1, shader.getProgram());
+        let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
         let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
         let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
 
         //center
-        center = new GraphicsNode(gl, centerNode, monoBlue, centerTransform, monoBlack, translation);
+        center = new GraphicsNode(gl, centerNode, monoRed, centerTransform, monoBlack, translation);
         arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, center));
 
 
@@ -137,16 +140,26 @@
         floor.createFloor(gl,shader);
         arrayWorld[1].push(floor);
 
-        //nodes
 
+        //objects
+        laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue);
+        robot = new Robot(arrayWorld[1][0].objectArray[60]);
+        laborint.createLaborint(gl,shader);
+        robot.createRobot(gl,shader);
+            
+        //nodes
         arrayWorld[1].push(new GraphicsNode(gl, sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][0].objectArray[4]));
         arrayWorld[1].push(new GraphicsNode(gl, cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][0].objectArray[15]));
-        arrayWorld[1].push(new GraphicsNode(gl, torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][0].objectArray[60]));
+        arrayWorld[1].push(new GraphicsNode(gl, torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][0].objectArray[57]));
         arrayWorld[1].push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform, monoBlack, translation, arrayWorld[1][0].objectArray[32]));
         arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][0].objectArray[46]));
+        //arrayWorld[1].push(laborint);
+        arrayWorld[1].push(robot);
+        rotateSpecificObjext(arrayWorld[1][6].objectArray[arrayWorld[1][6].leftArm],-70,"z");
+        rotateSpecificObjext(arrayWorld[1][6].objectArray[arrayWorld[1][6].rightArm],70,"z");
 
-
-        arrayWorld[1][2].translate = mult(arrayWorld[1][2].translate, rotate(45,[1,1,1]));
+        
+        //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
 
         render();
     }
@@ -189,6 +202,7 @@
                 arrayWorld[i][j].draw();
             }
         }
+        rotateSpecificObjext(arrayWorld[1][6].objectArray[arrayWorld[1][6].head],2,"y");
 
         requestAnimationFrame(render);
     }
@@ -199,10 +213,32 @@
             arrayWorld[0][i].updateLocalMatrix(m);
         }
     }
+    function rotateSpecificObjext(object, degree, way){
+        console.log(degree);
+        if(way == "x"){
+            object.translate = mult(object.translate, rotate(degree,[1,0,0]));
+        }else if(way == "y"){
+            object.translate = mult(object.translate, rotate(degree,[0,1,0]));
+        }else if(way == "z"){
+            object.translate = mult(object.translate, rotate(degree,[0,0,1]));
+        }
+        
+        for(let i = 0; i < object.children.length; i++){
+            if(way == "x"){
+                rotateObjectX(object.children[i],degree);
+            }else if(way == "y"){
+                rotateObjectY(object.children[i],degree);
+            }else if(way == "z"){
+                rotateObjectZ(object.children[i],degree);
+            }
+        }
+    } 
 
     function rotateWorldY(degree){
         console.log(degree);
+        
         arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
+       
         
         for(let i = 0; i < arrayWorld[0].length; i++){
             rotateObjectY(arrayWorld[0][i],degree);
@@ -275,6 +311,137 @@
         }
     }
 
+    function rotateObjectX(item,degree){
+        let a = item.localMatrix[1][3]; //z
+        let b = item.localMatrix[2][3]; //x
+        let hyp = Math.sqrt(a*a + b*b);
+        let angle = Math.atan(a/b) * (180/Math.PI);
+
+        if(a == 0 && b==0){
+            a=0;
+            b=0;
+        }
+        else if(a > 0 && b == 0){ // 90
+            if(degree > 0){
+                angle = -90 + degree;
+                b = ( hyp * Math.cos(angle * (Math.PI/180) ));
+            }else if(degree < 0){
+                angle = angle + degree;
+                b =  -hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }else if(a < 0 && b == 0){ // -90
+
+            if(degree > 0){
+                angle = -90 + degree;
+                b = -hyp * Math.cos(angle * (Math.PI/180) );
+            }else if(degree < 0){
+                angle = angle + degree;
+                b = -hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }
+        else{
+           if(angle - degree < -90){
+                angle = 90 + (angle -degree +90);
+                if(b>0){
+                    b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                }else{
+                    b = hyp * Math.cos(angle * (Math.PI/180) );
+                }
+            }
+            else{
+                angle -=degree;
+            }
+
+            if(b > 0){
+                b = hyp * Math.cos(angle * (Math.PI/180) );
+                a = hyp * Math.sin(angle * (Math.PI/180));
+            }
+            else if(b==0){
+                if(a > 0){
+                    a = hyp * Math.sin(angle * (Math.PI/180));
+                }
+                if(a > 0){
+                    a = -(hyp * Math.sin(angle * (Math.PI/180)));
+                }
+                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+            }
+            else{
+                b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+                a = -(hyp * Math.sin(angle * (Math.PI/180)));
+            }
+        }
+        item.localMatrix[1][3] = a;
+        item.localMatrix[2][3] = b;
+        for(let i = 0; i < item.children.length; i++){
+            rotateObjectX(item.children[i],degree);
+        }
+    }
+
+    function rotateObjectZ(item,degree){
+        let a = item.localMatrix[1][3]; //z
+        let b = item.localMatrix[0][3]; //x
+        let hyp = Math.sqrt(a*a + b*b);
+        let angle = Math.atan(a/b) * (180/Math.PI);
+
+        if(a == 0 && b==0){
+            a=0;
+            b=0;
+        }
+        else if(a > 0 && b == 0){ // 90
+            if(degree > 0){
+                angle = -90 + degree;
+                b = -( hyp * Math.cos(angle * (Math.PI/180) ));
+            }else if(degree < 0){
+                angle = angle + degree;
+                b =  hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }else if(a < 0 && b == 0){ // -90
+
+            if(degree > 0){
+                angle = -90 + degree;
+                b = hyp * Math.cos(angle * (Math.PI/180) );
+            }else if(degree < 0){
+                angle = angle + degree;
+                b = hyp * Math.cos(angle * (Math.PI/180) );
+            }
+        }
+        else{
+           if(angle - degree < -90){
+                angle = 90 + (angle -degree +90);
+                if(b>0){
+                    b = (hyp * Math.cos(angle * (Math.PI/180) ));
+                }else{
+                    b = -hyp * Math.cos(angle * (Math.PI/180) );
+                }
+            }
+            else{
+                angle -=degree;
+            }
+
+            if(b > 0){
+                b = -hyp * Math.cos(angle * (Math.PI/180) );
+                a = -hyp * Math.sin(angle * (Math.PI/180));
+            }
+            else if(b==0){
+                if(a > 0){
+                    a = -hyp * Math.sin(angle * (Math.PI/180));
+                }
+                if(a > 0){
+                    a = (hyp * Math.sin(angle * (Math.PI/180)));
+                }
+                b = (hyp * Math.cos(angle * (Math.PI/180) ));
+            }
+            else{
+                b = (hyp * Math.cos(angle * (Math.PI/180) ));
+                a = (hyp * Math.sin(angle * (Math.PI/180)));
+            }
+        }
+        item.localMatrix[1][3] = a;
+        item.localMatrix[0][3] = b;
+        for(let i = 0; i < item.children.length; i++){
+            rotateObjectZ(item.children[i],degree);
+        }
+    }
     window.onload = init;
     
 </script>
