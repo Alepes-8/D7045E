@@ -16,23 +16,30 @@ class Key{
                 break;       // right arrow
 
             case 38: 
-                console.log(Math.cos(lookDirectionDegree*(Math.PI/180)))
-                if(lookDirectionDegree == 0 ){
+                if(document.getElementById("fly").checked){
+                    if(lookDirectionDegree == 0 ){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1));
+                    }else if(lookDirectionDegree > 0){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
+                    }else if(lookDirectionDegree < 0){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
+                    }
+                }else{
                     moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1));
-                }else if(lookDirectionDegree > 0){
-                    moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                }else if(lookDirectionDegree < 0){
-                    moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
                 }
                 break;        // up arrow
 
             case 40:       // down arrow
-                if(lookDirectionDegree == 0 ){
+                if(document.getElementById("fly").checked){
+                    if(lookDirectionDegree == 0 ){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
+                    }else if(lookDirectionDegree > 0){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
+                    }else if(lookDirectionDegree < 0){
+                        moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
+                    }
+                }else{
                     moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
-                }else if(lookDirectionDegree > 0){
-                    moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                }else if(lookDirectionDegree < 0){
-                    moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
                 }
                 break;
 
@@ -82,11 +89,11 @@ class Key{
                         lookDirectionDegree -= 2.8125;
                     }
                 }
-                console.log(lookDirectionDegree);
                 break;
 
             case 87: //w
                 if( currentValue < 0.5){
+
                     if(currentValue < 0.04 && currentValue >= 0 || currentValue > -0.04 && currentValue <= 0){
                         camera.at[1] += 0.005;
                         lookDirectionDegree += 2.8125;
@@ -106,7 +113,6 @@ class Key{
                         lookDirectionDegree += 2.8125;
                     }
                 }
-                console.log(lookDirectionDegree);
                 break;
             /*
             case 32: //space
