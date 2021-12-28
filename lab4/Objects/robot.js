@@ -9,6 +9,11 @@ class Robot{
         this.lowerBody
         this.leftArm;
         this.rightArm;
+        this.down = true;
+        this.starWidth = 2;
+        this.length = 0.5;
+        this.headDegree = 0;
+        this.rotateLeft = true;
     }
 
 
@@ -32,7 +37,7 @@ class Robot{
 
         //head
         let topCone = new Cone(gl, 1.5, 1.5, shader.getProgram());
-        let star = new Star(gl, 2, 0.4, 6, shader.getProgram());
+        let star = new Star(gl, this.starWidth, this.length, 6, shader.getProgram());
         let antena = new Cylinder(gl, .05, 0.5, shader.getProgram());
 
         let topConeTransformer = mat4(1,0,0,0, 0,1,0,.5, 0,0,1,0, 0,0,0,1);
@@ -113,13 +118,34 @@ class Robot{
 
     }
 
-    rotateHead(){
-        let degree  = 45 ;
-        let rotation = rotate(degree,[0,1,0]); 
-        let change = mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1)
-        let newMatrix = mult(this.star.localMatrix, rotation);
-        this.star.localMatrix=newMatrix;
+    rotateHead(degree){
+        if(this.rotateLeft == true && this.headDegree < 90){
+            rotateSpecificObjext(this.objectArray[this.head],degree,"y");
+            this.headDegree +=degree;
+        }else if( this.rotateLeft == true && this.headDegree >= 90){
+            this.rotateLeft = false;
+        }else if(this.rotateLeft == false && this.headDegree > -90){
+            rotateSpecificObjext(this.objectArray[this.head],-degree,"y");
+            this.headDegree -=degree;
+        }else if( this.rotateLeft == false && this.headDegree <= -90){
+            this.rotateLeft = true;
+        }
+    }
 
+    changeSizeStar(degree){
+        //first two is to shrink the size of the star
+        if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
+            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 - degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
+        }else if(this.objectArray[this.star].mesh.x * 2 <= 1 && this.down == true){
+            this.down = false;
+        }
+        //two last is to make it bigger again
+        else if(this.down == false && this.objectArray[this.star].mesh.x * 2 < this.starWidth){
+            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 + degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
+        }
+        else if(this.objectArray[this.star].mesh.x * 2 >= this.starWidth && this.down == false){
+            this.down = true;
+        }
     }
 
     draw(){
