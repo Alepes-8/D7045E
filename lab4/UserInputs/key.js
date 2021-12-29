@@ -9,11 +9,11 @@ class Key{
         switch (evt.keyCode) {
             case 37:
                 //moveWorld(mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
-                px -= deltaTime * speed * direction;
+                px -= deltaTime * speed * 1 * friction;               
                 break;        // left arrow
 
             case 39:
-                moveWorld( mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                px -= deltaTime * speed * -1 * friction;
                 break;       // right arrow
 
             case 38: 
