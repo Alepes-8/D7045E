@@ -48,7 +48,11 @@
     getVertices(){
         return this.vertices;
     }
-  
+
+    changeSize(){
+      throw new Error("Has no implementation yet")
+    }
+
     getIndices(){
         return this.indices;
     } 

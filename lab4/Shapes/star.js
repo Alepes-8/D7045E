@@ -39,18 +39,45 @@ class Star extends Mesh{
     
         /*The connections between the vertices*/
         let indices = [];
-        console.log(vertices.length);
         for(let start = 0; start < 2; start++){
             for(let i = 2; i <= spikes*2+1; i++){
                 if(i == spikes*2 + 1 ){
                     indices.push(start, i, 2);
-                    console.log(i); 
                 }else{
                     indices.push(start, i, i+1);
-                    console.log(i); 
                 }     
             }
         }
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, shaderProgram);   
+        this.x = x; 
+        this.z = z;
+        this.spikes = spikes;
+        this.outer_Vertices = outer_Vertices;
+    }
+
+    changeSize(size){
+        console.log("hejsan" , this.outer_Vertices);
+        /*this.outer_Vertices -= size;
+        console.log("this.outer_Vertices" , this.outer_Vertices);
+
+        let inner_Vertices = this.outer_Vertices/3;
+        let vertices = [
+            vec4( 0, 0,  this.z, 1 ),   // front/bottom/left
+            vec4( 0,  0,  -this.z, 1 ),   // front/top/left
+        ];
+
+        for(let i = 0; i < this.spikes; i++){
+            this.vertices.push(vec4(
+                this.outer_Vertices*Math.cos((2*i) * 2 * Math.PI / (this.spikes*2)),
+                this.outer_Vertices*Math.sin( (i*2)* 2 * Math.PI / (this.spikes*2)),
+                0,
+                1));
+            this.vertices.push(vec4(
+                this.inner_Vertices*Math.cos((i*2+1) * 2 * Math.PI / (this.spikes*2)),
+                this.inner_Vertices*Math.sin((i*2+1) * 2 * Math.PI / (this.spikes*2)),
+                0,
+                1));
+        }
+        */
     }
 }

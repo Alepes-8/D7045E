@@ -14,22 +14,24 @@
 
 class GraphicsNode{
    /*holds a mesh resource, material and an instance specific transform*/
-  constructor(gl, mesh, material, transform, materialBlack , worldMatrix = null) {
+  constructor(gl, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
     this.gl = gl;
     this.mesh = mesh;
     this.material = material;
     this.materialBlack = materialBlack;
-    this.localMatrix = transform;
+    this.localMatrix = localMatrix;
     if(worldMatrix == null){
       this.start = true;
       this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
-      this.transform = mult(this.localMatrix,this.worldMatrix);
+      this.translate = translate;
+      this.transform = mult(mult(this.localMatrix,this.translate),this.worldMatrix);
     }else{
       this.start = false;
       this.worldMatrix = worldMatrix;
-      this.transform = mult(this.localMatrix,this.worldMatrix.transform);
+      this.translate = mult(translate,this.worldMatrix.translate); // takes the translation from parent and the added translation.
+      this.transform = mult(this.translate,this.worldMatrix.transform); // only difference between world matrix and transform is the rotation.
+      this.worldMatrix.children.push(this);
     }
-    
     this.children = [];
   }
 
@@ -42,7 +44,7 @@ class GraphicsNode{
     if(this.start){
       matrix = this.transform;
     }else{
-      matrix =  mult(this.localMatrix,this.worldMatrix.transform)
+      matrix =  mult(mult(this.localMatrix,this.worldMatrix.transform),this.translate);
       if(matrix != this.transform){
         this.transform = matrix;
       }
@@ -59,8 +61,8 @@ class GraphicsNode{
   }
 
   //if you move a node around the transform needs to be updated
-  updateTransform(m2) {
-   this.transform = mult(this.transform, m2);
+  updateLocalMatrix(m) {
+   this.localMatrix = mult(this.localMatrix, m);
   }
 
   getTransform() {
