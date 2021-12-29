@@ -8,7 +8,8 @@ class Key{
         let currentValue = camera.at[1];        
         switch (evt.keyCode) {
             case 37:
-                moveWorld(mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                //moveWorld(mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+                px -= deltaTime * speed * direction;
                 break;        // left arrow
 
             case 39:
