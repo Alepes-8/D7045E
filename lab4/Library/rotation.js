@@ -154,7 +154,6 @@ function rotateObjectZ(item,degree){
     let b = item.localMatrix[0][3]; //x
     let hyp = Math.sqrt(a*a + b*b);
     let angle = Math.atan(a/b) * (180/Math.PI);
-    console.log(angle);
     if(a == 0 && b==0){
 
     }
