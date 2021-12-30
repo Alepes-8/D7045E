@@ -58,8 +58,8 @@ class Robot{
 
         let armTransformer1 = mat4(1,0,0, -1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
         let armTransformer2 = mat4(1,0,0, 1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
-        let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.3, 0,0,1,0, 0,0,0,1);
-        let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.3, 0,0,1,0, 0,0,0,1);
+        let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
+        let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
 
         let arm1Translation = translate(0,0,0);
         let arm2Translation = translate(0,0,0);
