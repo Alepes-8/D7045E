@@ -1,0 +1,195 @@
+<!-- @author Alex Peschel, Oliver Olofsson -->
+
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>Laboration 3</title>
+
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+
+    </script>
+    <script src="gl_matrix.js"></script>
+    <script src="Library/MV.js"></script>
+    <script src="Library/rotation.js"></script>
+    <script src="init.js"></script>
+    <script src="Classes/mesh.js"></script>
+    <script src="Classes/shader.js"></script>
+    <script src="Classes/shaderProgram.js"></script>
+    <script src="Classes/matrial.js"></script>
+    <script src="Classes/graphicsNode.js"></script>
+    <script src="Classes/monochromeMaterial.js"></script>
+    <script src="Shapes/cuboid.js"></script>
+    <script src="Shapes/torus.js"></script>
+    <script src="Shapes/cylinder.js"></script>
+    <script src="Shapes/cone.js"></script>
+    <script src="Shapes/sphere.js"></script>
+    <script src="Shapes/star.js"></script>
+    <script src="Shapes/treeBody.js"></script>
+    <script src="Objects/floor.js"></script>
+    <script src="Objects/robot.js"></script>
+    <script src="Objects/laborint.js"></script>
+
+    <script src="camera.js"></script>
+    <script src="Objects/cameraObject.js"></script>
+
+    <script src="UserInputs/key.js"></script>
+
+    <script>
+        //id vertex shader and id fragmen shader is the shaders we have
+    
+    const vertexShaderSource = `#version 300 es
+        layout(location=0) in vec4 vertexPos;
+        uniform mat4 cMatrix;
+        uniform mat4 modelViewvMatrix;
+        uniform mat4 perspectiveMatrix;
+        uniform vec4 cameraPos;
+        
+        out float distance;
+
+        void main()
+        {
+            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
+            distance = length((cMatrix * vertexPos) - cameraPos) ;
+        }`;
+
+    const fragmentShaderSource = `#version 300 es
+        precision mediump float;
+        uniform vec4 u_Color;
+        in float distance;
+        out vec4 fragColor;
+
+        void main() {
+            fragColor = vec4(u_Color.xyz * (20.0/(distance)),1);
+        }`;
+    
+    let canvas;
+    let gl;
+    let camera;
+    let shader;
+    let part = true;
+    let lookDirectionDegree = 0;
+    let then = 0;
+    let arrayWorld = [[],[]];
+    const speed = 4;
+    const turnSpeed = 90;
+    let pz = 0;
+    let py = 0;
+    let px = 0;
+    let ang = 0;
+    const keys = {};
+    var friction = 1;
+
+
+    
+
+    function optionListiners(){
+        //buttons
+        document.getElementById("persproj").checked = true;
+        document.getElementById("fly").checked = false;
+
+        //key input        
+        window.addEventListener('keydown', (e) => {
+        keys[e.keyCode] = true;
+        e.preventDefault();
+        });
+        window.addEventListener('keyup', (e) => {
+        keys[e.keyCode] = false;
+        e.preventDefault();
+        });
+    }
+    
+    function render(now) {
+        now *= 0.001;
+        const deltaTime = now - then;
+        then = now;
+
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        shader.activate();
+        camera.activate(document.getElementById("persproj").checked);
+
+        for(let i = 0; i < arrayWorld.length; i++){
+            for(let j = 0; j < arrayWorld[i].length; j++){
+                arrayWorld[i][j].draw();
+            }
+        }
+        arrayWorld[1][robotID].rotateHead(1);
+        arrayWorld[1][robotID].changeSizeStar(0.01);
+        
+        //fps camera
+        moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
+        moveWorld(mat4(1,0,0,0, 0,1,0,py, 0,0,1,0, 0,0,0,1)); // up and down [1]
+        moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
+        rotateWorldY(ang);
+        
+        if(px > friction){
+            px -= friction
+        }else{
+            px = 0;
+        }
+         
+        if(pz > friction){
+            pz -= friction
+        }else{
+            pz = 0;
+        }
+
+        if(py > friction){
+            py -= friction
+        }else{
+            py = 0;
+        }
+
+        if(ang > friction){
+            ang -= friction
+        }else{
+            ang = 0;
+        }
+        
+        keyInput(deltaTime);
+        requestAnimationFrame(render);
+    }
+
+    function moveWorld(m){
+        
+        for(let i = 0; i < arrayWorld[0].length; i++){
+            arrayWorld[0][i].updateLocalMatrix(m);
+        }
+    }
+    
+    function rotateWorldY(degree){        
+        arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
+       
+        
+        for(let i = 0; i < arrayWorld[0].length; i++){
+            rotateObjectY(arrayWorld[0][i],degree);
+        }
+    } 
+    
+    window.onload = init;
+    
+</script>
+</head>
+<body>
+        <h2>Chess board with objects</h2>
+
+    <p id=message>Use arrow keys, PageUp, and PageDown to move around.<br>
+    Use W, S, Q and E to look around.</p>
+
+    <p>
+    <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
+    <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
+    <label><b><input type="checkbox" id="fly">&nbsp;God&nbsp;Mode</b></label>
+    </p>
+
+    <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
+    <div id="canvas-holder">
+    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
+    </div>
+
+</body>
+</html>

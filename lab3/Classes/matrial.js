@@ -22,7 +22,7 @@
 class Material{
     /* holds a variable that points to a ShaderProgram object */
     constructor(shaderProgram){
-        this.shaderProgram = shaderProgram; 
+        this.prog = shaderProgram; 
  
         if(this.constructor == Material){
             throw new Error("Object of Abstract Class cannot be created");
