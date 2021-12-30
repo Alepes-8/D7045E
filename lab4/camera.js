@@ -9,10 +9,10 @@ class Camera{
     this.aspect = (gl.canvas.width/gl.canvas.height);
     this.near = 1;  //when does the cubes disepear from the screen if the are to close
     this.far = 100; // How large is the area which things can be seen within
-    this.position = vec3(0,0,2); //first, right and left. secound is move up and down , third is move back and forth
+    this.position = vec3(0,0,2.5); //first, right and left. secound is move up and down , third is move back and forth
     this.at = vec3(0, 0, 0);  // how the camera is looking. (first = left or right) (secound = upp and down) ( last = unsure, but thinks it moves the camera up and down)
     this.rotate = vec3(0, 1.0, 0);
-
+ 
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
     this.modelViewvMatrix = lookAt(this.position, this.at , this.rotate);

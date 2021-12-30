@@ -14,6 +14,7 @@ class Sphere extends Mesh{
         let points  = 10;
         let indices = [];
 		let vertices = [];
+		let normals = [];
 
 		// generate vertices, normals and uvs
 
@@ -25,12 +26,16 @@ class Sphere extends Mesh{
 				const u = i / points * Math.PI * 2;
 				
 				// vertex
+				let x = Math.sin( v ) * Math.cos( u );
+				let y =  Math.cos( v );
+				let z = Math.sin( v ) * Math.sin( u );
 
-				let verX = -( radius) * Math.sin( v ) * Math.cos( u );
-				let verY = ( radius) * Math.cos( v );
-				let verZ = radius * Math.sin( v ) * Math.sin( u );
+				let verX = -( radius) * x;
+				let verY = ( radius) * y;
+				let verZ = radius * z;
 
-				vertices.push( vec4(verX, verY, verZ, 1));
+				vertices.push( vec4(verX, verY, verZ, 1.0));
+				normals.push(vec4(x, y, z, 1.0))
 			}
 		}
 
@@ -51,7 +56,7 @@ class Sphere extends Mesh{
 			}
 		}
 
-		let normals = [];
+		
 
         super(gl, vertices, indices, normals, shaderProgram);      
     }

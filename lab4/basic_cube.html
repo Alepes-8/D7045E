@@ -54,8 +54,8 @@
         void main()
         {
             gl_Position = perspectiveMatrix * modelViewvMatrix * vertexPos * cMatrix;
-            v_normal = normalize(mat3(cMatrix)*normalPos.xyz);
-            cameraPos = (cMatrix * vertexPos).xyz;
+            v_normal = normalize(normalPos.xyz);
+            cameraPos = (modelViewvMatrix * vertexPos).xyz / (modelViewvMatrix * vertexPos).w;
         }`;
 
     const fragmentShaderSource = `#version 300 es
@@ -126,17 +126,20 @@
         camera = new Camera(gl, shader.getProgram());
 
         //white light source
-        lightSource = new lightSource(gl, vec4(1,1,1,1), vec4(0, 0, 1, 1.0), shader);
+        lightSource = new lightSource(gl, vec4(1,1,1,1), vec4(0, 5, 1, 1.0), shader);
 
         optionListiners();
 
-        //let monoBlue = new MonochromeMaterial(gl, vec4(0, 1, 1, 1.0), shader, lightSource);
+        let monoBlue = new MonochromeMaterial(gl, vec4(0, 1, 1, 1.0), shader, lightSource);
         let monoNode = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader, lightSource);
-        //let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, lightSource);
-        let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-        //let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, lightSource);
+        //let cuboid1 = new Cuboid(gl, 1, 1, 1, shader.getProgram());
+        //let cuboid1 = new Sphere(gl, 0.5, shader.getProgram());
+        //let cuboid1 = new Torus(gl, 7, 1, shader.getProgram());
+        let cuboid1 = new Cone(gl, 0.5, 0.5, shader.getProgram());
+        //let cuboid1 = new Cylinder(gl, 0.5, 0.5, shader.getProgram());
 
-        movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1));
+        movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
 /*        
         let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
         floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);

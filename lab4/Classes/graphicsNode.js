@@ -53,9 +53,9 @@ class GraphicsNode{
     /*execute a draw call*/
     this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
 
-    //this.materialBlack.applyMaterial(matrix);
+    this.materialBlack.applyMaterial(matrix);
 
-    //this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
+    this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
   }
 
   //if you move a node around the transform needs to be updated

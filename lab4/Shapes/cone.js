@@ -12,6 +12,8 @@ class Cone extends Mesh{
         let r = width / 2; 
         let y = height / 2;
         let points= 30;
+        
+        let normals = [];
         /*The vector positions for e+ach point relative to each other in the 3D space*/
 
         let vertices = [
@@ -52,7 +54,7 @@ class Cone extends Mesh{
             }
         }
 
-        let normals = [];
+        
 
         super(gl, vertices, indices, normals, shaderProgram);      
     }

@@ -12,6 +12,8 @@ class Cylinder extends Mesh{
         let r = width / 2; 
         let y = height / 2;
         let points= 30;
+        
+        let normals = [];
         let vertices = [
             vec4( 0, -y,  0, 1 ),   // front/bottom/left
         ];
@@ -70,7 +72,7 @@ class Cylinder extends Mesh{
 
         }
 
-        let normals = [];
+        
         
         super(gl, vertices, indices, normals, shaderProgram);      
     }
