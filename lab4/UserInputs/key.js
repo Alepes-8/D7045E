@@ -1,137 +1,83 @@
-/**
- * @author Alex Peschel, Oliver Olofsson
- */
-class Key{
-
-    doKey(evt) {
-        let movementChange = true;
-        let currentValue = camera.at[1];        
-        switch (evt.keyCode) {
-            case 37:
-                moveWorld(mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
-                break;        // left arrow
-
-            case 39:
-                moveWorld( mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
-                break;       // right arrow
-
-            case 38: 
-                if(document.getElementById("fly").checked){
-                    if(lookDirectionDegree == 0 ){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1));
-                    }else if(lookDirectionDegree > 0){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                    }else if(lookDirectionDegree < 0){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                    }
-                }else{
-                    moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1));
+function keyInput(deltaTime){
+    if (keys['37'] || keys['39']) { //left and right
+        const direction = keys['39'] ? 1 : -1;
+            px -= deltaTime * speed * direction * friction;
+        }
+        if (keys['38'] || keys['40']) { //forward and backwards
+            const direction = keys['40'] ? 1 : -1;
+            if(document.getElementById("fly").checked){
+                if(lookDirectionDegree == 0 ){
+                    pz -= deltaTime * speed * direction * friction;
+                }else if(lookDirectionDegree > 0){
+                    let temp = deltaTime * speed * direction * friction;
+                    pz -= temp *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180)));
+                    py +=  temp * Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180)))
+                }else if(lookDirectionDegree < 0){
+                    let temp = deltaTime * speed * direction * friction;
+                    pz -= temp *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180)));
+                    py -=  temp * Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180)));
                 }
-                break;        // up arrow
+            }else{
+                pz -= deltaTime * speed * direction * friction;
+            }
+            
+            
+        }
+        if (keys['32'] || keys['16']) {//upp and down
+        const direction = keys['32'] ? 1 : -1;
+            py -= deltaTime * speed * direction * friction;
+        }
+        
+        if (keys['65'] || keys['68']) { //rotate world right and left
+            const direction = keys['68'] ? 1 : -1;
+            ang += deltaTime * turnSpeed * direction;
+        }
 
-            case 40:       // down arrow
-                if(document.getElementById("fly").checked){
-                    if(lookDirectionDegree == 0 ){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
-                    }else if(lookDirectionDegree > 0){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 * Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                    }else if(lookDirectionDegree < 0){
-                        moveWorld(mat4(1,0,0,0, 0,1,0,-0.1* Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180))), 0,0,1,-0.1 *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180))), 0,0,0,1));
-                    }
-                }else{
-                    moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,-0.1, 0,0,0,1));
-                }
-                break;
-
-            case 33: 
-                moveWorld( mat4(1,0,0,0, 0,1,0,0.1, 0,0,1,0, 0,0,0,1));
-                break;         // PageUp
-
-            case 34:     
-                moveWorld(mat4(1,0,0,0, 0,1,0,-0.1, 0,0,1,0, 0,0,0,1));   
-                break;// PageDown
-
-            case 81: //q
-                rotateWorldY(-2);
-                break;
-
-            case 69: //e
-                rotateWorldY(2);
-                break;
-
-            case 68: //d
-                //camera.position[0] += 0.1;
-                break;
-
-            case 65: //a
-                //camera.position[0] -= 0.1;
-                break;
-
-            case 83: //s
-                
+        if (keys['87'] || keys['83']) {
+            const direction = keys['87'] ? 1 : -1;
+            let currentValue = camera.at[1];        
+            if(direction == -1){
                 if( currentValue > -0.5){
                     if(currentValue < 0.04 && currentValue >= 0 || currentValue > -0.04 && currentValue <= 0){
-                        camera.at[1] -= 0.005;
-                        lookDirectionDegree -= 2.8125;
+                        camera.at[1] -= 0.01/20;
+                        lookDirectionDegree -= 5.625/20;
                     }else if(currentValue < 0.1 && currentValue >= 0.04 || currentValue > -0.1 && currentValue <= -0.04){
-                        camera.at[1] -= 0.0075;
-                        lookDirectionDegree -= 2.8125;
+                        camera.at[1] -= 0.015/20;
+                        lookDirectionDegree -= 5.625/20;
                     }else if(currentValue < 0.2 && currentValue >= 0.1 || currentValue > -0.2 && currentValue <= -0.1){
-                        camera.at[1] -= 0.0125;
-                        lookDirectionDegree -= 2.8125;
+                        camera.at[1] -= 0.025/30;
+                        lookDirectionDegree -= 5.625/30;
                     }else if(currentValue <= 0.5 && currentValue >= 0.2  || currentValue > -0.5 && currentValue <= -0.2){
-                        camera.at[1] -= 0.0375;
+                        camera.at[1] -= 0.075/15;
                         if(lookDirectionDegree != -87.1875){
-                            lookDirectionDegree -= 2.8125;
+                            lookDirectionDegree -= 5.625/15;
                         }
                     }else if(currentValue > 0.5){
-                        camera.at[1] -= 0.0375;
-                        lookDirectionDegree -= 2.8125;
+                        camera.at[1] -= 0.075 /15;
+                        lookDirectionDegree -= 5.625/15;
                     }
                 }
-                break;
-
-            case 87: //w
+            }else{
                 if( currentValue < 0.5){
-
                     if(currentValue < 0.04 && currentValue >= 0 || currentValue > -0.04 && currentValue <= 0){
-                        camera.at[1] += 0.005;
-                        lookDirectionDegree += 2.8125;
+                        camera.at[1] += 0.01/20;
+                        lookDirectionDegree += 5.625/20;
                     }else if(currentValue < 0.1 && currentValue >= 0.04 || currentValue > -0.1 && currentValue <= -0.04){
-                        camera.at[1] += 0.0075;
-                        lookDirectionDegree += 2.8125;
+                        camera.at[1] += 0.015/20;
+                        lookDirectionDegree += 5.625/20;
                     }else if(currentValue < 0.2 && currentValue >= 0.1 || currentValue > -0.2 && currentValue <= -0.1){
-                        camera.at[1] += 0.0125;
-                        lookDirectionDegree += 2.8125;
+                        camera.at[1] += 0.025/30;
+                        lookDirectionDegree += 5.625/30;
                     }else if(currentValue < 0.5 && currentValue >= 0.2  || currentValue >= -0.5 && currentValue <= -0.2){
-                        camera.at[1] += 0.0375;
+                        camera.at[1] += 0.075/15;
                         if(lookDirectionDegree != 87.1875){
-                            lookDirectionDegree += 2.8125;
+                            lookDirectionDegree += 5.625/15;
                         }
                     }else if(currentValue < -0.5){
-                        camera.at[1] += 0.0375;
-                        lookDirectionDegree += 2.8125;
+                        camera.at[1] += 0.075 /15;
+                        lookDirectionDegree += 5.625/15;
                     }
                 }
-                break;
-            /*
-            case 32: //space
-                camera.position[1] += 0.1;
-                break;
-
-            case 17: //ctrl
-                camera.position[1] -= 0.1;
-                break;
-            */
-            case 13:                                // return key
-            case 36: 
-                movingNode.transform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1);
-                break;  // home key
-            default: movementChange = false;
+            }
         }
-        if (movementChange) {
-                evt.preventDefault();
-                //render();
-        }
-    }
 }
