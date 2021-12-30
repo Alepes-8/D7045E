@@ -1,4 +1,4 @@
-function keyInput(){
+function keyInput(deltaTime){
     if (keys['37'] || keys['39']) { //left and right
         const direction = keys['39'] ? 1 : -1;
             px -= deltaTime * speed * direction * friction;
