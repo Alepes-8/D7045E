@@ -77,9 +77,12 @@ function init() {
     robot.createRobot(gl,shader);
         
     arrayWorld[1].push(robot);
-    rotateSpecificObjext(arrayWorld[1][arrayWorld[1].length - 1].objectArray[arrayWorld[1][arrayWorld[1].length - 1].leftArm],-70,"z");
-    rotateSpecificObjext(arrayWorld[1][arrayWorld[1].length - 1].objectArray[arrayWorld[1][arrayWorld[1].length - 1].rightArm],70,"z");
     robotID = arrayWorld[1].length - 1;
+    for(let i = 0; i <35 ; i++){
+        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
+        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
+
+    }
     down = true;
 
     //nodes

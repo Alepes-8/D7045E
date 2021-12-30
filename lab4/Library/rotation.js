@@ -150,16 +150,16 @@ function rotateObjectX(item,degree){
 }
 
 function rotateObjectZ(item,degree){
-    let a = item.localMatrix[1][3]; //z
+    let a = item.localMatrix[1][3]; //y
     let b = item.localMatrix[0][3]; //x
     let hyp = Math.sqrt(a*a + b*b);
     let angle = Math.atan(a/b) * (180/Math.PI);
-
+    console.log(angle);
     if(a == 0 && b==0){
 
     }
     else if(a > 0 && b == 0){ // 90
-        if(degree > 0){
+        if(degree > 0){ 
             angle = -90 + degree;
             b = -( hyp * Math.cos(angle * (Math.PI/180) ));
         }else if(degree < 0){
@@ -177,23 +177,13 @@ function rotateObjectZ(item,degree){
         }
     }
     else{
-       if(angle - degree < -90){
-            angle = 90 + (angle -degree +90);
-            if(b>0){
-                b = (hyp * Math.cos(angle * (Math.PI/180) ));
-            }else{
-                b = -hyp * Math.cos(angle * (Math.PI/180) );
-            }
-        }
-        else{
-            angle -=degree;
-        }
-
+        
+        angle +=degree; 
         if(b > 0){
-            b = -hyp * Math.cos(angle * (Math.PI/180) );
-            a = -hyp * Math.sin(angle * (Math.PI/180));
+            b = hyp * Math.cos(angle * (Math.PI/180) );
+            a = hyp * Math.sin(angle * (Math.PI/180));
         }
-        else if(b==0){
+     else if(b==0){
             if(a > 0){
                 a = -hyp * Math.sin(angle * (Math.PI/180));
             }
@@ -203,8 +193,8 @@ function rotateObjectZ(item,degree){
             b = (hyp * Math.cos(angle * (Math.PI/180) ));
         }
         else{
-            b = (hyp * Math.cos(angle * (Math.PI/180) ));
-            a = (hyp * Math.sin(angle * (Math.PI/180)));
+            b = -(hyp * Math.cos(angle * (Math.PI/180) ));
+            a = -(hyp * Math.sin(angle * (Math.PI/180)));
         }
     }
     item.localMatrix[1][3] = a;
