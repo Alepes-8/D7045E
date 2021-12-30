@@ -30,20 +30,20 @@ class Key{
                 floor.move(mat4(1,0,0,0, 0,1,0,0, 0,0,1,0.1, 0,0,0,1)); 
                 break;// PageDown
 
-            case 81: //A
-                camera.at[0] -= 0.2;
+            case 65: //A
+                camera.position[0] -= 0.1;
                 break;
 
-            case 69: //D
-                camera.at[0] += 0.2;
-                break;
-
-            case 68: //e
+            case 68: //D
                 camera.position[0] += 0.1;
                 break;
 
-            case 65: //q
-                camera.position[0] -= 0.1;
+            case 69: //e
+                camera.at[0] += 0.2;
+                break;
+
+            case 81: //q
+                camera.at[0] -= 0.2;
                 break;
 
             case 83: //s
@@ -51,7 +51,7 @@ class Key{
                 break;
 
             case 87: //w
-                camera.position[2 ] -= 0.2;
+                camera.position[2] -= 0.2;
                 break;
             
             case 32: //space

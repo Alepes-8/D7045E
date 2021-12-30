@@ -61,6 +61,8 @@ class Torus extends Mesh{
 
 		}
 
-        super(gl, vertices, indices, shaderProgram);      
+		let normals = [];
+
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

@@ -51,6 +51,9 @@ class Cone extends Mesh{
                 indices.push(points+1,i,i+1)
             }
         }
-        super(gl, vertices, indices, shaderProgram);      
+
+        let normals = [];
+
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

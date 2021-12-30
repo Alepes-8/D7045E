@@ -23,8 +23,6 @@ class Cylinder extends Mesh{
                 r*Math.sin(v * 2 * Math.PI / points),
                 1));
         }
-
-       
         
         /*The connections between the vertices*/
         let indices = [];
@@ -72,8 +70,8 @@ class Cylinder extends Mesh{
 
         }
 
-
+        let normals = [];
         
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

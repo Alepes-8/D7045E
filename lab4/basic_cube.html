@@ -20,6 +20,7 @@
     <script src="Classes/shaderProgram.js"></script>
     <script src="Classes/matrial.js"></script>
     <script src="Classes/graphicsNode.js"></script>
+    <script src="Classes/lightSource.js"></script>
     <script src="Classes/monochromeMaterial.js"></script>
     <script src="Shapes/cuboid.js"></script>
     <script src="Shapes/torus.js"></script>
@@ -37,28 +38,62 @@
         //id vertex shader and id fragmen shader is the shaders we have
     
     const vertexShaderSource = `#version 300 es
+        precision mediump float;
+        
         layout(location=0) in vec4 vertexPos;
+        in vec4 normalPos;
+
         uniform mat4 cMatrix;
+
         uniform mat4 modelViewvMatrix;
         uniform mat4 perspectiveMatrix;
-        uniform vec4 cameraPos;
         
-        out float distance;
+        out vec3 cameraPos;
+        out vec3 v_normal;
 
         void main()
         {
-            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
-            distance = length((cMatrix * vertexPos) - cameraPos) ;
+            gl_Position = perspectiveMatrix * modelViewvMatrix * vertexPos * cMatrix;
+            v_normal = normalize(mat3(cMatrix)*normalPos.xyz);
+            cameraPos = (cMatrix * vertexPos).xyz;
         }`;
 
     const fragmentShaderSource = `#version 300 es
         precision mediump float;
-        uniform vec4 u_Color;
-        in float distance;
-        out vec4 fragColor;
+        
+        uniform vec4 lightPosition;
+        uniform vec4 ambientProduct;
+        uniform vec4 diffuseProduct;
+        uniform vec4 specularProduct;
+        uniform float shininess; // Shininess
+
+        uniform mat4 modelViewvMatrix;
+        uniform mat4 modelvMatrixInv;
+
+        in vec3 v_normal;
+        in vec3 cameraPos;
+        out vec4 fragment_color;
 
         void main() {
-            fragColor = vec4(u_Color.xyz * (10.0/(distance)),1);
+            vec3 L = normalize(lightPosition.xyz);
+            vec3 E = normalize(modelvMatrixInv[3].xyz - cameraPos);
+
+            vec4 fColor;
+            vec3 H = normalize(L + E);
+            vec4 ambient = ambientProduct;
+
+            float Kd = max(dot(L, v_normal), 0.0);
+            vec4  diffuse = Kd*diffuseProduct;
+
+            float Ks = pow(max(dot(v_normal, H), 0.0), shininess);
+            vec4  specular = Ks * specularProduct;
+
+            if(dot(L, v_normal) < 0.0) {
+                specular = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+            fColor = ambient + diffuse + specular;
+            fColor.a = 1.0;
+            fragment_color = fColor;
         }`;
     
     let canvas;
@@ -80,7 +115,7 @@
 
         //webgl configurations
         gl.viewport( 0, 0, canvas.width, canvas.height ); //delete
-        gl.clearColor(0.2, 0.2, .2, 1 );
+        gl.clearColor(0.2, 0.2, 0.2, 1 );
 
         gl.enable(gl.DEPTH_TEST);
 
@@ -90,15 +125,19 @@
 
         camera = new Camera(gl, shader.getProgram());
 
+        //white light source
+        lightSource = new lightSource(gl, vec4(1,1,1,1), vec4(0, 0, 1, 1.0), shader);
+
         optionListiners();
 
-        let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-        let monoNode = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        //let monoBlue = new MonochromeMaterial(gl, vec4(0, 1, 1, 1.0), shader, lightSource);
+        let monoNode = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader, lightSource);
+        //let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, lightSource);
         let cuboid1 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
-        let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
+        //let cuboid2 = new Cuboid(gl, 0.5, 0.5, 0.5, shader.getProgram());
 
-        //movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1), monoBlack);
+        movingNode = new GraphicsNode(gl, cuboid1, monoNode, mat4(1,0,0,0, 0,1,0,0, 0,0,1,5, 0,0,0,1));
+/*        
         let boardPlacement = mat4(1,0,0,-4, 0,1,0,-2, 0,0,1,-4, 0,0,0,1);
         floor = new Floor(16, 0.1,16, 8, 8, boardPlacement,monoBlue,monoNode);
         floor.createFloor(gl, shader);
@@ -129,7 +168,7 @@
         let robotPlacement = mat4(1,0,0,-4, 0,1,0,0, 0,0,1,-4, 0,0,0,1)
         robot = new Robot(floor.movingNode[0]);
         robot.createRobot();
-
+*/
         /*
         let max = 15;
         let min = -15;
@@ -180,15 +219,17 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
+        lightSource.activate();
 
-        floor.draw();
-        robot.draw();
+        //floor.draw();
+        //robot.draw();
+        movingNode.draw();
         
         for(let i = 0; i < nodes.length; i++) {
             nodes[i].draw();
         }
 
-        robot.rotateHead();
+        //robot.rotateHead();
         requestAnimationFrame(render);
     }
 
@@ -249,7 +290,7 @@
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
 
     <div id="canvas-holder">
-    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
+    <canvas width=900px height=500px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
     </div>
 
 </body>

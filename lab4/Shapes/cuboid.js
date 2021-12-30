@@ -12,6 +12,7 @@ class Cuboid extends Mesh{
         let x = width / 2; 
         let y = height / 2;
         let z = depth / 2;
+        
 
         /*The vector positions for each point relative to each other in the 3D space*/
         let vertices = [
@@ -41,7 +42,45 @@ class Cuboid extends Mesh{
             4, 5, 6,
             6, 7, 4
         ];
+
+        let normals = [
+            // Front
+            0,  0,  1,
+            0,  0,  1,
+            0,  0,  1,
+            0,  0,  1,
+       
+            // Back
+            0,  0, -1,
+            0,  0, -1,
+            0,  0, -1,
+            0,  0, -1,
+       
+            // Top
+            0,  1,  0,
+            0,  1,  0,
+            0,  1,  0,
+            0,  1,  0,
+       
+           // Bottom
+            0, -1,  0,
+            0, -1,  0,
+            0, -1,  0,
+            0, -1,  0,
+       
+           // Right
+            1,  0,  0,
+            1,  0,  0,
+            1,  0,  0,
+            1,  0,  0,
+       
+           // Left
+            -1,  0,  0,
+            -1,  0,  0,
+            -1,  0,  0,
+            -1,  0,  0
+        ];
         
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }
