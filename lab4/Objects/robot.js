@@ -123,7 +123,7 @@ class Robot{
         let change = mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1)
         let newMatrix = mult(this.star.localMatrix, rotation);
         //this.star.localMatrix=newMatrix;
-
+    }
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
