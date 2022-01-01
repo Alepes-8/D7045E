@@ -117,19 +117,12 @@ class Robot{
 
     }
 
-    rotateHead(degree){
-        if(this.rotateLeft == true && this.headDegree < 90){
-            rotateSpecificObjext(this.objectArray[this.head],degree,"y");
-            this.headDegree +=degree;
-        }else if( this.rotateLeft == true && this.headDegree >= 90){
-            this.rotateLeft = false;
-        }else if(this.rotateLeft == false && this.headDegree > -90){
-            rotateSpecificObjext(this.objectArray[this.head],-degree,"y");
-            this.headDegree -=degree;
-        }else if( this.rotateLeft == false && this.headDegree <= -90){
-            this.rotateLeft = true;
-        }
-    }
+    rotateHead(){
+        let degree  = 45 ;
+        let rotation = rotate(degree,[0,1,0]); 
+        let change = mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1)
+        let newMatrix = mult(this.star.localMatrix, rotation);
+        //this.star.localMatrix=newMatrix;
 
     changeSizeStar(degree){
         //first two is to shrink the size of the star
