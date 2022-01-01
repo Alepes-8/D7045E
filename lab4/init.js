@@ -15,7 +15,6 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    camera = new CameraObject(gl, shader.getProgram());
 
     optionListiners();
 
@@ -59,8 +58,8 @@ function init() {
     let star = new Star(gl, 3, 2, 6, shader.getProgram());
 
     //center
-    //center = new GraphicsNode(gl, centerNode, monoRed, centerTransform, monoBlack, translation);
-    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera.cameraObject));
+    camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
+    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
 
 
     //move item
