@@ -15,7 +15,6 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    camera = new CameraObject(gl, shader.getProgram());
 
     optionListiners();
 
@@ -59,8 +58,8 @@ function init() {
     let star = new Star(gl, 3, 2, 6, shader.getProgram());
 
     //center
-    //center = new GraphicsNode(gl, centerNode, monoRed, centerTransform, monoBlack, translation);
-    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera.cameraObject));
+    camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
+    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
 
 
     //move item
@@ -77,9 +76,12 @@ function init() {
     robot.createRobot(gl,shader);
         
     arrayWorld[1].push(robot);
-    rotateSpecificObjext(arrayWorld[1][arrayWorld[1].length - 1].objectArray[arrayWorld[1][arrayWorld[1].length - 1].leftArm],-70,"z");
-    rotateSpecificObjext(arrayWorld[1][arrayWorld[1].length - 1].objectArray[arrayWorld[1][arrayWorld[1].length - 1].rightArm],70,"z");
     robotID = arrayWorld[1].length - 1;
+    for(let i = 0; i <35 ; i++){
+        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
+        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
+
+    }
     down = true;
 
     //nodes

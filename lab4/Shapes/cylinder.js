@@ -63,17 +63,13 @@ class Cylinder extends Mesh{
         {
             if(side == points){
                 indices.push(side,1,points+2)
-                indices.push(points+1+side,1,points+2)
+                indices.push(points+1+side,side,points+2)
             }else{
                 indices.push(side,side+1,points+1+side)
                 indices.push(points+1+side,side+1,points+2+side)
             }
-
-
         }
 
-
-        
         super(gl, vertices, indices, shaderProgram);      
     }
 }

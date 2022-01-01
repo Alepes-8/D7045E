@@ -27,9 +27,8 @@ class Robot{
         //body
         let botCone = new Cone(gl, 2.5, 2.5, shader.getProgram());
         let midCone1 = new Cone(gl, 2, 2, shader.getProgram());
-        let midCone2 = new Cone(gl, 1.5, 1.5, shader.getProgram());
 
-        let botConeTransformer = mat4(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
+        let botConeTransformer = mat4(1,0,0,0, 0,1,0,1.9, 0,0,1,0, 0,0,0,1);
         let mid1ConeTransformer = mat4(1,0,0,0, 0,1,0,0.6, 0,0,1,0, 0,0,0,1);
 
         let botConeTranslation = translate(0,0,0);
@@ -58,8 +57,8 @@ class Robot{
 
         let armTransformer1 = mat4(1,0,0, -1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
         let armTransformer2 = mat4(1,0,0, 1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
-        let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.3, 0,0,1,0, 0,0,0,1);
-        let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.3, 0,0,1,0, 0,0,0,1);
+        let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
+        let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
 
         let arm1Translation = translate(0,0,0);
         let arm2Translation = translate(0,0,0);
