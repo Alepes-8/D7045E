@@ -15,6 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
+    lightsource = new lightSource(gl, vec4(1,1,1,1), vec4(0, 5, 1, 1.0), shader);
 
     optionListiners();
 
@@ -26,11 +27,11 @@ function init() {
     let objectsHights = 4;
 
     //colors
-    let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-    let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
-    let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-    let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
-    let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
+    let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader, lightsource);
+    let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader, lightsource);
+    let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, lightsource);
+    let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader, lightsource);
+    let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader, lightsource);
 
 
     // translatons
