@@ -19,6 +19,8 @@ class Camera{
 
     /*selects a lens for a perspective view and how much of the world the camera should image*/
     this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
+  
+    this.modelvMatrixInv = inverse4(this.modelViewvMatrix);
   }
 
   //activate the camera view by sending the view matrix and projection matrix to the program
@@ -33,11 +35,13 @@ class Camera{
     
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
     var modelViewvMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelViewvMatrix");
-    var cameraPos = this.gl.getUniformLocation(this.shaderProgram, "cameraPos");
+    var modelvMatrixInv = this.gl.getUniformLocation(this.shaderProgram, "modelvMatrixInv");
+    //var cameraPos = this.gl.getUniformLocation(this.shaderProgram, "cameraPos");
 
-    this.gl.uniform4fv(cameraPos, flatten(vec4(this.position,1)));
+    //this.gl.uniform4fv(cameraPos, flatten(vec4(this.position,1)));
     this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
     this.gl.uniformMatrix4fv(modelViewvMatrix, false, flatten(this.modelViewvMatrix));
+    this.gl.uniformMatrix4fv(modelvMatrixInv, false, flatten(this.modelvMatrixInv));
   }
 
   getVMatrix(){

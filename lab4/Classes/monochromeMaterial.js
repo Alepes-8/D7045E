@@ -10,12 +10,21 @@
 
 class MonochromeMaterial extends Material{
 
-  constructor(gl, color, shaderProgram) {
+  constructor(gl, color, shaderProgram, lightSource) {
     super(shaderProgram.getProgram());
     this.gl = gl;
     this.color = color;
-    this.colorLocation = null;
+    //this.colorLocation = null;
     this.shaderProgram = shaderProgram;
+
+    //this.ambient = vec4(1.0, 0.0, 1.0, 1.0);
+    this.diffuse = color;
+    this.specular = vec4(1.0, 1.0, 1.0, 1.0);
+    this.shine = 20.0;
+
+    //this.ambientProduct = mult(lightSource.lightAmbient, this.ambient);
+    this.diffuseProduct = mult(lightSource.lightDiffuse, this.diffuse);
+    this.specularProduct = mult(lightSource.lightSpecular, this.specular);
   }
 
   applyMaterial(transform) {
@@ -23,9 +32,13 @@ class MonochromeMaterial extends Material{
     let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
     this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
 
-    this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
-    //if the node is far away the RBG variables gets multiplied with lower values => darker color
+    //this.ambient_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");
+    this.diffuse_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");
+    this.specular_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
 
-    this.gl.uniform4fv(this.colorLocation, this.color);
+    //this.gl.uniform4fv(this.ambient_loc, flatten(this.ambientProduct));
+    this.gl.uniform4fv(this.diffuse_loc, flatten(this.diffuseProduct));
+    this.gl.uniform4fv(this.specular_loc, flatten(this.specularProduct));
+    this.gl.uniform1f(this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess"), this.shine);
   }
 }
