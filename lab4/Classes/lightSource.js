@@ -1,4 +1,4 @@
-class lightSource{
+class LightSource{
 
   constructor(gl, color, lightPosition, shaderProgram) {
     this.lightPosition = lightPosition;

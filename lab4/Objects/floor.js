@@ -1,5 +1,5 @@
 class Floor{
-    constructor(boardWeith, boardHight,boardLength, sideSizeX, sideSizeZ, color1, color2, centerNode){
+    constructor(boardWeith, boardHight,boardLength, sideSizeX, sideSizeZ, color1, color2, centerNode, lightSource){
         this.centerNode = centerNode;
         this.cubeWidth =boardWeith/sideSizeX;
         this.cubeHight = boardHight;
@@ -9,11 +9,12 @@ class Floor{
         this.color1 = color1;
         this.color2 = color2;
         this.objectArray = [];
+        this.lightSource = lightSource;
     }
 
     createFloor(gl,  shader){  
        
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, this.lightSource);
         let cuboid = new Cuboid(gl, this.cubeWidth, this.cubeHight, this.cubeLength, shader.getProgram());
         let monoNode;
 
