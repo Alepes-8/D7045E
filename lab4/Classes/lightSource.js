@@ -7,7 +7,6 @@ class LightSource{
     this.lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
     this.gl = gl;
     this.shaderProgram = shaderProgram;
-    this.gl.uniform4fv(this.gl.getUniformLocation(this.shaderProgram.getProgram(), "lightPosition"),flatten(this.lightPosition));
   }
 
   activate() {

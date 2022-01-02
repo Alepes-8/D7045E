@@ -27,9 +27,9 @@ class MonochromeMaterial extends Material{
     this.diffuseProduct = mult(lightSource.lightDiffuse, this.diffuse);
     this.specularProduct = mult(lightSource.lightSpecular, this.specular);
 
-    console.log(lightSource.lightAmbient);
-    console.log(lightSource.lightDiffuse);
-    console.log(lightSource.lightSpecular);
+    //console.log(lightSource.lightAmbient);
+    //console.log(lightSource.lightDiffuse);
+    //console.log(lightSource.lightSpecular);
   }
 
   applyMaterial(transform) {
