@@ -20,6 +20,14 @@ class Camera{
     /*selects a lens for a perspective view and how much of the world the camera should image*/
     this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
   
+    this.nMatrix = [
+      vec3(this.modelViewvMatrix[0][0], this.modelViewvMatrix[0][1], this.modelViewvMatrix[0][2]),
+      vec3(this.modelViewvMatrix[1][0], this.modelViewvMatrix[1][1], this.modelViewvMatrix[1][2]),
+      vec3(this.modelViewvMatrix[2][0], this.modelViewvMatrix[2][1], this.modelViewvMatrix[2][2])
+    ];
+
+    this.cMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+
     this.modelvMatrixInv = inverse4(this.modelViewvMatrix);
   }
 
@@ -35,12 +43,14 @@ class Camera{
     
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
     var modelViewvMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelViewvMatrix");
+    var nMatrix = this.gl.getUniformLocation(this.shaderProgram, "nMatrix");
     var modelvMatrixInv = this.gl.getUniformLocation(this.shaderProgram, "modelvMatrixInv");
     //var cameraPos = this.gl.getUniformLocation(this.shaderProgram, "cameraPos");
 
     //this.gl.uniform4fv(cameraPos, flatten(vec4(this.position,1)));
     this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
     this.gl.uniformMatrix4fv(modelViewvMatrix, false, flatten(this.modelViewvMatrix));
+    this.gl.uniformMatrix3fv(nMatrix, false, flatten(this.nMatrix));
     this.gl.uniformMatrix4fv(modelvMatrixInv, false, flatten(this.modelvMatrixInv));
   }
 

@@ -51,13 +51,13 @@ function init() {
     //shapes
     let centerNode = new Sphere(gl, 0.5, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
-    let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
+    /*let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
     let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
     let star = new Star(gl, 3, 2, 6, shader.getProgram());
-
+*/
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoBlue, firstCubeTransform, monoBlack, translation, camera));

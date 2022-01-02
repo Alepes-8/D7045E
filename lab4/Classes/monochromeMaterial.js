@@ -17,14 +17,15 @@ class MonochromeMaterial extends Material{
     //this.colorLocation = null;
     this.shaderProgram = shaderProgram;
 
-    //this.ambient = vec4(1.0, 0.0, 1.0, 1.0);
-    this.diffuse = color;
-    this.specular = vec4(1.0, 1.0, 1.0, 1.0);
-    this.shine = 20.0;
+    this.ambientColor = color;
+    this.diffuseColor = color;
+    this.specularColor = vec3(1.0, 1.0, 1.0);
+    this.shineExponent = 20.0;
 
-    //this.ambientProduct = mult(lightSource.lightAmbient, this.ambient);
-    this.diffuseProduct = mult(lightSource.lightDiffuse, this.diffuse);
-    this.specularProduct = mult(lightSource.lightSpecular, this.specular);
+    this.ambientProduct = mult(lightSource.lightAmbient, this.ambientColor);
+    this.diffuseProduct = mult(lightSource.lightDiffuse, this.diffuseColor);
+    this.specularProduct = mult(lightSource.lightSpecular, this.specularColor);
+  
   }
 
   applyMaterial(transform) {
@@ -32,13 +33,14 @@ class MonochromeMaterial extends Material{
     let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
     this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
 
-    //this.ambient_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");
-    this.diffuse_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");
-    this.specular_loc = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
+    this.ambient = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");
+    this.diffuse = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");
+    this.specular = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
+    this.shininess = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess");
 
-    //this.gl.uniform4fv(this.ambient_loc, flatten(this.ambientProduct));
-    this.gl.uniform4fv(this.diffuse_loc, flatten(this.diffuseProduct));
-    this.gl.uniform4fv(this.specular_loc, flatten(this.specularProduct));
-    this.gl.uniform1f(this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess"), this.shine);
+    this.gl.uniform4fv(this.ambient, flatten(this.ambientProduct));
+    this.gl.uniform4fv(this.diffuse, flatten(this.diffuseProduct));
+    this.gl.uniform3fv(this.specular, flatten(this.specularProduct));
+    this.gl.uniform1f(this.shininess, this.shineExponent);
   }
 }
