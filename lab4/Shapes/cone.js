@@ -17,6 +17,10 @@ class Cone extends Mesh{
         let vertices = [
             vec4(0,-y,0)
         ];
+
+        let normals = [
+            vec4(0,-1,0)
+        ];
         
     
         for(let v = 0; v < points; v++){
@@ -25,9 +29,14 @@ class Cone extends Mesh{
                 -y,
                 r*Math.sin(v * 2 * Math.PI / points),
                 1));
+
+            normals.push(vec4((Math.cos(v * 2 * Math.PI / points) * y/Math.sqrt(y*y+r*r)), (Math.sin(v * 2 * Math.PI / points) * y/Math.sqrt(y*y+r*r)), (r/Math.sqrt(y*y+r*r)), 1.0));
         }
 
-        vertices.push(vec4(0,y,0,1));
+        for(let v = 0; v < points; v++){
+            vertices.push(vec4(0,y,0,1));
+            normals.push(vec4((Math.cos(v * 2 * Math.PI / points) * y/Math.sqrt(y*y+r*r)), (Math.sin(v * 2 * Math.PI / points) * y/Math.sqrt(y*y+r*r)), (r/Math.sqrt(y*y+r*r)), 1.0));
+        }
         
         /*The connections between the vertices*/
         let indices = [];
@@ -51,6 +60,6 @@ class Cone extends Mesh{
                 indices.push(points+1,i,i+1)
             }
         }
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

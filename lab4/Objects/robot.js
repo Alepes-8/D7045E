@@ -1,5 +1,5 @@
 class Robot{
-    constructor(start){
+    constructor(start, lightSource){
         
         this.worldMatrix = start;
         this.objectArray = [];
@@ -14,15 +14,16 @@ class Robot{
         this.length = 0.5;
         this.headDegree = 0;
         this.rotateLeft = true;
+        this.lightSource = lightSource;
     }
 
 
     createRobot(gl,shader){
-        let monoGreen = new MonochromeMaterial(gl, vec4(0,1,0, 1), shader);
-        let monoYellow= new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
-        let monoRed = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader);
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-        let monoGrey = new MonochromeMaterial(gl, vec4(0.4, 0.4, 0.4, 1), shader);
+        let monoGreen = new MonochromeMaterial(gl, vec4(0,1,0, 1), shader, this.lightSource);
+        let monoYellow= new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader, this.lightSource);
+        let monoRed = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader, this.lightSource);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, this.lightSource);
+        let monoGrey = new MonochromeMaterial(gl, vec4(0.4, 0.4, 0.4, 1), shader, this.lightSource);
 
         //body
         let botCone = new Cone(gl, 2.5, 2.5, shader.getProgram());

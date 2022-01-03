@@ -17,6 +17,7 @@ class Torus extends Mesh{
         let arc = Math.PI * 2 // the whole loop. If we place Math.PI will the system only draw half a cirkle 
         let indices = [];
 		let vertices = [];
+		let normals = [];
 
 		// generate vertices, normals and uvs
 
@@ -34,7 +35,7 @@ class Torus extends Mesh{
 				let verZ = tube * Math.sin( v );
 
 				vertices.push( vec4(verX, verY, verZ,1));
-
+				normals.push(vec4((Math.cos(u)*Math.cos(v)), (Math.sin(u)*Math.cos(v)), (Math.sin(v)), 1.0));
 			}
 
 		}
@@ -61,6 +62,6 @@ class Torus extends Mesh{
 
 		}
 
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

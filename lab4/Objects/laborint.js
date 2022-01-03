@@ -1,5 +1,5 @@
 class Laborint{
-    constructor(xSize, ySize, xAmount, yAmount, thickness, floor, color){
+    constructor(xSize, ySize, xAmount, yAmount, thickness, floor, color, lightSource){
         this.xSize = xSize;
         this.ySize = ySize;
         this.xAmount = xAmount;
@@ -10,6 +10,7 @@ class Laborint{
         this.color = color;
         this.floor = floor;
         this.objectArray = [];
+        this.lightSource = lightSource;
     }
 
     createRandomLaborint(gl,  shader){  
@@ -48,7 +49,7 @@ class Laborint{
     }
 
     createLaborint(gl,  shader){  
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, this.lightSource);
         var arr = [];
         let hight;
         if(this.weight > this.length){

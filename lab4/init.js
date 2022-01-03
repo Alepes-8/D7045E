@@ -15,7 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 5, 1, 1.0), shader);
+    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 10, 0, 1.0), shader);
 
     optionListiners();
 
@@ -51,29 +51,29 @@ function init() {
     //shapes
     let centerNode = new Sphere(gl, 0.5, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
-    /*let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
+    let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
     let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
     let star = new Star(gl, 3, 2, 6, shader.getProgram());
-*/
+
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
-    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoBlue, firstCubeTransform, monoBlack, translation, camera));
+    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
 
-/*
+
     //move item
-    floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
+    floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoRed, monoWhite, arrayWorld[0][0], lightSource);
     floor.createFloor(gl,shader);
     arrayWorld[1].push(floor);
     floorID = arrayWorld[1].length - 1;
 
 
     //objects
-    laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue);
-    robot = new Robot(arrayWorld[1][0].objectArray[60]);
-    laborint.createLaborint(gl,shader);
+    //laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
+    robot = new Robot(arrayWorld[1][0].objectArray[60], lightSource);
+    //laborint.createLaborint(gl,shader);
     robot.createRobot(gl,shader);
         
     arrayWorld[1].push(robot);
@@ -93,9 +93,9 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    arrayWorld[1].push(laborint);
+    //arrayWorld[1].push(laborint);
    
-    */
+    
     //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
 
     render();

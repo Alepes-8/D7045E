@@ -22,17 +22,25 @@ class Star extends Mesh{
             vec4( 0,  0,  -z, 1 ),   // front/top/left
         ];
 
+        let normals = [
+            vec4(0, 0, 1, 1.0),
+            vec4(0, 0, -1, 1.0)
+        ];
+
         for(let i = 0; i < spikes; i++){
             vertices.push(vec4(
                 outer_Vertices*Math.cos((2*i) * 2 * Math.PI / (spikes*2)),
                 outer_Vertices*Math.sin( (i*2)* 2 * Math.PI / (spikes*2)),
                 0,
                 1));
+            normals.push(vec4((Math.cos((2*i) * 2 * Math.PI / (spikes*2))), (Math.sin( (i*2)* 2 * Math.PI / (spikes*2))), (0), 1.0));
+            
             vertices.push(vec4(
                 inner_Vertices*Math.cos((i*2+1) * 2 * Math.PI / (spikes*2)),
                 inner_Vertices*Math.sin((i*2+1) * 2 * Math.PI / (spikes*2)),
                 0,
                 1));
+            normals.push(vec4((Math.cos((i*2+1) * 2 * Math.PI / (spikes*2))), (Math.sin((i*2+1) * 2 * Math.PI / (spikes*2))), (0), 1.0));
         }
 
 
@@ -48,7 +56,7 @@ class Star extends Mesh{
                 }     
             }
         }
-        super(gl, vertices, indices, shaderProgram);   
+        super(gl, vertices, indices, normals, shaderProgram);   
         this.x = x; 
         this.z = z;
         this.spikes = spikes;

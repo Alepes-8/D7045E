@@ -61,9 +61,9 @@
             //cameraPos = (cMatrix * vertexPos).xyz;
             //v_normal = normalize(mat3(cMatrix)*normalPos.xyz);
 
-            gl_Position = perspectiveMatrix * modelViewvMatrix * vertexPos * cMatrix;
+            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos ;
             v_normal = normalize(normalPos.xyz);
-            cameraPos = (modelViewvMatrix * vertexPos * cMatrix).xyz / (modelViewvMatrix * vertexPos * cMatrix).w;
+            cameraPos = (modelViewvMatrix * vertexPos).xyz / (modelViewvMatrix * vertexPos).w;
         }`;
 
     const fragmentShaderSource = `#version 300 es
