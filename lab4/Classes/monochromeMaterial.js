@@ -38,12 +38,12 @@ class MonochromeMaterial extends Material{
     this.specular = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
     this.shininess = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess");
 
-    /*this.gl.uniform4fv(this.ambient, flatten(this.ambientProduct));
+    this.gl.uniform4fv(this.ambient, flatten(this.ambientProduct));
     this.gl.uniform4fv(this.diffuse, flatten(this.diffuseProduct));
-    this.gl.uniform3fv(this.specular, flatten(this.specularProduct));*/
-    this.gl.uniform4fv(this.ambient, this.ambientColor);
+    this.gl.uniform3fv(this.specular, flatten(this.specularProduct));
+    /*this.gl.uniform4fv(this.ambient, this.ambientColor);
     this.gl.uniform4fv(this.diffuse, this.diffuseColor);
-    this.gl.uniform3fv(this.specular, this.specularColor);
+    this.gl.uniform3fv(this.specular, this.specularColor);*/
     this.gl.uniform1f(this.shininess, this.shineExponent);
   }
 }

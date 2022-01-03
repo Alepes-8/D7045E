@@ -41,11 +41,11 @@
       this.gl.enableVertexAttribArray(this.vertexPos);
 
       this.normalBuffer = this.gl.createBuffer();
-      let normalPos = this.gl.getAttribLocation(shaderProgram, "normalPos");
+      this.normalPos = this.gl.getAttribLocation(shaderProgram, "normalPos");
       this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
       this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten(this.normals), this.gl.STATIC_DRAW);
-      this.gl.vertexAttribPointer(normalPos, 4, this.gl.FLOAT, false, 0, 0);
-      this.gl.enableVertexAttribArray(normalPos);
+      this.gl.vertexAttribPointer(this.normalPos, 4, this.gl.FLOAT, false, 0, 0);
+      this.gl.enableVertexAttribArray(this.normalPos);
     }
     
     getVertexArray() {

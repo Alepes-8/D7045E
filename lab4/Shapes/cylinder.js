@@ -13,7 +13,7 @@ class Cylinder extends Mesh{
         let y = height / 2;
         let points= 30;
         let vertices = [
-            vec4( 0, -y,  0, 1 ),   // front/bottom/left
+            vec4( 0, -y,  0, 1 )   // front/bottom/left
         ];
 
         let normals = [
@@ -27,7 +27,7 @@ class Cylinder extends Mesh{
                 r*Math.sin(v * 2 * Math.PI / points),
                 1));
 
-            normals.push(vec4((Math.cos(v * 2 * Math.PI / points)), (Math.sin(v * 2 * Math.PI / points)), (0), 1.0));
+            normals.push(vec4((Math.cos(v * 2 * Math.PI / points)), 0, (Math.sin(v * 2 * Math.PI / points)), 1.0));
         }
 
        
@@ -46,7 +46,7 @@ class Cylinder extends Mesh{
         }
 
         vertices.push(vec4(0,y,0,1));
-        normals.push(vec4((Math.cos(2 * Math.PI / points)), (Math.sin(2 * Math.PI / points)), (0), 1.0));
+        normals.push(vec4((0), 1, (0), 1.0));
 
         for(let v2 = 0; v2 < points; v2++){
             vertices.push(vec4(
@@ -55,7 +55,7 @@ class Cylinder extends Mesh{
                 r*Math.sin(v2 * 2 * Math.PI / points),
                 1));
 
-            normals.push(vec4((Math.cos(v2 * 2 * Math.PI / points)), (Math.sin(v2 * 2 * Math.PI / points)), (0), 1.0));
+            normals.push(vec4((Math.cos(v2 * 2 * Math.PI / points)), 0, (Math.sin(v2 * 2 * Math.PI / points)), 1.0));
         }
 
         for(let i2 = 1; i2 <= points;i2++ )
