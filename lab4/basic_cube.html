@@ -94,16 +94,12 @@
             }
             R = -reflect(L,N);
             V = normalize( -cameraPos);  // (Assumes a perspective projection.)
-            if ( dot(L,N) <= 0.0 ) {
-                fragment_color = ambientProduct;
-            }
-            else {
-                vec3 color = 0.8 * dot(L,N) * diffuseProduct.rgb ;
-                if (dot(R,V) > 0.0) {
-                    color += 0.4*pow(dot(R,V),shininess) * specularProduct;
-                }
-                fragment_color = vec4(color, diffuseProduct.a);
-            }
+            vec3 amb = vec3(0.05f,0.05f,0.05f);
+            float LdotN = max(0.0f, dot(L,N));
+            amb = (1.0f - LdotN) * amb;
+            vec3 color = LdotN * diffuseProduct.rgb + amb * diffuseProduct.rgb;
+            color += 0.4*pow(max(0.0f, dot(R,V)),shininess) * specularProduct;
+            fragment_color = vec4(color, diffuseProduct.a);
         }`;
     
     let canvas;
