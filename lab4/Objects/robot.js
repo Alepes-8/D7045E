@@ -14,10 +14,14 @@ class Robot{
         this.length = 0.5;
         this.headDegree = 0;
         this.rotateLeft = true;
+        this.gl;
+        this.shader;
     }
 
 
     createRobot(gl,shader){
+        this.gl = gl; 
+        this.shader = shader;
         let monoGreen = new MonochromeMaterial(gl, vec4(0,1,0, 1), shader);
         let monoYellow= new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
         let monoRed = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader);
@@ -137,13 +141,16 @@ class Robot{
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
-            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 - degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
+            this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 - degree,this.objectArray[this.star].mesh.z * 2);
+            //this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 - degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
         }else if(this.objectArray[this.star].mesh.x * 2 <= 1 && this.down == true){
             this.down = false;
         }
         //two last is to make it bigger again
         else if(this.down == false && this.objectArray[this.star].mesh.x * 2 < this.starWidth){
-            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 + degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
+            this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 + degree,this.objectArray[this.star].mesh.z * 2);
+
+            //this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 + degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
         }
         else if(this.objectArray[this.star].mesh.x * 2 >= this.starWidth && this.down == false){
             this.down = true;
