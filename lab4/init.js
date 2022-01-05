@@ -45,7 +45,6 @@ function init() {
     let torusTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
-    let starTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
 
     //shapes
     let centerNode = new Sphere(gl, 0.5, shader.getProgram());
@@ -55,7 +54,6 @@ function init() {
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
-    let star = new Star(gl, 3, 2, 6, shader.getProgram());
 
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
@@ -79,9 +77,6 @@ function init() {
         
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
-    //rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
-    //rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
-
 
     down = true;
 
@@ -93,10 +88,8 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    //arrayWorld[1].push(laborint);
+    arrayWorld[1].push(laborint);
    
     
-    //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
-
     render();
 }
