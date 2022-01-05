@@ -28,7 +28,7 @@ function rotateObjectY(item,degree){
     if(a == 0 && b==0){
         
     }
-    else if(a > 0 && b == 0){ // 90
+    else if(a > 0 && b == 0){ // exactly 90
         if(degree > 0){
             angle = -90 + degree;
             b = ( hyp * Math.cos(angle * (Math.PI/180) ));
@@ -36,7 +36,7 @@ function rotateObjectY(item,degree){
             angle = angle + degree;
             b =  -hyp * Math.cos(angle * (Math.PI/180) );
         }
-    }else if(a < 0 && b == 0){ // -90
+    }else if(a < 0 && b == 0){ // exactly  -90
 
         if(degree > 0){
             angle = -90 + degree;
@@ -46,8 +46,8 @@ function rotateObjectY(item,degree){
             b = -hyp * Math.cos(angle * (Math.PI/180) );
         }
     }
-    else{
-       if(angle - degree < -90){
+    else{ // any other degree than 90 & -90
+       if(angle - degree < -90){// if you will go bellow -90
             angle = 90 + (angle -degree +90);
             if(b>0){
                 b = -(hyp * Math.cos(angle * (Math.PI/180) ));
@@ -59,7 +59,7 @@ function rotateObjectY(item,degree){
             angle -=degree;
         }
 
-        if(b > 0){
+        if(b > 0){// if possetive x axis
             b = hyp * Math.cos(angle * (Math.PI/180) );
             a = hyp * Math.sin(angle * (Math.PI/180));
         }
