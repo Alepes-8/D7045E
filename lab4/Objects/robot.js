@@ -136,7 +136,9 @@ class Robot{
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
+            
             this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 - degree,this.objectArray[this.star].mesh.z * 2);
+
         }else if(this.objectArray[this.star].mesh.x * 2 <= 1 && this.down == true){
             this.down = false;
         }
