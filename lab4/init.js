@@ -34,7 +34,6 @@ function init() {
 
 
     // translatons
-    let centerTranslation = translate(0,0,0);
     let translation = translate(0,0,0);
 
     //transform
