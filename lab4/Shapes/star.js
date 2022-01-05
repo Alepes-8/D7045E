@@ -82,7 +82,6 @@ class Star extends Mesh{
     
         /*vertex array object handle, this.vertexArray gets the value of a WebGLVertexArrayObject
         representing a vertex array object (VAO) which points to vertex array data*/
-        gl.bindVertexArray(this.vao);  
     
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
     
@@ -91,9 +90,11 @@ class Star extends Mesh{
     
 
         /*Set up vertex attribute pointers*/
+        /*
         this.vertexPos =  gl.getAttribLocation( this.shaderProgram, "vertexPos"); //Fix a call to ShaderProgram      
         gl.vertexAttribPointer(this.vertexPos, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.vertexPos);
+        */
         this.x = x; 
         this.z = z;
     }
