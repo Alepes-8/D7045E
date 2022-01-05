@@ -58,9 +58,6 @@ function init() {
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
   
-
-    camera.translate = mult(camera.translate, rotate(3,[0,1,0]));
-
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
     floor.createFloor(gl,shader);
