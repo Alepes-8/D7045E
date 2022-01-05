@@ -9,7 +9,6 @@
 
 class Star extends Mesh{
     constructor(gl, width, depth, spike, shaderProgram){
-
         let x = width / 2; 
         let z = depth / 2;
         let spikes = spike;
@@ -52,32 +51,50 @@ class Star extends Mesh{
         this.x = x; 
         this.z = z;
         this.spikes = spikes;
-        this.outer_Vertices = outer_Vertices;
+        this.shaderProgram = shaderProgram;
+
     }
 
-    changeSize(size){
-        console.log("hejsan" , this.outer_Vertices);
-        /*this.outer_Vertices -= size;
-        console.log("this.outer_Vertices" , this.outer_Vertices);
+    changeSize(gl , width, depth){
 
-        let inner_Vertices = this.outer_Vertices/3;
+        let x = width / 2; 
+        let z = depth / 2;
+        let outer_Vertices = x;
+        let inner_Vertices = x/3;
+
         let vertices = [
-            vec4( 0, 0,  this.z, 1 ),   // front/bottom/left
-            vec4( 0,  0,  -this.z, 1 ),   // front/top/left
+            vec4( 0, 0,  z, 1 ),   // front/bottom/left
+            vec4( 0,  0,  -z, 1 ),   // front/top/left
         ];
 
         for(let i = 0; i < this.spikes; i++){
-            this.vertices.push(vec4(
-                this.outer_Vertices*Math.cos((2*i) * 2 * Math.PI / (this.spikes*2)),
-                this.outer_Vertices*Math.sin( (i*2)* 2 * Math.PI / (this.spikes*2)),
+            vertices.push(vec4(
+                outer_Vertices*Math.cos((2*i) * 2 * Math.PI / (this.spikes*2)),
+                outer_Vertices*Math.sin( (i*2)* 2 * Math.PI / (this.spikes*2)),
                 0,
                 1));
-            this.vertices.push(vec4(
-                this.inner_Vertices*Math.cos((i*2+1) * 2 * Math.PI / (this.spikes*2)),
-                this.inner_Vertices*Math.sin((i*2+1) * 2 * Math.PI / (this.spikes*2)),
+            vertices.push(vec4(
+                inner_Vertices*Math.cos((i*2+1) * 2 * Math.PI / (this.spikes*2)),
+                inner_Vertices*Math.sin((i*2+1) * 2 * Math.PI / (this.spikes*2)),
                 0,
                 1));
         }
-        */
+    
+        /*vertex array object handle, this.vertexArray gets the value of a WebGLVertexArrayObject
+        representing a vertex array object (VAO) which points to vertex array data*/
+        gl.bindVertexArray(this.vao);  
+    
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+    
+        /*send the array of vertices to the GPU*/
+        gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
+    
+
+        /*Set up vertex attribute pointers*/
+        this.vertexPos =  gl.getAttribLocation( this.shaderProgram, "vertexPos"); //Fix a call to ShaderProgram      
+        gl.vertexAttribPointer(this.vertexPos, 4, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(this.vertexPos);
+        this.x = x; 
+        this.z = z;
     }
 }
