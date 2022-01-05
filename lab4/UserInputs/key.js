@@ -2,6 +2,7 @@ function keyInput(deltaTime){
     if (keys['37'] || keys['39']) { //left and right
         const direction = keys['39'] ? 1 : -1;
             px -= deltaTime * speed * direction * friction;
+
         }
         if (keys['38'] || keys['40']) { //forward and backwards
             const direction = keys['40'] ? 1 : -1;
@@ -20,7 +21,6 @@ function keyInput(deltaTime){
             }else{
                 pz -= deltaTime * speed * direction * friction;
             }
-            
             
         }
         if (keys['32'] || keys['16']) {//upp and down

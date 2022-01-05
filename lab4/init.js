@@ -60,7 +60,9 @@ function init() {
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
+  
 
+    camera.translate = mult(camera.translate, rotate(3,[0,1,0]));
 
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
@@ -77,11 +79,10 @@ function init() {
         
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
-    for(let i = 0; i <35 ; i++){
-        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
-        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
+    //rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
+    //rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
 
-    }
+
     down = true;
 
     //nodes
@@ -92,7 +93,7 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    arrayWorld[1].push(laborint);
+    //arrayWorld[1].push(laborint);
    
     
     //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
