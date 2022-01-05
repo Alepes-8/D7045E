@@ -14,14 +14,10 @@ class Robot{
         this.length = 0.5;
         this.headDegree = 0;
         this.rotateLeft = true;
-        this.gl;
-        this.shader;
     }
 
 
     createRobot(gl,shader){
-        this.gl = gl; 
-        this.shader = shader;
         let monoGreen = new MonochromeMaterial(gl, vec4(0,1,0, 1), shader);
         let monoYellow= new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
         let monoRed = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader);
@@ -98,15 +94,11 @@ class Robot{
         rotateObject(this.objectArray[ this.objectArray.length-2],45, "z");
         rotateObject(this.objectArray[ this.objectArray.length-1],-45, "z");
 
-        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-2],45,"z");
-        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-45,"z");
 
         // arm 
         this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer1, monoBlack, arm1Translation, this.objectArray[this.mainBody]))
-        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-70,"y");
         this.leftArm = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer2, monoBlack, arm2Translation, this.objectArray[this.mainBody]))
-        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],70,"y");
         this.rightArm = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer1, monoBlack, hand1Translation, this.objectArray[this.leftArm]))
         this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer2, monoBlack, hand2Translation, this.objectArray[this.rightArm]))
@@ -125,12 +117,15 @@ class Robot{
     }
 
     rotateHead(degree){
+        //rotate counterclockwise
         if(this.rotateLeft == true && this.headDegree < 90){
             rotateObject(this.objectArray[this.head],degree, "y");
             this.headDegree +=degree;
         }else if( this.rotateLeft == true && this.headDegree >= 90){
             this.rotateLeft = false;
-        }else if(this.rotateLeft == false && this.headDegree > -90){
+        }
+        //rotate clockwise
+        else if(this.rotateLeft == false && this.headDegree > -90){
             rotateObject(this.objectArray[this.head],-degree, "y");
             this.headDegree -=degree;
         }else if( this.rotateLeft == false && this.headDegree <= -90){
