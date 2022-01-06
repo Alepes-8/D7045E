@@ -35,7 +35,6 @@ function init() {
 
 
     // translatons
-    let centerTranslation = translate(0,0,0);
     let translation = translate(0,0,0);
 
     //transform
@@ -46,23 +45,20 @@ function init() {
     let torusTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
-    let starTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
 
     //shapes
     let centerNode = new Sphere(gl, 0.5, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
     let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
-    let cube = new Cuboid(gl, 2, 2, 2, shader.getProgram());
+    let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
-    let star = new Star(gl, 3, 2, 6, shader.getProgram());
 
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
-
-
+  
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoRed, monoWhite, arrayWorld[0][0], lightSource);
     floor.createFloor(gl,shader);
@@ -78,11 +74,12 @@ function init() {
         
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
+
     for(let i = 0; i <35 ; i++){
         rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
         rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
-
     }
+
     down = true;
 
     //nodes
@@ -93,9 +90,8 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    arrayWorld[1].push(laborint);   
+    //arrayWorld[1].push(laborint);
+   
     
-    //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
-
     render();
 }
