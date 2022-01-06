@@ -15,7 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 10, 0, 1.0), shader);
+    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 20, 0, 1.0), shader);
 
     optionListiners();
 
@@ -93,8 +93,7 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    arrayWorld[1].push(laborint);
-   
+    arrayWorld[1].push(laborint);   
     
     //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
 
