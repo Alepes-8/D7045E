@@ -29,9 +29,9 @@ class MonochromeMaterial extends Material{
   }
 
   applyMaterial(transform) {
-    //The cMatrix gives us the possition of the figure. 
-    let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
-    this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
+    //The modelMatrix gives us the possition of the figure. 
+    let modelMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "modelMatrix");
+    this.gl.uniformMatrix4fv(modelMatrix, false, flatten(transform));
 
     this.ambient = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");
     this.diffuse = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");

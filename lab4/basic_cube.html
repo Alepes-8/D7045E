@@ -48,9 +48,9 @@
         layout(location=0) in vec4 vertexPos;
         in vec4 normalPos;
 
-        uniform mat4 cMatrix;
+        uniform mat4 modelMatrix;
 
-        uniform mat4 modelViewvMatrix;
+        uniform mat4 viewMatrix;
         uniform mat4 perspectiveMatrix;
         
         out vec3 cameraPos;
@@ -58,12 +58,12 @@
 
         void main()
         {
-            //cameraPos = (cMatrix * vertexPos).xyz;
-            //v_normal = normalize(mat3(cMatrix)*normalPos.xyz);
+            //cameraPos = (modelMatrix * vertexPos).xyz;
+            //v_normal = normalize(mat3(modelMatrix)*normalPos.xyz);
 
-            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos ;
+            gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vertexPos ;
             v_normal = normalize(normalPos.xyz);
-            cameraPos = (modelViewvMatrix * vertexPos).xyz / (modelViewvMatrix * vertexPos).w;
+            cameraPos = (viewMatrix * modelMatrix * vertexPos).xyz;
         }`;
 
     const fragmentShaderSource = `#version 300 es
@@ -76,21 +76,22 @@
         uniform vec3 specularProduct;
         uniform float shininess;
 
-       // uniform mat4 modelViewvMatrix;
-        //uniform mat4 modelvMatrixInv;
+        uniform mat4 modelMatrix;
+        uniform mat4 viewMatrix;
 
         in vec3 v_normal;
         in vec3 cameraPos;
         out vec4 fragment_color;
 
         void main() {
+            vec4 v_lightPosition = modelMatrix * lightPosition;
             vec3 N, L, R, V;  // vectors for lighting equation
-            N = normalize( nMatrix * v_normal );
-            if ( lightPosition.w == 0.0 ) {
-                L = normalize( lightPosition.xyz );
+            N = normalize( v_normal );
+            if ( v_lightPosition.w == 0.0 ) {
+                L = normalize( v_lightPosition.xyz );
             }
             else {
-                L = normalize( lightPosition.xyz/lightPosition.w - cameraPos );
+                L = normalize( v_lightPosition.xyz/v_lightPosition.w - cameraPos );
             }
             R = -reflect(L,N);
             V = normalize( -cameraPos);  // (Assumes a perspective projection.)
@@ -225,7 +226,7 @@
 
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
     <div id="canvas-holder">
-    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
+    <canvas width=1900px height=950px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
     </div>
 
 </body>

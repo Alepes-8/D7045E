@@ -124,9 +124,9 @@ class Cuboid extends Mesh{
        
         ];
         
-        console.log("V: ", vertices);
-        console.log("I; ", indices);
-        console.log("N: ", normals);
+        //console.log("V: ", vertices);
+        //.log("I; ", indices);
+        //console.log("N: ", normals);
         super(gl, vertices, indices, normals, shaderProgram);      
     }
 }
