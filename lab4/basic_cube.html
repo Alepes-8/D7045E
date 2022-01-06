@@ -85,7 +85,7 @@
         void main() {
             vec4 v_lightPosition = modelMatrix * lightPosition;
             vec3 N, L, R, V;  // vectors for lighting equation
-            N = normalize( v_normal );
+            N = normalize( mat3(modelMatrix) * v_normal );
             if ( v_lightPosition.w == 0.0 ) {
                 L = normalize( v_lightPosition.xyz );
             }
