@@ -29,7 +29,7 @@ class ChangeObjects{
         else if(form == "6"){
             cuboid1 = new Star(gl, width, depth, shader.getProgram());
         }
-        movingNode = new GraphicsNode(gl, cuboid1, monoNode, movingNode.getTransform(), monoBlack);
+        movingNode = new GraphicsNode(gl, shader.getProgram(), cuboid1, monoNode, movingNode.getTransform(), monoBlack);
         //render();
     }
 
@@ -73,7 +73,7 @@ class ChangeObjects{
                 let x = Math.floor(Math.random() * (max - min)) + min;
                 let y = Math.floor(Math.random() * (max - min)) + min;
                 let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-                temp.push(new GraphicsNode(gl, cuboid1, monoBlue, nodes[i].getTransform() ,monoBlack));
+                temp.push(new GraphicsNode(gl, shader.getProgram(), cuboid1, monoBlue, nodes[i].getTransform() ,monoBlack));
             }
         }else{
             let cuboid1; 
@@ -104,7 +104,7 @@ class ChangeObjects{
                 let x = Math.floor(Math.random() * (max - min)) + min;
                 let y = Math.floor(Math.random() * (max - min)) + min;
                 let z = Math.floor(Math.random() * (maxZ - minZ)) + minZ;
-                temp.push(new GraphicsNode(gl, cuboid1, monoBlue, nodes[i].getTransform(),monoBlack));
+                temp.push(new GraphicsNode(gl, shader.getProgram(), cuboid1, monoBlue, nodes[i].getTransform(),monoBlack));
             }
         }
         nodes = temp;

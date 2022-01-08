@@ -14,12 +14,14 @@
 
 class GraphicsNode{
    /*holds a mesh resource, material and an instance specific transform*/
-  constructor(gl, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
+  constructor(gl, shaderProgram, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
     this.gl = gl;
+    this.shaderProgram = shaderProgram;
     this.mesh = mesh;
     this.material = material;
     this.materialBlack = materialBlack;
     this.localMatrix = localMatrix;
+    
     if(worldMatrix == null){
       this.start = true;
       this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
@@ -49,6 +51,12 @@ class GraphicsNode{
         this.transform = matrix;
       }
     }
+
+    let modelMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelMatrix");
+    let viewMatrix = this.gl.getUniformLocation(this.shaderProgram, "viewMatrix");
+
+    let N = normalize(mult(mat3(viewMatrix), mat3(modelMatrix)));
+
 
     this.material.applyMaterial(matrix);
 

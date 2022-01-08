@@ -38,7 +38,7 @@ class Floor{
                     monoNode = this.color2;
                 }
                 let cubeTranslate = translate(0,0,0);
-                this.objectArray.push(new GraphicsNode(gl, cuboid, monoNode, lockalMatrix, monoBlack, cubeTranslate, parent));
+                this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, monoNode, lockalMatrix, monoBlack, cubeTranslate, parent));
             }
         }
     }

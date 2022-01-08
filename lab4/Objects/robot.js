@@ -81,39 +81,39 @@ class Robot{
 
 
         //body
-        this.objectArray.push(new GraphicsNode(gl, botCone, monoGreen, botConeTransformer, monoBlack, botConeTranslation, this.worldMatrix))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), botCone, monoGreen, botConeTransformer, monoBlack, botConeTranslation, this.worldMatrix))
         this.lowerBody = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, midCone1, monoGreen, mid1ConeTransformer, monoBlack, mid1ConeTranslation, this.objectArray[this.objectArray.length-1]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), midCone1, monoGreen, mid1ConeTransformer, monoBlack, mid1ConeTranslation, this.objectArray[this.objectArray.length-1]))
         this.mainBody = this.objectArray.length-1;;
 
         //head
-        this.objectArray.push(new GraphicsNode(gl, topCone, monoGreen, topConeTransformer, monoBlack, topConeTranslation, this.objectArray[this.objectArray.length-1]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), topCone, monoGreen, topConeTransformer, monoBlack, topConeTranslation, this.objectArray[this.objectArray.length-1]))
         this.head = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, star, monoYellow, starTransformer, monoBlack, starTranslation, this.objectArray[this.objectArray.length-1]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), star, monoYellow, starTransformer, monoBlack, starTranslation, this.objectArray[this.objectArray.length-1]))
         this.star = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, antena, monoRed, eyeTransformer1, monoBlack, eye1Translation, this.objectArray[this.head]))
-        this.objectArray.push(new GraphicsNode(gl, antena, monoRed, eyeTransformer2, monoBlack, eye2Translation, this.objectArray[this.head]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), antena, monoRed, eyeTransformer1, monoBlack, eye1Translation, this.objectArray[this.head]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), antena, monoRed, eyeTransformer2, monoBlack, eye2Translation, this.objectArray[this.head]))
         rotateSpecificObjext( this.objectArray[ this.objectArray.length-2],45,"z");
         rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-45,"z");
 
         // arm 
-        this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer1, monoBlack, arm1Translation, this.objectArray[this.mainBody]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), arm, monoGrey, armTransformer1, monoBlack, arm1Translation, this.objectArray[this.mainBody]))
         //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-70,"y");
         this.leftArm = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer2, monoBlack, arm2Translation, this.objectArray[this.mainBody]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), arm, monoGrey, armTransformer2, monoBlack, arm2Translation, this.objectArray[this.mainBody]))
         //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],70,"y");
         this.rightArm = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer1, monoBlack, hand1Translation, this.objectArray[this.leftArm]))
-        this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer2, monoBlack, hand2Translation, this.objectArray[this.rightArm]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), hand, monoRed, handTransformer1, monoBlack, hand1Translation, this.objectArray[this.leftArm]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), hand, monoRed, handTransformer2, monoBlack, hand2Translation, this.objectArray[this.rightArm]))
 
         
         //leg
-        this.objectArray.push(new GraphicsNode(gl, thigh, monoGrey, thighTransformer1, monoBlack, thigh1Translation, this.objectArray[this.lowerBody]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), thigh, monoGrey, thighTransformer1, monoBlack, thigh1Translation, this.objectArray[this.lowerBody]))
         this.leftLeg = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, thigh, monoGrey, thighTransformer2, monoBlack, thigh2Translation, this.objectArray[this.lowerBody]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), thigh, monoGrey, thighTransformer2, monoBlack, thigh2Translation, this.objectArray[this.lowerBody]))
         this.rightLeg = this.objectArray.length-1;
-        this.objectArray.push(new GraphicsNode(gl, foot, monoRed, footTransformer, monoBlack, foot1Translation, this.objectArray[this.leftLeg]))
-        this.objectArray.push(new GraphicsNode(gl, foot, monoRed, footTransformer, monoBlack, foo2Translation, this.objectArray[this.rightLeg]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), foot, monoRed, footTransformer, monoBlack, foot1Translation, this.objectArray[this.leftLeg]))
+        this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), foot, monoRed, footTransformer, monoBlack, foo2Translation, this.objectArray[this.rightLeg]))
 
 
     }

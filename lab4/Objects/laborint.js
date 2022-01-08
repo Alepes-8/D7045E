@@ -32,7 +32,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
         arr = [];
         while(arr.length < this.yAmount*this.xAmount*0.5){
@@ -43,7 +43,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
         
     }
@@ -103,7 +103,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
 
 
@@ -121,7 +121,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,-this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
 
 
@@ -165,7 +165,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
 
 
@@ -186,7 +186,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,-this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
         
     }

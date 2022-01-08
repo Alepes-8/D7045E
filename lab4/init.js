@@ -15,7 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 10, 10, 1.0), shader);
+    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(2, 3, 5, 0.0), shader);
 
     optionListiners();
 
@@ -57,7 +57,7 @@ function init() {
 
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
-    arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
+    arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
   
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoRed, monoWhite, arrayWorld[0][0], lightSource);
@@ -83,11 +83,11 @@ function init() {
     down = true;
 
     //nodes
-    arrayWorld[1].push(new GraphicsNode(gl, sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
-    arrayWorld[1].push(new GraphicsNode(gl, cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[15]));
-    arrayWorld[1].push(new GraphicsNode(gl, torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[57]));
-    arrayWorld[1].push(new GraphicsNode(gl, cylinder, monoYellow, cylinderTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[32]));
-    arrayWorld[1].push(new GraphicsNode(gl, cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[15]));
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[57]));
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cylinder, monoYellow, cylinderTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[32]));
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
     arrayWorld[1].push(laborint);

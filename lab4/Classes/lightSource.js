@@ -10,7 +10,7 @@ class LightSource{
     }
   
     activate() {
-      let lightPosition = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "lightPosition")
+      let lightPosition = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "lightPosition");
       this.gl.uniform4fv(lightPosition, flatten(this.lightPosition));
     }
 }
