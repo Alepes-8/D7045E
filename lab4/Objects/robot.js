@@ -15,75 +15,57 @@ class Robot{
         this.headDegree = 0;
         this.rotateLeft = true;
     }
-
-
     createRobot(gl,shader){
         let monoGreen = new MonochromeMaterial(gl, vec4(0,1,0, 1), shader);
         let monoYellow= new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
         let monoRed = new MonochromeMaterial(gl, vec4(1, 0, 0, 1.0), shader);
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let monoGrey = new MonochromeMaterial(gl, vec4(0.4, 0.4, 0.4, 1), shader);
-
         //body
         let botCone = new Cone(gl, 2.5, 2.5, shader.getProgram());
         let midCone1 = new Cone(gl, 2, 2, shader.getProgram());
-
         let botConeTransformer = mat4(1,0,0,0, 0,1,0,1.9, 0,0,1,0, 0,0,0,1);
         let mid1ConeTransformer = mat4(1,0,0,0, 0,1,0,0.6, 0,0,1,0, 0,0,0,1);
-
         let botConeTranslation = translate(0,0,0);
         let mid1ConeTranslation = translate(0,0,0);
-
         //head
         let topCone = new Cone(gl, 1.5, 1.5, shader.getProgram());
         let star = new Star(gl, this.starWidth, this.length, 6, shader.getProgram());
         let antena = new Cylinder(gl, .05, 0.5, shader.getProgram());
-
         let topConeTransformer = mat4(1,0,0,0, 0,1,0,.5, 0,0,1,0, 0,0,0,1);
         let starTransformer = mat4(1,0,0,0, 0,1,0,.7, 0,0,1,0, 0,0,0,1);
         let eyeTransformer1 = mat4(1,0,0,-.5, 0,1,0,0, 0,0,1,.1, 0,0,0,1);
         let eyeTransformer2 = mat4(1,0,0, .5, 0,1,0,0, 0,0,1,.1, 0,0,0,1);
-
         let topConeTranslation = translate(0,0,0);
         let starTranslation = translate(0,0,0);
         let eye1Translation = translate(0,0,0);
         let eye2Translation = translate(0,0,0);
-
         //arm
         let arm = new Cylinder(gl, 0.2, 1,  shader.getProgram());
         let hand = new Sphere(gl, 0.3, shader.getProgram());
-
-
         let armTransformer1 = mat4(1,0,0, -0.90, 0,1,0,-0.6, 0,0,1,0, 0,0,0,1);
         let armTransformer2 = mat4(1,0,0, 0.90, 0,1,0,-0.6, 0,0,1,0, 0,0,0,1);
         let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
         let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
-
         let arm1Translation = translate(0,0,0);
         let arm2Translation = translate(0,0,0);
         let hand1Translation = translate(0,0,0);
         let hand2Translation = translate(0,0,0);
-
         //leg
         let thigh = new Cylinder(gl, 0.2, 0.7, shader.getProgram());
         let foot = new Cone(gl, 0.6, .3, shader.getProgram());
-
         let thighTransformer1 = mat4(1,0,0, -.5, 0,1,0,-1.5, 0,0,1,0, 0,0,0,1);
         let thighTransformer2 = mat4(1,0,0,.5, 0,1,0,-1.5, 0,0,1,0, 0,0,0,1);
         let footTransformer = mat4(1,0,0,0, 0,1,0,-0.2, 0,0,1,0, 0,0,0,1);
-
         let thigh1Translation = translate(0,0,0);
         let thigh2Translation = translate(0,0,0);
         let foot1Translation = translate(0,0,0);
         let foo2Translation = translate(0,0,0);
-
-
         //body
         this.objectArray.push(new GraphicsNode(gl, botCone, monoGreen, botConeTransformer, monoBlack, botConeTranslation, this.worldMatrix))
         this.lowerBody = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, midCone1, monoGreen, mid1ConeTransformer, monoBlack, mid1ConeTranslation, this.objectArray[this.objectArray.length-1]))
         this.mainBody = this.objectArray.length-1;;
-
         //head
         this.objectArray.push(new GraphicsNode(gl, topCone, monoGreen, topConeTransformer, monoBlack, topConeTranslation, this.objectArray[this.objectArray.length-1]))
         this.head = this.objectArray.length-1;
@@ -93,8 +75,6 @@ class Robot{
         this.objectArray.push(new GraphicsNode(gl, antena, monoRed, eyeTransformer2, monoBlack, eye2Translation, this.objectArray[this.head]))
         rotateObject(this.objectArray[ this.objectArray.length-2],45, "z");
         rotateObject(this.objectArray[ this.objectArray.length-1],-45, "z");
-
-
         // arm 
         this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer1, monoBlack, arm1Translation, this.objectArray[this.mainBody]))
         this.leftArm = this.objectArray.length-1;
@@ -113,9 +93,7 @@ class Robot{
         this.objectArray.push(new GraphicsNode(gl, foot, monoRed, footTransformer, monoBlack, foot1Translation, this.objectArray[this.leftLeg]))
         this.objectArray.push(new GraphicsNode(gl, foot, monoRed, footTransformer, monoBlack, foo2Translation, this.objectArray[this.rightLeg]))
 
-
     }
-
 
     rotateHead(degree){
         //rotate counterclockwise
@@ -132,14 +110,13 @@ class Robot{
         }else if( this.rotateLeft == false && this.headDegree <= -90){
             this.rotateLeft = true;
         }
-
     }
+
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
             
             this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 - degree,this.objectArray[this.star].mesh.z * 2);
-
         }else if(this.objectArray[this.star].mesh.x * 2 <= 1 && this.down == true){
             this.down = false;
         }
@@ -151,7 +128,6 @@ class Robot{
             this.down = true;
         }
     }
-
     draw(){
         for(let i = 0; i < this.objectArray.length; i++){
             this.objectArray[i].draw();

@@ -6,13 +6,11 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Cuboid extends Mesh{
+ class Cuboid extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
         let x = width / 2; 
         let y = height / 2;
         let z = depth / 2;
-        
 
         /*The vector positions for each point relative to each other in the 3D space*/
         let vertices = [
@@ -20,7 +18,6 @@ class Cuboid extends Mesh{
             vec4( -x,  y,  z, 1 ),   // front/top/left
             vec4(  x,  y,  z, 1 ),   // front/top/right
             vec4(  x, -y,  z, 1) ,   // front/bottom/right
-
             vec4(  x, -y, -z, 1 ),   // back/bottom/right
             vec4(  x,  y, -z, 1 ),   // back/top/right
             vec4( -x,  y, -z, 1 ),   // back/top/left
@@ -43,44 +40,6 @@ class Cuboid extends Mesh{
             6, 7, 4
         ];
 
-        let normals = [
-            // Front
-            0,  0,  1,
-            0,  0,  1,
-            0,  0,  1,
-            0,  0,  1,
-       
-            // Back
-            0,  0, -1,
-            0,  0, -1,
-            0,  0, -1,
-            0,  0, -1,
-       
-            // Top
-            0,  1,  0,
-            0,  1,  0,
-            0,  1,  0,
-            0,  1,  0,
-       
-           // Bottom
-            0, -1,  0,
-            0, -1,  0,
-            0, -1,  0,
-            0, -1,  0,
-       
-           // Right
-            1,  0,  0,
-            1,  0,  0,
-            1,  0,  0,
-            1,  0,  0,
-       
-           // Left
-            -1,  0,  0,
-            -1,  0,  0,
-            -1,  0,  0,
-            -1,  0,  0
-        ];
-        
-        super(gl, vertices, indices, normals, shaderProgram);      
+        super(gl, vertices, indices, shaderProgram);      
     }
 }

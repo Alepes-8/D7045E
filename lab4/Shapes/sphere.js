@@ -6,58 +6,44 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Sphere extends Mesh{
+ class Sphere extends Mesh{
     constructor(gl, width, shaderProgram){
         let radius = width / 2;   
-
         let points  = 10;
         let indices = [];
 		let vertices = [];
-		let normals = [];
 
 		// generate vertices, normals and uvs
 
 		for ( let j = 0; j <= points ; j ++ ) {
-
 			for ( let i = 0; i <= points; i ++ ) {
-
 				const v = j / points * Math.PI;
 				const u = i / points * Math.PI * 2;
-				
+
 				// vertex
-				let x = Math.sin( v ) * Math.cos( u );
-				let y =  Math.cos( v );
-				let z = Math.sin( v ) * Math.sin( u );
 
-				let verX = -( radius) * x;
-				let verY = ( radius) * y;
-				let verZ = radius * z;
+				let verX = -( radius) * Math.sin( v ) * Math.cos( u );
+				let verY = ( radius) * Math.cos( v );
+				let verZ = radius * Math.sin( v ) * Math.sin( u );
 
-				vertices.push( vec4(verX, verY, verZ, 1.0));
-				normals.push(vec4(x, y, z, 1.0))
+				vertices.push( vec4(verX, verY, verZ, 1));
 			}
 		}
 
 		// generate indices
-
 		for ( let j = 1; j <= points ; j ++ ) {
 			for ( let i = 1; i <= points; i ++ ) {
-
 				// indices
 				let a = ( points + 1 ) * j + i - 1;
 				let b = ( points + 1 ) * ( j - 1 ) + i - 1;
 				let c = ( points + 1 ) * ( j - 1 ) + i;
 				let d = ( points + 1 ) * j + i;
-
 				// faces
 				indices.push( a, b, d );
 				indices.push( b, c, d );
 			}
 		}
 
-		
-
-        super(gl, vertices, indices, normals, shaderProgram);      
+        super(gl, vertices, indices, shaderProgram);      
     }
 }

@@ -5,13 +5,11 @@
 <html>
 <head>
     <title>Laboration 3</title>
-
     <style>
         body {
             background-color: #ffffff;
         }
     </style>
-
     </script>
     <script src="gl_matrix.js"></script>
     <script src="Library/MV.js"></script>
@@ -22,7 +20,6 @@
     <script src="Classes/shaderProgram.js"></script>
     <script src="Classes/matrial.js"></script>
     <script src="Classes/graphicsNode.js"></script>
-    <script src="Classes/lightSource.js"></script>
     <script src="Classes/monochromeMaterial.js"></script>
     <script src="Shapes/cuboid.js"></script>
     <script src="Shapes/torus.js"></script>
@@ -33,78 +30,39 @@
     <script src="Objects/floor.js"></script>
     <script src="Objects/robot.js"></script>
     <script src="Objects/laborint.js"></script>
-
     <script src="camera.js"></script>
     <script src="Objects/cameraNode.js"></script>
     <script src="UserInputs/key.js"></script>
-
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
-    
+
     const vertexShaderSource = `#version 300 es
-        precision mediump float;
-        
         layout(location=0) in vec4 vertexPos;
-        in vec4 normalPos;
-
         uniform mat4 cMatrix;
-
         uniform mat4 modelViewvMatrix;
         uniform mat4 perspectiveMatrix;
+        uniform vec4 cameraPos;
         
-        out vec3 cameraPos;
-        out vec3 v_normal;
-
+        out float distance;
         void main()
         {
-            gl_Position = perspectiveMatrix * modelViewvMatrix * vertexPos * cMatrix;
-            v_normal = normalize(normalPos.xyz);
-            cameraPos = (modelViewvMatrix * vertexPos).xyz / (modelViewvMatrix * vertexPos).w;
+            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
+            distance = length((cMatrix * vertexPos) - cameraPos) ;
         }`;
 
     const fragmentShaderSource = `#version 300 es
         precision mediump float;
-        
-        uniform vec4 lightPosition;
-        uniform vec4 ambientProduct;
-        uniform vec4 diffuseProduct;
-        uniform vec4 specularProduct;
-        uniform float shininess; // Shininess
-
-        uniform mat4 modelViewvMatrix;
-        uniform mat4 modelvMatrixInv;
-
-        in vec3 v_normal;
-        in vec3 cameraPos;
-        out vec4 fragment_color;
-
+        uniform vec4 u_Color;
+        in float distance;
+        out vec4 fragColor;
         void main() {
-            vec3 L = normalize(lightPosition.xyz);
-            vec3 E = normalize(modelvMatrixInv[3].xyz - cameraPos);
-
-            vec4 fColor;
-            vec3 H = normalize(L + E);
-            vec4 ambient = ambientProduct;
-
-            float Kd = max(dot(L, v_normal), 0.0);
-            vec4  diffuse = Kd*diffuseProduct;
-
-            float Ks = pow(max(dot(v_normal, H), 0.0), shininess);
-            vec4  specular = Ks * specularProduct;
-
-            if(dot(L, v_normal) < 0.0) {
-                specular = vec4(0.0, 0.0, 0.0, 1.0);
-            }
-            fColor = ambient + diffuse + specular;
-            fColor.a = 1.0;
-            fragment_color = fColor;
+            fragColor = vec4(u_Color.xyz * (20.0/(distance)),1);
         }`;
-    
+
     let canvas;
     let gl;
     let camera;
     let shader;
-    let lightSource;
     let part = true;
     let lookDirectionDegree = 0;
     let then = 0;
@@ -118,12 +76,10 @@
     const keys = {};
     var friction = 10;
     
-
     function optionListiners(){
         //buttons
         document.getElementById("persproj").checked = true;
         document.getElementById("fly").checked = false;
-
         //key input        
         window.addEventListener('keydown', (e) => {
         keys[e.keyCode] = true;
@@ -139,22 +95,18 @@
         now *= 0.001;
         const deltaTime = now - then;
         then = now;
-
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
-
-        lightSource.activate();
-
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
                 arrayWorld[i][j].draw();
             }
-        }        
+        }
+
         arrayWorld[1][robotID].rotateHead(1);
         arrayWorld[1][robotID].changeSizeStar(0.01);
 
-        
        //fps camera
         moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
         moveWorld(mat4(1,0,0,0, 0,1,0,py, 0,0,1,0, 0,0,0,1)); // up and down [1]
@@ -182,7 +134,6 @@
             }
             
         }
-
         if(Math.abs(py) > 0){
             py += ((-py) * friction *deltaTime);
             if(py> 0 && py<0.005){
@@ -193,7 +144,6 @@
             }
             
         }
-
         if(Math.abs(ang) > 0){
             ang += ((-ang) * friction *deltaTime);
             if(ang> 0 && ang<0.05){
@@ -207,7 +157,6 @@
         keyInput(deltaTime);
         requestAnimationFrame(render);
     }
-
     function moveWorld(m){
         for(let i = 0; i < arrayWorld[0].length; i++){
             arrayWorld[0][i].updateLocalMatrix(m);
@@ -226,10 +175,8 @@
 </head>
 <body>
         <h2>Chess board with objects</h2>
-
     <p id=message>Use arrow keys, PageUp, and PageDown to move around.<br>
     Use W, S, Q and E to look around.</p>
-
     <p>
     <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
     <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
@@ -238,7 +185,7 @@
 
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
     <div id="canvas-holder">
-    <canvas width=900px height=500px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
+    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
     </div>
 
 </body>

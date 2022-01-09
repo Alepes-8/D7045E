@@ -6,26 +6,25 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Cylinder extends Mesh{
+ class Cylinder extends Mesh{
     constructor(gl, width, height, shaderProgram){
         let r = width / 2; 
         let y = height / 2;
         let points= 30;
-        
-        
         let vertices = [
-            vec4( 0, -y,  0, 1.0)   // front/bottom/left
-        ];
-        let normals = [
-            vec4(0, -1, 0, 1.0)
+            vec4( 0, -y,  0, 1 ),   // front/bottom/left
         ];
 
         for(let v = 0; v < points; v++){
-            vertices.push(vec4(r*Math.cos(v * 2 * Math.PI / points), -y, r*Math.sin(v * 2 * Math.PI / points), 1.0));
-            normals.push(vec4((Math.cos(v * 2 * Math.PI / points)), (Math.sin(v * 2 * Math.PI / points)), (0), 1.0));
+            vertices.push(vec4(
+                r*Math.cos(v * 2 * Math.PI / points),
+                -y,
+                r*Math.sin(v * 2 * Math.PI / points),
+                1));
         }
-        
+
+
+
         /*The connections between the vertices*/
         let indices = [];
         //create the cirkle indeces
@@ -40,11 +39,13 @@ class Cylinder extends Mesh{
         }
 
         vertices.push(vec4(0,y,0,1));
-        normals.push(vec4((Math.cos(2 * Math.PI / points)), (Math.sin(2 * Math.PI / points)), (0), 1.0));
 
         for(let v2 = 0; v2 < points; v2++){
-            vertices.push(vec4(r*Math.cos(v2 * 2 * Math.PI / points), y, r*Math.sin(v2 * 2 * Math.PI / points), 1.0));
-            normals.push(vec4((Math.cos(v2 * 2 * Math.PI / points)), (Math.sin(v2 * 2 * Math.PI / points)), (0), 1.0));
+            vertices.push(vec4(
+                r*Math.cos(v2 * 2 * Math.PI / points),
+                y,
+                r*Math.sin(v2 * 2 * Math.PI / points),
+                1));
         }
 
         for(let i2 = 1; i2 <= points;i2++ )
@@ -56,7 +57,6 @@ class Cylinder extends Mesh{
             }
                 
         }
-
         for(let side = 1; side <= points;side++ )
         {
             if(side == points){
@@ -68,8 +68,6 @@ class Cylinder extends Mesh{
             }
         }
 
-        
-        
-        super(gl, vertices, indices, normals, shaderProgram);      
+        super(gl, vertices, indices, shaderProgram);      
     }
 }
