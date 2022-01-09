@@ -15,7 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
-    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(2, 3, 5, 0.0), shader);
+    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(2, 3, 5, 0.0), shader.getProgram());
 
     optionListiners();
 

@@ -31,6 +31,10 @@ class MonochromeMaterial extends Material{
   applyMaterial(transform) {
     //The modelMatrix gives us the possition of the figure. 
     let modelMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "modelMatrix");
+
+    //let model = this.gl.getUniform(this.shaderProgram.getProgram(), modelMatrix);
+    //console.log("modelMatrix", model);
+
     this.gl.uniformMatrix4fv(modelMatrix, false, flatten(transform));
 
     this.ambient = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");

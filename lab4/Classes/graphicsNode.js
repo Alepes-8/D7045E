@@ -21,6 +21,8 @@ class GraphicsNode{
     this.material = material;
     this.materialBlack = materialBlack;
     this.localMatrix = localMatrix;
+
+    
     
     if(worldMatrix == null){
       this.start = true;
@@ -51,12 +53,9 @@ class GraphicsNode{
         this.transform = matrix;
       }
     }
-
-    let modelMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelMatrix");
-    let viewMatrix = this.gl.getUniformLocation(this.shaderProgram, "viewMatrix");
-
-    let N = normalize(mult(mat3(viewMatrix), mat3(modelMatrix)));
-
+    
+    
+    
 
     this.material.applyMaterial(matrix);
 
@@ -66,6 +65,7 @@ class GraphicsNode{
     this.materialBlack.applyMaterial(matrix);
 
     this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
+    
   }
 
   //if you move a node around the transform needs to be updated

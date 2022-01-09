@@ -40,6 +40,7 @@ class Camera{
       this.perspectiveMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
     }
     this.viewMatrix = lookAt(this.position, this.at , this.rotate);
+    //console.log(this.viewMatrix);
     
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
     var viewMatrix = this.gl.getUniformLocation(this.shaderProgram, "viewMatrix");
