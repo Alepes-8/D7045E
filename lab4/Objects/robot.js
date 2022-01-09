@@ -52,10 +52,11 @@ class Robot{
         //arm
         let arm = new Cylinder(gl, 0.2, 1,  shader.getProgram());
         let hand = new Sphere(gl, 0.3, shader.getProgram());
+        let finger = new Cylinder(gl, 0.1, 0.2,  shader.getProgram());
 
 
-        let armTransformer1 = mat4(1,0,0, -0.90, 0,1,0,-0.6, 0,0,1,0, 0,0,0,1);
-        let armTransformer2 = mat4(1,0,0, 0.90, 0,1,0,-0.6, 0,0,1,0, 0,0,0,1);
+        let armTransformer1 = mat4(1,0,0, -1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
+        let armTransformer2 = mat4(1,0,0, 1, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
         let handTransformer1 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
         let handTransformer2 = mat4(1,0,0,0, 0,1,0,-0.5, 0,0,1,0, 0,0,0,1);
 
@@ -91,19 +92,19 @@ class Robot{
         this.star = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, antena, monoRed, eyeTransformer1, monoBlack, eye1Translation, this.objectArray[this.head]))
         this.objectArray.push(new GraphicsNode(gl, antena, monoRed, eyeTransformer2, monoBlack, eye2Translation, this.objectArray[this.head]))
-        rotateObject(this.objectArray[ this.objectArray.length-2],45, "z");
-        rotateObject(this.objectArray[ this.objectArray.length-1],-45, "z");
-
+        rotateSpecificObjext( this.objectArray[ this.objectArray.length-2],45,"z");
+        rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-45,"z");
 
         // arm 
         this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer1, monoBlack, arm1Translation, this.objectArray[this.mainBody]))
+        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],-70,"y");
         this.leftArm = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, arm, monoGrey, armTransformer2, monoBlack, arm2Translation, this.objectArray[this.mainBody]))
+        //rotateSpecificObjext( this.objectArray[ this.objectArray.length-1],70,"y");
         this.rightArm = this.objectArray.length-1;
         this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer1, monoBlack, hand1Translation, this.objectArray[this.leftArm]))
         this.objectArray.push(new GraphicsNode(gl, hand, monoRed, handTransformer2, monoBlack, hand2Translation, this.objectArray[this.rightArm]))
-        rotateObject(this.objectArray[ this.leftArm],-45, "z");
-        rotateObject(this.objectArray[ this.rightArm],45, "z");
+
         
         //leg
         this.objectArray.push(new GraphicsNode(gl, thigh, monoGrey, thighTransformer1, monoBlack, thigh1Translation, this.objectArray[this.lowerBody]))
@@ -116,36 +117,23 @@ class Robot{
 
     }
 
-
-    rotateHead(degree){
-        //rotate counterclockwise
-        if(this.rotateLeft == true && this.headDegree < 90){
-            rotateObject(this.objectArray[this.head],degree, "y");
-            this.headDegree +=degree;
-        }else if( this.rotateLeft == true && this.headDegree >= 90){
-            this.rotateLeft = false;
-        }
-        //rotate clockwise
-        else if(this.rotateLeft == false && this.headDegree > -90){
-            rotateObject(this.objectArray[this.head],-degree, "y");
-            this.headDegree -=degree;
-        }else if( this.rotateLeft == false && this.headDegree <= -90){
-            this.rotateLeft = true;
-        }
-
+    rotateHead(){
+        let degree  = 45 ;
+        let rotation = rotate(degree,[0,1,0]); 
+        let change = mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1)
+        let newMatrix = mult(this.star.localMatrix, rotation);
+        //this.star.localMatrix=newMatrix;
     }
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){
-            
-            this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 - degree,this.objectArray[this.star].mesh.z * 2);
-
+            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 - degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
         }else if(this.objectArray[this.star].mesh.x * 2 <= 1 && this.down == true){
             this.down = false;
         }
         //two last is to make it bigger again
         else if(this.down == false && this.objectArray[this.star].mesh.x * 2 < this.starWidth){
-            this.objectArray[this.star].mesh.changeSize(this.objectArray[this.star].gl,  this.objectArray[this.star].mesh.x * 2 + degree,this.objectArray[this.star].mesh.z * 2);
+            this.objectArray[this.star].mesh = new Star(gl, this.objectArray[this.star].mesh.x * 2 + degree, this.objectArray[this.star].mesh.z * 2, this.objectArray[this.star].mesh.spikes, shader.getProgram())
         }
         else if(this.objectArray[this.star].mesh.x * 2 >= this.starWidth && this.down == false){
             this.down = true;

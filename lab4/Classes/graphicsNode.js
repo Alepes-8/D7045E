@@ -28,7 +28,7 @@ class GraphicsNode{
     }else{
       this.start = false;
       this.worldMatrix = worldMatrix;
-      this.translate = mult(this.worldMatrix.translate, translate); // takes the translation from parent and the added translation.
+      this.translate = mult(translate,this.worldMatrix.translate); // takes the translation from parent and the added translation.
       this.transform = mult(this.translate,this.worldMatrix.transform); // only difference between world matrix and transform is the rotation.
       this.worldMatrix.children.push(this);
     }
@@ -44,7 +44,7 @@ class GraphicsNode{
     if(this.start){
       matrix = this.transform;
     }else{
-      matrix =  mult(mult(this.worldMatrix.transform, this.localMatrix),this.translate);
+      matrix =  mult(mult(this.localMatrix,this.worldMatrix.transform),this.translate);
       if(matrix != this.transform){
         this.transform = matrix;
       }
