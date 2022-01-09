@@ -116,6 +116,7 @@ class Robot{
 
     }
 
+
     rotateHead(degree){
         //rotate counterclockwise
         if(this.rotateLeft == true && this.headDegree < 90){
@@ -131,8 +132,8 @@ class Robot{
         }else if( this.rotateLeft == false && this.headDegree <= -90){
             this.rotateLeft = true;
         }
-    }
 
+    }
     changeSizeStar(degree){
         //first two is to shrink the size of the star
         if(this.objectArray[this.star].mesh.x * 2 > this.starWidth/3 && this.down == true){

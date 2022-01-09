@@ -15,6 +15,7 @@ function init() {
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
 
+    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(0, 5, 1, 1.0), shader);
 
     optionListiners();
 
@@ -26,11 +27,11 @@ function init() {
     let objectsHights = 4;
 
     //colors
-    let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-    let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
-    let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
-    let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
-    let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
+    let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader, lightSource);
+    let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader, lightSource);
+    let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, lightSource);
+    let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader, lightSource);
+    let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader, lightSource);
 
 
     // translatons
@@ -57,9 +58,10 @@ function init() {
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
-  
+
+
     //move item
-    floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0]);
+    floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoBlack, monoWhite, arrayWorld[0][0], lightSource);
     floor.createFloor(gl,shader);
     arrayWorld[1].push(floor);
     floorID = arrayWorld[1].length - 1;
@@ -87,5 +89,7 @@ function init() {
     arrayWorld[1].push(laborint);
    
     
+    //arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate = mult(arrayWorld[1][6].objectArray[arrayWorld[1][6].head].translate, rotate(45,[0,1,0]));
+
     render();
 }
