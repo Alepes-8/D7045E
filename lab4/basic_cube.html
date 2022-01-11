@@ -23,6 +23,8 @@
     <script src="Classes/matrial.js"></script>
     <script src="Classes/graphicsNode.js"></script>
     <script src="Classes/lightSource.js"></script>
+    <script src="Objects/sunNode.js"></script>
+
     <script src="Classes/monochromeMaterial.js"></script>
     <script src="Shapes/cuboid.js"></script>
     <script src="Shapes/torus.js"></script>
@@ -84,17 +86,16 @@
         out vec4 fragment_color;
 
         void main() {
-            vec4 v_lightPosition = modelMatrix * lightPosition;
             vec3 N, L, R, V;  // vectors for lighting equation
             N = normalize( mat3(modelMatrix) * v_normal );
-            if ( v_lightPosition.w == 0.0 ) {
-                L = normalize( v_lightPosition.xyz );
+            if ( lightPosition.w == 0.0 ) {
+                L = normalize( lightPosition.xyz );
             }
             else {
-                L = normalize( v_lightPosition.xyz/v_lightPosition.w - cameraPos );
+                L = normalize( lightPosition.xyz/lightPosition.w - cameraPos.xyz );
             }
             R = -reflect(L,N);
-            V = normalize( -cameraPos );  // (Assumes a perspective projection.)
+            V = normalize( -cameraPos.xyz );  // (Assumes a perspective projection.)
             vec3 amb = vec3(0.05f,0.05f,0.05f);
             float LdotN = max(0.0f, dot(L,N));
             amb = (1.0f - LdotN) * amb;
@@ -121,6 +122,7 @@
     let ang = 0;
     const keys = {};
     var friction = 1;
+    let left = true;
 
 
     
@@ -150,19 +152,37 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
         lightSource.activate();
+        /*if(left == true){
+            lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+            if ( lightSource.lightPosition[0] > 10){
+                left = false;
+            }
+        }  else if(left == false){
+            lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
+            if ( lightSource.lightPosition[0] < -10){
+                left = true;
+            }
+        } */
+        //lightSource.lightPos();
 
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
                 arrayWorld[i][j].draw();
             }
         }
+        lightSource.draw();
         arrayWorld[1][robotID].rotateHead(1);
         arrayWorld[1][robotID].changeSizeStar(0.01);
         
         //fps camera
         moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
+        //moveLight(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1))
         moveWorld(mat4(1,0,0,0, 0,1,0,py, 0,0,1,0, 0,0,0,1)); // up and down [1]
+        //moveLight(mat4(1,0,0,0, 0,1,0,-py, 0,0,1,0, 0,0,0,1)); // up and down [1]
+
         moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
+        //moveLight(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
+
         rotateWorldY(ang);
         
         if(px > friction){
@@ -188,13 +208,16 @@
         }else{
             ang = 0;
         }
-        
         keyInput(deltaTime);
         requestAnimationFrame(render);
+        
+    }
+
+    function moveLight(m){
+        lightSource.updateLocalMatrix(m);
     }
 
     function moveWorld(m){
-        
         for(let i = 0; i < arrayWorld[0].length; i++){
             arrayWorld[0][i].updateLocalMatrix(m);
         }
@@ -202,8 +225,11 @@
     
     function rotateWorldY(degree){        
         arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
-       
-        
+        lightSource.translate = mult(lightSource.translate, rotate(degree,[0,1,0]));
+
+        rotateObjectY(lightSource,degree);
+
+
         for(let i = 0; i < arrayWorld[0].length; i++){
             rotateObjectY(arrayWorld[0][i],degree);
         }

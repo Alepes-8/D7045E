@@ -14,11 +14,13 @@ function init() {
     let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
+    let translation = translate(0,0,0);
 
-    lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(2, 3, 5, 0.0), shader.getProgram());
+    let sunShape = new Sphere(gl, 2, shader.getProgram());
+   
 
     optionListiners();
-
+    
     let boardWeith = 30;
     let boardHight = 0.1;
     let boardLength = 30;
@@ -26,6 +28,11 @@ function init() {
     let sideSizeZ = 8;
     let objectsHights = 4;
 
+    let sunTransform = mat4(1,0,0,2, 0,1,0,3, 0,0,1,5, 0,0,0,1);
+
+    //lightSource = new LightSource(gl, vec4(1,1,1,1), vec4(2, 3, 5, 0.0), shader.getProgram());
+
+    lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null, vec4(1,1,1,1));
     //colors
     let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader, lightSource);
     let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader, lightSource);
@@ -35,7 +42,6 @@ function init() {
 
 
     // translatons
-    let translation = translate(0,0,0);
 
     //transform
     let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
@@ -49,7 +55,7 @@ function init() {
     //shapes
     let centerNode = new Sphere(gl, 0.5, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
-    let sphere = new Sphere(gl, objectsHights*0.75, shader.getProgram());
+    let sphere = new Sphere(gl, 2, shader.getProgram());
     let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
@@ -58,7 +64,11 @@ function init() {
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoRed, centerTransform, monoBlack, translation);
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
-  
+    lightSource.giveParent(camera);
+    lightSource.giveColors(monoYellow,monoBlack);
+
+
+   
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoRed, monoWhite, arrayWorld[0][0], lightSource);
     floor.createFloor(gl,shader);

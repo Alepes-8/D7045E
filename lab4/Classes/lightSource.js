@@ -1,7 +1,7 @@
 class LightSource{
 
     constructor(gl, color, lightPosition, shaderProgram) {
-      this.lightPosition = lightPosition;
+      this.lightPosition = vec4( lightPosition[0][3],lightPosition[1][3], lightPosition[2][3],0);
       this.lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
       this.lightDiffuse = color;
       this.lightSpecular = vec3(1.0, 1.0, 1.0);
@@ -23,8 +23,12 @@ class LightSource{
       //console.log("N: ", u_normalMatrix);
       
       this.gl.uniformMatrix3fv(this.normalMatrix, false, flatten(u_normalMatrix));*/
-
+      //this.lightPosition = vec4( this.matrixLight[0][3], this.matrixLight[1][3], this.matrixLight[2][3],0);
       let lightPosition = this.gl.getUniformLocation(this.shaderProgram, "lightPosition");
       this.gl.uniform4fv(lightPosition, flatten(this.lightPosition));
+    }
+
+    lightPos(){
+      console.log(this.lightPosition);
     }
 }

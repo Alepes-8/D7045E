@@ -27,6 +27,14 @@ function keyInput(deltaTime){
         const direction = keys['32'] ? 1 : -1;
             py -= deltaTime * speed * direction * friction;
         }
+
+         if (keys['13'] ) {//upp and down
+            console.log(lightSource.lightPosition);
+            console.log(lightSource.transform);
+            console.log("-----------")
+            console.log(lightSource.localMatrix);
+
+        }
         
         if (keys['65'] || keys['68']) { //rotate world right and left
             const direction = keys['68'] ? 1 : -1;
