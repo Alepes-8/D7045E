@@ -10,7 +10,7 @@
 
 class MonochromeMaterial extends Material{
 
-  constructor(gl, color, shaderProgram, lightSource) {
+  constructor(gl, color, shaderProgram) {
     super(shaderProgram.getProgram());
     this.gl = gl;
     this.color = color;
@@ -21,14 +21,12 @@ class MonochromeMaterial extends Material{
     this.diffuseColor = color;
     this.specularColor = vec3(1.0, 1.0, 1.0);
     this.shineExponent = 20.0;
-
-    this.ambientProduct = mult(lightSource.lightAmbient, this.ambientColor);
-    this.diffuseProduct = mult(lightSource.lightDiffuse, this.diffuseColor);
-    this.specularProduct = mult(lightSource.lightSpecular, this.specularColor);
+ 
   
   }
 
   applyMaterial(transform) {
+
     //The modelMatrix gives us the possition of the figure. 
     let modelMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "modelMatrix");
 

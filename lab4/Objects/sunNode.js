@@ -1,13 +1,12 @@
 class SunNode extends LightSource{
     constructor(gl,shaderProgram, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null, color) {
-        super(gl, color, localMatrix, shaderProgram);
+        super(gl, color, vec4(localMatrix[0][3],localMatrix[1][3],localMatrix[2][3],1), shaderProgram);
         this.gl = gl;
         this.mesh = mesh;
         this.material = material;
         this.materialBlack = materialBlack;
         this.localMatrix = localMatrix;
         if(worldMatrix == null){
-            console.log("hejsan");
             this.start = true;
             this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
             this.translate = translate;
@@ -23,10 +22,11 @@ class SunNode extends LightSource{
     }
 
     draw() {
-        /*bind the mesh's vertex array object*/
+        /*/*bind the mesh's vertex array object*/
         this.gl.bindVertexArray(this.mesh.getVertexArray());
         
         /*call the apply material method of the material*/
+        //this.localMatrix = mat4(1,0,0,this.lightPosition.x, 0,1,0,this.lightPosition.y, 0,0,1,this.lightPosition.z, 0,0,0,1);
         let matrix;
         if(this.start){
           matrix = this.transform;
@@ -36,17 +36,19 @@ class SunNode extends LightSource{
             this.transform = matrix;
           }
         }
-        this.lightPosition = vec4( this.transform[0][3], this.transform[1][3], this.transform[2][3],0);
+        console.log(this.transform);
+        this.lightPosition = vec4(this.transform[0][3],this.transform[1][3],this.transform[2][3],1);
 
-    
-        
-        
+
+        this.material.applyMaterial(matrix);
+        /*execute a draw call*/
+        this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
     }
 
     giveParent(worldMatrix){
         this.start = false;
         this.worldMatrix =  worldMatrix;
-        this.localMatrix = mult(this.localMatrix ,mat4(1,0,0,0, 0,1,0,3, 0,0,1,0, 0,0,0,1)); // takes the translation from parent and the added translation.
+        this.localMatrix = mult(this.localMatrix ,mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // takes the translation from parent and the added translation.
     
         this.translate = mult(this.translate,this.worldMatrix.translate); // takes the translation from parent and the added translation.
         this.transform = mult(this.translate,this.worldMatrix.transform); // only difference between world matrix and transform is the rotation.

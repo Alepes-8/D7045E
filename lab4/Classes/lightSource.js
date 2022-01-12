@@ -1,7 +1,7 @@
 class LightSource{
 
     constructor(gl, color, lightPosition, shaderProgram) {
-      this.lightPosition = vec4( lightPosition[0][3],lightPosition[1][3], lightPosition[2][3],0);
+      this.lightPosition = lightPosition;
       this.lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
       this.lightDiffuse = color;
       this.lightSpecular = vec3(1.0, 1.0, 1.0);

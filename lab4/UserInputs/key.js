@@ -29,6 +29,7 @@ function keyInput(deltaTime){
         }
 
          if (keys['13'] ) {//upp and down
+            lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,0 , 0,1,0,0.1, 0,0,1,0 , 0,0,0,1));
             console.log(lightSource.lightPosition);
             console.log(lightSource.transform);
             console.log("-----------")
