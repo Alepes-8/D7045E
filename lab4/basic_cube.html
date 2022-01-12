@@ -220,9 +220,9 @@
     }
     
     function rotateWorldY(degree){       
-        lightSource.translate = mult(rotate(degree,[0,1,0]), lightSource.translate);
         arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
-
+        lightSource.translate = mult(lightSource.translate, rotate(degree,[0,1,0]));
+        rotateObjectY(lightSource,degree);
 
 
         for(let i = 0; i < arrayWorld[0].length; i++){
