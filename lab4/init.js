@@ -72,10 +72,10 @@ function init() {
  
 
     //objects
-      laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
+    laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
     robot = new Robot(arrayWorld[1][0].objectArray[60], lightSource);
     laborint.createLaborint(gl,shader);
-      robot.createRobot(gl,shader);
+    robot.createRobot(gl,shader);
     
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
