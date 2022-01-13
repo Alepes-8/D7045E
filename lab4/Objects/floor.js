@@ -17,7 +17,7 @@ class Floor{
         let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid = new Cuboid(gl, this.cubeWidth, this.cubeHight, this.cubeLength, shader.getProgram());
         let monoNode;
-
+    
          for(let i = 0;  i < this.sideSizeZ;  i++ ){
             for(let j = 0; j < this.sideSizeX; j++){
                 let parent  = this.findParent(j);
@@ -41,6 +41,7 @@ class Floor{
             }
         }
     }
+
     draw(){
         for(let i = 0; i < this.objectArray.length; i++) {
             this.objectArray[i].draw();

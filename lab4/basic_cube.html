@@ -59,7 +59,7 @@
 
             gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vertexPos ;
             v_normal = normalize(normalPos.xyz);
-            cameraPos = (viewMatrix * modelMatrix * vertexPos).xyz;
+            cameraPos = ( modelMatrix * vertexPos).xyz;
         }`;
 
     const fragmentShaderSource = `#version 300 es
@@ -112,6 +112,7 @@
     let py = 0;
     let px = 0;
     let ang = 0;
+    let topang = 0;
     const keys = {};
     let left = true;
     var friction = 10;
@@ -139,6 +140,8 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
         lightSource.activate();
+        //rotateObject(camera,2, "y");
+        camera.draw();
         /*if(left == true){
             lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
             if ( lightSource.lightPosition[0] > 10){
@@ -167,7 +170,8 @@
         moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
 
         rotateWorldY(ang);
-        
+        //rotateWorldZ(topang);
+
         //change the speed in one direction with the given friction value
         if(Math.abs(px) > 0){
             px += ((-px) * friction *deltaTime);
@@ -208,6 +212,16 @@
                 ang = 0;
             }
         }
+
+        if(Math.abs(topang) > 0){
+            topang += ((-topang) * friction *deltaTime);
+            if(topang> 0 && ang<0.05){
+                topang = 0;
+            }
+            if(topang< 0 && topang>-0.05){
+                topang = 0;
+            }
+        }
         keyInput(deltaTime);
         requestAnimationFrame(render);
         
@@ -223,24 +237,15 @@
         for(let i = 0; i < arrayWorld[0].length; i++){
             arrayWorld[0][i].updateLocalMatrix(m);
         }
+
     }
-    
-    /*function rotateWorldY(degree){       
-        arrayWorld[0][0].translate = mult(arrayWorld[0][0].translate, rotate(degree,[0,1,0]));
-        lightSource.translate = mult(lightSource.translate, rotate(degree,[0,1,0]));
-        rotateObjectY(lightSource,degree);
 
-
-        for(let i = 0; i < arrayWorld[0].length; i++){
-            rotateObjectY(arrayWorld[0][i],degree);
-        }*/
     function rotateWorldY(degree){    
-        rotateFromOrigin(lightSource,degree);
-        rotateFromOrigin(arrayWorld[0][0],degree);
-        
-        
+        rotateFromOriginY(lightSource,degree);
+        rotateFromOriginY(arrayWorld[0][0],degree);
+
     } 
-    
+
     window.onload = init;
     
 </script>
