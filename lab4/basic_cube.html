@@ -234,7 +234,8 @@
         for(let i = 0; i < arrayWorld[0].length; i++){
             rotateObjectY(arrayWorld[0][i],degree);
         }*/
-    function rotateWorldY(degree){        
+    function rotateWorldY(degree){    
+        rotateFromOrigin(lightSource,degree);
         rotateFromOrigin(arrayWorld[0][0],degree);
         
         

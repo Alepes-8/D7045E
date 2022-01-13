@@ -62,7 +62,6 @@ function init() {
     lightSource.giveParent(camera);
     lightSource.giveColors(monoYellow,monoBlack);
 
-    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[0][0]));
 
    
     //move item
@@ -70,17 +69,17 @@ function init() {
     floor.createFloor(gl,shader);
     arrayWorld[1].push(floor);
     floorID = arrayWorld[1].length - 1;
- /*
+ 
 
     //objects
-    laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
+     /* laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
     robot = new Robot(arrayWorld[1][0].objectArray[60], lightSource);
     laborint.createLaborint(gl,shader);
-    robot.createRobot(gl,shader);
-        
+      robot.createRobot(gl,shader);
+    
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
-    down = true;
+    down = true;  */
     //nodes
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[15]));
@@ -89,8 +88,8 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
 
-    arrayWorld[1].push(laborint);
-   */
+    //arrayWorld[1].push(laborint);
+ 
     
     render();
 }

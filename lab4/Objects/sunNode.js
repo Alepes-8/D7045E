@@ -36,7 +36,6 @@ class SunNode extends LightSource{
             this.transform = matrix;
           }
         }
-        console.log(this.transform);
         this.lightPosition = vec4(this.transform[0][3],this.transform[1][3],this.transform[2][3],1);
 
 
