@@ -42,7 +42,7 @@ function init() {
     let torusTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
-    let sunTransform = mat4(1,0,0,15, 0,1,0,20, 0,0,1,-15, 0,0,0,1);
+    let sunTransform = mat4(1,0,0,8, 0,1,0,10, 0,0,1,-8, 0,0,0,1);
 
 
     //shapes
@@ -59,6 +59,7 @@ function init() {
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoWhite, centerTransform, monoBlack, translation);
 
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, camera));
+    arrayWorld[0].push(lightSource);
     lightSource.giveParent(camera);
     lightSource.giveColors(monoYellow,monoBlack);
 
@@ -87,9 +88,6 @@ function init() {
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cylinder, monoYellow, cylinderTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[32]));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cone, monoYellow, coneTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[46]));
 
-
     arrayWorld[1].push(laborint);
- 
-    
     render();
 }

@@ -36,6 +36,8 @@
     <script src="camera.js"></script>
     <script src="Objects/cameraNode.js"></script>
     <script src="UserInputs/key.js"></script>
+    <script src="physicCaluclation.js"></script>
+
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
 
@@ -75,13 +77,20 @@
         uniform mat4 modelMatrix;
         uniform mat4 viewMatrix;
         uniform mat4 modelViewMatrix;
+        float attenuationFactor = 0.5;
+
+        float attenuation = 0.1;
 
         in vec3 v_normal;
         in vec3 cameraPos;
         out vec4 fragment_color;
 
         void main() {
-            float distance = 10.0;
+            if(attenuation > 0.0 ){
+                float dist = distance(cameraPos,lightPosition.xyz/lightPosition.w);
+                attenuationFactor = 1.0 / (1.0 + dist*0.08);
+            }
+
             vec3 N, L, R, V;  // vectors for lighting equation
             N = normalize( mat3(modelMatrix) * v_normal );
 
@@ -90,9 +99,9 @@
             R = -reflect(L,N);
             V = normalize( vec3(0,0,0) );  // (Assumes a perspective projection.)
             vec3 amb = vec3(0.1f,0.1f,0.1f) ;
-            float LdotN = max(0.0f, dot(L,N)) * (1.0/distance);
+            float LdotN = max(0.0f, dot(L,N));
             amb = (1.0f - LdotN) * amb;
-            vec3 color = LdotN * diffuseProduct.rgb + amb * diffuseProduct.rgb;
+            vec3 color = (LdotN * diffuseProduct.rgb +  amb * diffuseProduct.rgb)*attenuationFactor;
             color += 0.4*pow(max(0.0f, dot(R,V)),shininess) * specularProduct;
             fragment_color = vec4(color, 1.0);
             //fragment_color = vec4(N, 1.0);
@@ -100,9 +109,9 @@
 
     let canvas;
     let gl;
-    let camera;
-    let shader;
-    let lightSource;
+    //let camera;
+    //let shader;
+    //let lightSource;
     let part = true;
     let lookDirectionDegree = 0;
     let then = 0;
@@ -114,6 +123,7 @@
     let px = 0;
     let ang = 0;
     let topang = 0;
+    
     const keys = {};
     let left = true;
     var friction = 10;
@@ -122,6 +132,8 @@
         //buttons
         document.getElementById("persproj").checked = true;
         document.getElementById("fly").checked = false;
+        document.getElementById("sun").checked = false;
+
         //key input        
         window.addEventListener('keydown', (e) => {
         keys[e.keyCode] = true;
@@ -141,20 +153,7 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
         lightSource.activate();
-        //rotateObject(camera,2, "y");
         camera.draw();
-        /*if(left == true){
-            lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
-            if ( lightSource.lightPosition[0] > 10){
-                left = false;
-            }
-        }  else if(left == false){
-            lightSource.localMatrix = mult(lightSource.localMatrix, mat4(1,0,0,-0.1, 0,1,0,0, 0,0,1,0, 0,0,0,1));
-            if ( lightSource.lightPosition[0] < -10){
-                left = true;
-            }
-        } */
-        //lightSource.lightPos();
 
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
@@ -162,8 +161,8 @@
             }
         }
         lightSource.draw();
-        //arrayWorld[1][robotID].rotateHead(1);
-        //arrayWorld[1][robotID].changeSizeStar(0.01);
+        arrayWorld[1][robotID].rotateHead(1);
+        arrayWorld[1][robotID].changeSizeStar(0.01);
         
         //fps camera
         moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
@@ -174,77 +173,34 @@
         //rotateWorldZ(topang);
 
         //change the speed in one direction with the given friction value
-        if(Math.abs(px) > 0){
-            px += ((-px) * friction *deltaTime);
-            if(px> 0 && px<0.005){
-                px = 0;
-            }
-            if(px< 0 && px>-0.005){
-                px = 0;
-            }
-        }
-         
-        if(Math.abs(pz) > 0){
-            pz += ((-pz) * friction *deltaTime);
-            if(pz> 0 && pz<0.005){
-                pz = 0;
-            }
-            if(pz< 0 && pz>-0.005){
-                pz = 0;
-            }
-            
-        }
-        if(Math.abs(py) > 0){
-            py += ((-py) * friction *deltaTime);
-            if(py> 0 && py<0.005){
-                py = 0;
-            }
-            if(py< 0 && py>-0.005){
-                py = 0;
-            }
-            
-        }
-        if(Math.abs(ang) > 0){
-            ang += ((-ang) * friction *deltaTime);
-            if(ang> 0 && ang<0.05){
-                ang = 0;
-            }
-            if(ang< 0 && ang>-0.05){
-                ang = 0;
-            }
-        }
-
-        if(Math.abs(topang) > 0){
-            topang += ((-topang) * friction *deltaTime);
-            if(topang> 0 && ang<0.05){
-                topang = 0;
-            }
-            if(topang< 0 && topang>-0.05){
-                topang = 0;
-            }
-        }
+        physic(deltaTime);
+        
         keyInput(deltaTime);
         requestAnimationFrame(render);
         
     }
 
-    function moveLight(m){
-        lightSource.lightPosition = add(lightSource.lightPosition, vec4(m[0][3],m[1][3],m[2][3],0.0));
-    }
+
     function moveWorld(m){
-        //moveLight(m)
-        lightSource.updateLocalMatrix(m);
-        
-        for(let i = 0; i < arrayWorld[0].length; i++){
-            arrayWorld[0][i].updateLocalMatrix(m);
-        }
+        if(document.getElementById("sun").checked){
+            negateing = negate(vec4(m[0][3],m[1][3],m[2][3],1));
+            m[0][3] = negateing[0];
+            m[1][3] = negateing[1];
+            m[2][3] = negateing[2];
+            lightSource.updateLocalMatrix(m);
+        }else{
+            for(let i = 0; i < arrayWorld[0].length; i++){
+                arrayWorld[0][i].updateLocalMatrix(m);
+            }
+       }
+
 
     }
 
     function rotateWorldY(degree){    
-        rotateFromOriginY(lightSource,degree);
-        rotateFromOriginY(arrayWorld[0][0],degree);
-
+        for(let i = 0; i < arrayWorld[0].length; i++){
+            rotateFromOriginY(arrayWorld[0][i],degree);
+        }
     } 
 
     window.onload = init;
@@ -259,6 +215,8 @@
     <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
     <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
     <label><b><input type="checkbox" id="fly">&nbsp;God&nbsp;Mode</b></label>
+    <label><b><input type="checkbox" id="sun">&nbsp;Move he Sun</b></label>
+
     </p>
 
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
