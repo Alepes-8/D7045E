@@ -69,14 +69,15 @@ function init() {
     lightSource.giveParent(camera);
     lightSource.giveColors(monoYellow,monoBlack);
 
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[0][0]));
 
-
+   
     //move item
     floor = new Floor(boardWeith, boardHight ,boardLength, sideSizeX, sideSizeZ, monoRed, monoWhite, arrayWorld[0][0], lightSource);
     floor.createFloor(gl,shader);
     arrayWorld[1].push(floor);
     floorID = arrayWorld[1].length - 1;
-
+ /*
 
     //objects
     laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
@@ -103,7 +104,7 @@ function init() {
 
 
     arrayWorld[1].push(laborint);
-   
+   */
     
     render();
 }
