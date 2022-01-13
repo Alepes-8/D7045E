@@ -6,8 +6,7 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Sphere extends Mesh{
+ class Sphere extends Mesh{
     constructor(gl, width, shaderProgram){
         let radius = width / 2;   
 
@@ -59,7 +58,6 @@ class Sphere extends Mesh{
 				let b = ( points + 1 ) * ( j - 1 ) + i - 1;
 				let c = ( points + 1 ) * ( j - 1 ) + i;
 				let d = ( points + 1 ) * j + i;
-
 				// faces
 				indices.push( a, b, d );
 				indices.push( b, c, d );

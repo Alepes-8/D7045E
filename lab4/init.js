@@ -1,20 +1,14 @@
 function init() {
-
     canvas = document.getElementById("webglcanvas");
     gl = canvas.getContext("webgl2");
-
     if (!gl) {alert("WebGL isn't available");}
-
     //webgl configurations
     gl.viewport( 0, 0, canvas.width, canvas.height ); //delete
     gl.clearColor(0.2, 0.2, .2, 1 );
-
     gl.enable(gl.DEPTH_TEST);
-
     let fragmentShader = new Shader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
     let vertexShader = new Shader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     shader = new ShaderProgram(gl, vertexShader.getter(), fragmentShader.getter());
-    let translation = translate(0,0,0);
 
     let sunShape = new Sphere(gl, 2, shader.getProgram());
    
@@ -39,7 +33,7 @@ function init() {
 
 
     // translatons
-
+    let translation = translate(0,0,0);
     //transform
     let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
     let firstCubeTransform = mat4(1,0,0,-boardWeith/2+boardWeith/sideSizeX/2, 0,1,0,-3, 0,0,1,boardLength/2-boardLength/sideSizeZ/2, 0,0,0,1);
@@ -60,7 +54,6 @@ function init() {
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
     let cylinder = new Cylinder(gl, 2, objectsHights, shader.getProgram());
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
-
     //center
     lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null, vec4(1,1,1,1));
 
@@ -87,14 +80,7 @@ function init() {
         
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
-
-    for(let i = 0; i <35 ; i++){
-        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].leftArm],-2,"z");
-        rotateSpecificObjext(arrayWorld[1][robotID].objectArray[arrayWorld[1][robotID].rightArm],2,"z");
-    }
-
     down = true;
-
     //nodes
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[15]));

@@ -6,8 +6,7 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Torus extends Mesh{
+ class Torus extends Mesh{
     constructor(gl, width, height, shaderProgram){
         let radius = width / 2; 
         let tube = height / 2;
@@ -22,9 +21,7 @@ class Torus extends Mesh{
 		// generate vertices, normals and uvs
 
 		for ( let j = 0; j <= radialSegments; j ++ ) {
-
 			for ( let i = 0; i <= tubularSegments; i ++ ) {
-
 				const u = i / tubularSegments * arc;
 				const v = j / radialSegments * Math.PI * 2;
 
@@ -39,25 +36,17 @@ class Torus extends Mesh{
 			}
 
 		}
-
 		// generate indices
-
 		for ( let j = 1; j <= radialSegments; j ++ ) {
-
 			for ( let i = 1; i <= tubularSegments; i ++ ) {
-
 				// indices
-
 				let a = ( tubularSegments + 1 ) * j + i - 1;
 				let b = ( tubularSegments + 1 ) * ( j - 1 ) + i - 1;
 				let c = ( tubularSegments + 1 ) * ( j - 1 ) + i;
 				let d = ( tubularSegments + 1 ) * j + i;
-
 				// faces
-
 				indices.push( a, b, d );
 				indices.push( b, c, d );
-
 			}
 
 		}

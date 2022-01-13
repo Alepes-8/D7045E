@@ -7,7 +7,6 @@
       ○ a Vertex Buffer handle, and
       ○ an Element Array Buffer handle (index buffer).
   ● It also sets up vertex attribute pointers accordingly.
-
   @author Alex Peschel, Oliver Olofsson
 */ 
 
@@ -63,5 +62,5 @@
     getIndices(){
         return this.indices;
     } 
+  
   }
-

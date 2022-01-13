@@ -13,8 +13,8 @@ class Floor{
     }
 
     createFloor(gl,  shader){  
-       
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, this.lightSource);
+
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
         let cuboid = new Cuboid(gl, this.cubeWidth, this.cubeHight, this.cubeLength, shader.getProgram());
         let monoNode;
 
@@ -31,7 +31,6 @@ class Floor{
                 }else{
                     lockalMatrix = mat4(1,0,0,this.cubeWidth, 0,1,0,0, 0,0,1,0, 0,0,0,1)
                 }
-
                 if( (j+i) % 2 == 1){
                     monoNode = this.color1;
                 }else{
@@ -42,13 +41,11 @@ class Floor{
             }
         }
     }
-
     draw(){
         for(let i = 0; i < this.objectArray.length; i++) {
             this.objectArray[i].draw();
         }
     }
-
     findParent(cube){
         if(cube == 0){
             return this.objectArray[this.objectArray.length - this.sideSizeX];

@@ -1,4 +1,3 @@
-
 /** 
 *    ● Implement a class MonochromeMaterial that extends Material.
 *    ● The constructor should take an RGB color as a parameter.

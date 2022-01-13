@@ -6,8 +6,7 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Cuboid extends Mesh{
+ class Cuboid extends Mesh{
     constructor(gl, width, height, depth, shaderProgram){
         let x = width / 2; 
         let y = height / 2;

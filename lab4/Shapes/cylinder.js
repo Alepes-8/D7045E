@@ -6,8 +6,7 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Cylinder extends Mesh{
+ class Cylinder extends Mesh{
     constructor(gl, width, height, shaderProgram){
         let r = width / 2; 
         let y = height / 2;
@@ -30,8 +29,8 @@ class Cylinder extends Mesh{
             normals.push(vec4((Math.cos(v * 2 * Math.PI / points)), 0, (Math.sin(v * 2 * Math.PI / points)), 1.0));
         }
 
-       
-        
+
+
         /*The connections between the vertices*/
         let indices = [];
         //create the cirkle indeces
@@ -67,7 +66,6 @@ class Cylinder extends Mesh{
             }
                 
         }
-
         for(let side = 1; side <= points;side++ )
         {
             if(side == points){

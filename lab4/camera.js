@@ -1,7 +1,7 @@
 /**
  * @author Alex Peschel, Oliver Olofsson
  */
-class Camera{
+ class Camera{
   constructor(gl, shaderProgram) {
     this.gl = gl;
     this.shaderProgram = shaderProgram;
@@ -12,7 +12,6 @@ class Camera{
     this.position = vec3(0,8,30); //first, right and left. secound is move up and down , third is move back and forth
     this.at = [0, 0, 0];  // how the camera is looking. (first = left or right) (secound = upp and down) ( last = unsure, but thinks it moves the camera up and down)
     this.rotate = [0, 1.0, 0];
-
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
     this.viewMatrix = lookAt(this.position, this.at , this.rotate);
@@ -58,7 +57,6 @@ class Camera{
   getVMatrix(){
     return this.viewMatrix;
   }
-
   getPMatrix() {
     return this.perspectiveMatrix;
   }

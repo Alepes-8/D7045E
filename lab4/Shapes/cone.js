@@ -6,8 +6,7 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
-
-class Cone extends Mesh{
+ class Cone extends Mesh{
     constructor(gl, width, height, shaderProgram){
         let r = width / 2; 
         let y = height / 2;
@@ -21,8 +20,8 @@ class Cone extends Mesh{
         let normals = [
             vec4(0, -1, 0, 1.0)
         ];
-        
-    
+
+
         for(let v = 0; v < points; v++){
             vertices.push(vec4(
                 r*Math.cos(v * 2 * Math.PI / points),
