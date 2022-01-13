@@ -153,7 +153,6 @@
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
         lightSource.activate();
-        camera.draw();
 
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
@@ -161,6 +160,8 @@
             }
         }
         lightSource.draw();
+        camera.draw();
+
         arrayWorld[1][robotID].rotateHead(1);
         arrayWorld[1][robotID].changeSizeStar(0.01);
         
@@ -189,18 +190,12 @@
             m[2][3] = negateing[2];
             lightSource.updateLocalMatrix(m);
         }else{
-            for(let i = 0; i < arrayWorld[0].length; i++){
-                arrayWorld[0][i].updateLocalMatrix(m);
-            }
+            camera.updateLocalMatrix(m);   
        }
-
-
     }
 
     function rotateWorldY(degree){    
-        for(let i = 0; i < arrayWorld[0].length; i++){
-            rotateFromOriginY(arrayWorld[0][i],degree);
-        }
+        rotateFromOriginY(camera,degree);
     } 
 
     window.onload = init;

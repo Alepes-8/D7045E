@@ -6,74 +6,84 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
+
  class Cylinder extends Mesh{
     constructor(gl, width, height, shaderProgram){
-        let r = width / 2; 
-        let y = height / 2;
-        let points= 30;
-        let vertices = [
-            vec4( 0, -y,  0, 1 )   // front/bottom/left
-        ];
+        var radius = width / 2 || 0.5;
+        var height = height || 2*radius;
+        var slices = 32;
+        var noTop = false;
+        var noBottom = false;
 
-        let normals = [
-            vec4(0, -1, 0, 1.0)
-        ];
+        var vertices = [];
+        var normals = [];
+        var indices = [];
+       
+        var du = 2*Math.PI / slices;
+        var kv = 0;
+        var k = 0;
+        var i,u;
 
-        for(let v = 0; v < points; v++){
-            vertices.push(vec4(
-                r*Math.cos(v * 2 * Math.PI / points),
-                -y,
-                r*Math.sin(v * 2 * Math.PI / points),
-                1));
+        for (i = 0; i <= slices; i++) {
+            u = i*du;
+            var c = Math.cos(u);
+            var s = Math.sin(u);
 
-            normals.push(vec4((Math.cos(v * 2 * Math.PI / points)), 0, (Math.sin(v * 2 * Math.PI / points)), 1.0));
+            vertices[kv] = vec4(c*radius, -height/2, s*radius, 1.0);
+            normals[kv] = vec4(c, 0, s, 1.0);
+            kv++;
+            vertices[kv] = vec4(c*radius, height/2, s*radius, 1.0);
+            normals[kv] = vec4(c, 0, s, 1.0);
+            kv++;
         }
+        for (i = 0; i < slices; i++) {
+                indices[k++] = 2*i;
+                indices[k++] = 2*i+3;
+                indices[k++] = 2*i+1;
+                indices[k++] = 2*i;
+                indices[k++] = 2*i+2;
+                indices[k++] = 2*i+3;
+        }
+        var startIndex = kv;
+        if (!noBottom) {
+            vertices[kv] = vec4(0, -height/2, 0, 1.0);
+            normals[kv] = vec4(0, -1, 0, 1.0);
+            kv++;
 
+            for (i = 0; i <= slices; i++) {
+                u = 2*Math.PI - i*du;
+                var c = Math.cos(u);
+                var s = Math.sin(u);
 
-
-        /*The connections between the vertices*/
-        let indices = [];
-        //create the cirkle indeces
-        for(let i = 1; i <= points;i++ )
-        {
-            if(i == points){
-                indices.push(0,i,1)
+                vertices[kv] = vec4(c*radius, -height/2, s*radius, 1.0);
+                normals[kv] = vec4(0, -1, 0, 1.0);
+                kv++;
             }
-            else{
-                indices.push(0,i,i+1)
+            for (i = 0; i < slices; i++) {
+                indices[k++] = startIndex;
+                indices[k++] = startIndex + i + 1;
+                indices[k++] = startIndex + i + 2;
             }
         }
+        var startIndex = kv;
+        if (!noTop) {
+            vertices[kv] = vec4(0, height/2, 0, 1.0);
+            normals[kv] = vec4(0, 1, 0, 1.0);
+            kv++;
+            
+            for (i = 0; i <= slices; i++) {
+                u = i*du;
+                var c = Math.cos(u);
+                var s = Math.sin(u);
 
-        vertices.push(vec4(0,y,0,1));
-        normals.push(vec4((0), 1, (0), 1.0));
-
-        for(let v2 = 0; v2 < points; v2++){
-            vertices.push(vec4(
-                r*Math.cos(v2 * 2 * Math.PI / points),
-                y,
-                r*Math.sin(v2 * 2 * Math.PI / points),
-                1));
-
-            normals.push(vec4((Math.cos(v2 * 2 * Math.PI / points)), 0, (Math.sin(v2 * 2 * Math.PI / points)), 1.0));
-        }
-
-        for(let i2 = 1; i2 <= points;i2++ )
-        {
-            if(i2 == points){
-                indices.push(points+1,points+1+i2,points+2)
-            }else{
-                indices.push(points+1,points+1+i2,points+i2+2)
+                vertices[kv] = vec4(c*radius, height/2, s*radius, 1.0);
+                normals[kv] = vec4(0, 1, 0, 1.0);
+                kv++;
             }
-                
-        }
-        for(let side = 1; side <= points;side++ )
-        {
-            if(side == points){
-                indices.push(side,1,points+2)
-                indices.push(points+1+side,side,points+2)
-            }else{
-                indices.push(side,side+1,points+1+side)
-                indices.push(points+1+side,side+1,points+2+side)
+            for (i = 0; i < slices; i++) {
+                indices[k++] = startIndex;
+                indices[k++] = startIndex + i + 1;
+                indices[k++] = startIndex + i + 2;
             }
         }
 

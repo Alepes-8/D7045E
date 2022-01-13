@@ -22,10 +22,6 @@ class CameraNode extends Camera{
     }
 
     draw() {
-        /*bind the mesh's vertex array object*/
-        this.gl.bindVertexArray(this.mesh.getVertexArray());
-
-        /*call the apply material method of the material*/
         let matrix;
         if(this.start){
             matrix =  mult(this.localMatrix ,this.translate);
@@ -38,10 +34,6 @@ class CameraNode extends Camera{
             this.transform = matrix;
             }
         }
-
-        this.material.applyMaterial(matrix);
-        //execute a draw call
-        this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
     }
 
     //if you move a node around the transform needs to be updated

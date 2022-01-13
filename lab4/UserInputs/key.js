@@ -11,8 +11,6 @@ function keyInput(deltaTime){
                 pz += direction * speed ;
                 pz += (-pz * friction* deltaTime )
             }else if(lookDirectionDegree > 0){
-                console.log(lookDirectionDegree)
-
                 let temp = direction * speed ;
                 let tempZ = temp *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180)));
                 let tempY = -temp * Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180)));

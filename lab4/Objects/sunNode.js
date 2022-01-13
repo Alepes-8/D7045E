@@ -31,10 +31,10 @@ class SunNode extends LightSource{
         if(this.start){
           matrix = this.transform;
         }else{
-          matrix =  mult(mult(this.localMatrix,this.worldMatrix.transform),this.translate);
-          if(matrix != this.transform){
-            this.transform = matrix;
-          }
+            matrix =  mult(mult(this.worldMatrix.transform, this.localMatrix),this.translate);
+            if(matrix != this.transform){
+                this.transform = matrix;
+            }
         }
         this.lightPosition = vec4(this.transform[0][3],this.transform[1][3],this.transform[2][3],1);
 
