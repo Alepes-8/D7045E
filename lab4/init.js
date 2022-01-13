@@ -42,10 +42,13 @@ function init() {
     let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let sunTransform = mat4(1,0,0,0, 0,1,0,17, 0,0,1,-8, 0,0,0,1);
+    let moonTransform = mat4(1,0,0,1.7, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 
 
     //shapes
     let sunShape = new SunSphere(gl, 2, shader.getProgram());
+    let moonSphere = new Sphere(gl, 0.6, shader.getProgram());
+
     let centerNode = new Sphere(gl, 0.1, shader.getProgram());
     let worldNode = new Sphere(gl, 0.0, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
@@ -65,7 +68,6 @@ function init() {
     arrayWorld[0].push(lightSource);
     lightSource.giveParent(arrayWorld[0][2]);
     lightSource.giveColors(monoYellow,monoBlack);
-    lightSource.rotateSun(45);
 
    
     //move item
@@ -85,6 +87,7 @@ function init() {
     robotID = arrayWorld[1].length - 1;
     down = true;  
     //nodes
+    arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), moonSphere, monoWhite, moonTransform, monoBlack, translation, lightSource));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), cube, monoYellow, cubeTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[15]));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), torus, monoYellow, torusTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[57]));

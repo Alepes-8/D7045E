@@ -99,7 +99,7 @@
             L = normalize(lightPosition.xyz/lightPosition.w - cameraPos.xyz);
             
             R = -reflect(L,N);
-            V = normalize( vec3(0,0,0) );  // (Assumes a perspective projection.)
+            V = normalize(-cameraPos);  // (Assumes a perspective projection.)
             vec3 amb = vec3(0.1f,0.1f,0.1f) ;
             float LdotN = max(0.0f, dot(L,N));
             amb = (1.0f - LdotN) * amb;
@@ -135,6 +135,8 @@
         document.getElementById("persproj").checked = true;
         document.getElementById("fly").checked = false;
         document.getElementById("sun").checked = false;
+        document.getElementById("sunUp").checked = false;
+
 
         //key input        
         window.addEventListener('keydown', (e) => {
@@ -167,19 +169,18 @@
         arrayWorld[1][robotID].rotateHead(1);
         arrayWorld[1][robotID].changeSizeStar(0.01);
         if(document.getElementById("sun").checked){
-            lightSource.rotateSun(0.1);
+            lightSource.rotateSunPosition(0.1);
             if(lightSource.getLightDegree() > 100){
-                lightSource.rotateSun(-200);
+                lightSource.rotateSunPosition(-200);
             }
         }
-        
+        lightSource.rotateSun(1);
         //fps camera
         moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
         moveWorld(mat4(1,0,0,0, 0,1,0,py, 0,0,1,0, 0,0,0,1)); // up and down [1]
         moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
 
         rotateWorldY(ang);
-        //rotateWorldZ(topang);
 
         //change the speed in one direction with the given friction value
         physics(deltaTime);
@@ -191,7 +192,16 @@
 
 
     function moveWorld(m){
-        arrayWorld[0][0].updateLocalMatrix(m);   
+        if(document.getElementById("sunUp").checked){
+            if(m[0][3] == 0 && m[2][3] == 0){
+                let temp = negate(vec4(0,m[1][3],0,0));
+                m[1][3] = temp[1];
+                lightSource.updateLocalMatrix(m);
+            }
+           
+        }else{
+            arrayWorld[0][0].updateLocalMatrix(m);   
+        } 
     }
 
     function rotateWorldY(degree){    
@@ -211,6 +221,8 @@
     <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
     <label><b><input type="checkbox" id="fly">&nbsp;God&nbsp;Mode</b></label>
     <label><b><input type="checkbox" id="sun">&nbsp;Move the Sun</b></label>
+    <label><b><input type="checkbox" id="sunUp">&nbsp;Change Sun's Elivation</b></label>
+
 
     </p>
 

@@ -71,8 +71,12 @@ class SunNode extends LightSource{
         return(this.sunPoition);
     }
 
-    rotateSun(degree){
+    rotateSunPosition(degree){
         this.sunPoition += degree;
         rotateObject(this.worldMatrix,degree,"z");
+    }
+
+    rotateSun(degree){
+        rotateObject(this,degree,"y");
     }
 }
