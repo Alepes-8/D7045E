@@ -1,4 +1,4 @@
-function physic(deltaTime){
+function physics(deltaTime){
     if(Math.abs(px) > 0){
         px += ((-px) * friction *deltaTime);
         if(px> 0 && px<0.005){

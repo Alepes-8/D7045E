@@ -116,8 +116,8 @@
     let lookDirectionDegree = 0;
     let then = 0;
     let arrayWorld = [[],[]];
-    const speed = 0.01;
-    const turnSpeed = 0.2;
+    const speed = 0.007;
+    const turnSpeed = 0.1;
     let pz = 0;
     let py = 0;
     let px = 0;
@@ -173,7 +173,7 @@
         //rotateWorldZ(topang);
 
         //change the speed in one direction with the given friction value
-        physic(deltaTime);
+        physics(deltaTime);
         
         keyInput(deltaTime);
         requestAnimationFrame(render);
