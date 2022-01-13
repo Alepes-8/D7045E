@@ -19,6 +19,7 @@ class SunNode extends LightSource{
             this.worldMatrix.children.push(this);
         }
         this.children = [];
+        this.sunPoition = 0;
     }
 
     draw() {
@@ -65,5 +66,13 @@ class SunNode extends LightSource{
     
     getTransform() {
         return this.transform;
+    }
+    getLightDegree(){
+        return(this.sunPoition);
+    }
+
+    rotateSun(degree){
+        this.sunPoition += degree;
+        rotateObject(this.worldMatrix,degree,"z");
     }
 }
