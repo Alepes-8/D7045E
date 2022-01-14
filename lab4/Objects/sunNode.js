@@ -1,6 +1,6 @@
 class SunNode extends LightSource{
-    constructor(gl,shaderProgram, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null, color) {
-        super(gl, color, vec4(localMatrix[0][3],localMatrix[1][3],localMatrix[2][3],1), shaderProgram);
+    constructor(gl,shaderProgram, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
+        super(gl, vec4(localMatrix[0][3],localMatrix[1][3],localMatrix[2][3],1), shaderProgram);
         this.gl = gl;
         this.mesh = mesh;
         this.material = material;

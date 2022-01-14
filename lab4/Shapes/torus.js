@@ -55,7 +55,6 @@
                 indices[k++] = row2 + i + 1;
             }
         }
-
         super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

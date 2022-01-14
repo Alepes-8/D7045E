@@ -52,16 +52,6 @@
 				indices.push(row1+i);
 				indices.push(row1+i+1);
 				indices.push(row2+i+1);
-				/*
-				// indices
-				let a = ( points + 1 ) * j + i - 1;
-				let b = ( points + 1 ) * ( j - 1 ) + i - 1;
-				let c = ( points + 1 ) * ( j - 1 ) + i;
-				let d = ( points + 1 ) * j + i;
-				// faces
-				indices.push( a, b, d );
-				indices.push( b, c, d );
-				*/
 			}
 		}
 

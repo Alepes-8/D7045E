@@ -16,8 +16,8 @@
 
         /*The vector positions for each point relative to each other in the 3D space*/
         let vertices = [
-            vec4( 0, 0,  z, 1 ),   // front/bottom/left
-            vec4( 0,  0,  -z, 1 ),   // front/top/left
+            vec4( 0, 0,  z, 1 ),   
+            vec4( 0,  0,  -z, 1 ),   
         ];
 
         let normals = [
@@ -41,8 +41,6 @@
             normals.push(vec4((Math.cos((i*2+1) * 2 * Math.PI / (spikes*2))), (Math.sin((i*2+1) * 2 * Math.PI / (spikes*2))), (0), 1.0));
         }
 
-
-    
         /*The connections between the vertices*/
         let indices = [];
         for(let start = 0; start < 2; start++){
@@ -66,8 +64,8 @@
         let outer_Vertices = x;
         let inner_Vertices = x/3;
         let vertices = [
-            vec4( 0, 0,  z, 1 ),   // front/bottom/left
-            vec4( 0,  0,  -z, 1 ),   // front/top/left
+            vec4( 0, 0,  z, 1 ),   
+            vec4( 0,  0,  -z, 1 ),   
         ];
         for(let i = 0; i < this.spikes; i++){
             vertices.push(vec4(

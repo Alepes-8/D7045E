@@ -1,6 +1,5 @@
 function physics(deltaTime){
     if(Math.abs(px) > 0){
-        console.log(px);
         px += ((-px) * friction *deltaTime);
         if(px> 0 && px<0.005){
             px = 0;

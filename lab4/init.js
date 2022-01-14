@@ -59,7 +59,7 @@ function init() {
 
     //center
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoWhite, centerTransform, monoBlack, translation);
-    lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null, vec4(1,1,1,1));
+    lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null);
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), worldNode, monoWhite, centerTransform, monoBlack, translation, camera));
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, arrayWorld[0][0]));
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), worldNode, monoWhite, centerTransform, monoBlack, translation, arrayWorld[0][0]));

@@ -22,8 +22,6 @@ class GraphicsNode{
     this.materialBlack = materialBlack;
     this.localMatrix = localMatrix;
 
-    
-    
     if(worldMatrix == null){
       this.start = true;
       this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
@@ -61,7 +59,7 @@ class GraphicsNode{
 
   //if you move a node around the transform needs to be updated
   updateLocalMatrix(m) {
-   this.localMatrix = mult(this.localMatrix, m);
+    this.localMatrix = mult(this.localMatrix, m);
   }
 
   getTransform() {

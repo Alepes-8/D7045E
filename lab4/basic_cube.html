@@ -67,19 +67,15 @@
     const fragmentShaderSource = `#version 300 es
         precision mediump float;
         
-        uniform mat3 normalMatrix;
         uniform vec4 lightPosition;
-        uniform vec4 ambientProduct;
         uniform vec4 diffuseProduct;
         uniform vec3 specularProduct;
         uniform float shininess;
 
         uniform mat4 modelMatrix;
-        uniform mat4 viewMatrix;
-        uniform mat4 modelViewMatrix;
-        float attenuationFactor = 0.5;
 
-        float attenuation = 0.1;
+        float attenuationFactor = 0.5;
+        float attenuation = 0.08;
 
         in vec3 v_normal;
         in vec3 cameraPos;
@@ -88,7 +84,7 @@
         void main() {
             if(attenuation > 0.0 ){
                 float dist = distance(cameraPos,lightPosition.xyz/lightPosition.w);
-                attenuationFactor = 1.0 / (1.0 + dist*0.08);
+                attenuationFactor = 1.0 / (1.0 + dist*attenuation);
             }
 
             vec3 N, L, R, V;  // vectors for lighting equation
@@ -109,9 +105,6 @@
 
     let canvas;
     let gl;
-    //let camera;
-    //let shader;
-    //let lightSource;
     let part = true;
     let lookDirectionDegree = 0;
     let then = 0;
@@ -184,7 +177,6 @@
         
         keyInput(deltaTime);
         requestAnimationFrame(render);
-        
     }
 
 

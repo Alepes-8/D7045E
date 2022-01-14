@@ -13,36 +13,22 @@ class MonochromeMaterial extends Material{
     super(shaderProgram.getProgram());
     this.gl = gl;
     this.color = color;
-    //this.colorLocation = null;
     this.shaderProgram = shaderProgram;
 
-    this.ambientColor = color;
     this.diffuseColor = color;
     this.specularColor = vec3(1.0, 1.0, 1.0);
     this.shineExponent = 20.0;
- 
-  
   }
 
   applyMaterial(transform) {
-
     //The modelMatrix gives us the possition of the figure. 
     let modelMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "modelMatrix");
-
-    //let model = this.gl.getUniform(this.shaderProgram.getProgram(), modelMatrix);
-    //console.log("modelMatrix", model);
-
     this.gl.uniformMatrix4fv(modelMatrix, false, flatten(transform));
 
-    this.ambient = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "ambientProduct");
     this.diffuse = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");
     this.specular = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
     this.shininess = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess");
 
-    /*this.gl.uniform4fv(this.ambient, flatten(this.ambientProduct));
-    this.gl.uniform4fv(this.diffuse, flatten(this.diffuseProduct));
-    this.gl.uniform3fv(this.specular, flatten(this.specularProduct));*/
-    this.gl.uniform4fv(this.ambient, this.ambientColor);
     this.gl.uniform4fv(this.diffuse, this.diffuseColor);
     this.gl.uniform3fv(this.specular, this.specularColor);
     this.gl.uniform1f(this.shininess, this.shineExponent);

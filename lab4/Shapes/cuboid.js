@@ -43,12 +43,10 @@
             vec4( -x, -y,  z, 1 ),   // bot/upper/left = front/lower/left
             vec4(  x, -y,  z, 1 ),   // bot/upper/right = front/lower/right
             vec4(  x, -y, -z, 1 )   // bot/lower/right = back/lower/right
-            
         ];
     
         /*The connections between the vertices*/
         let indices = [
-
             0, 1, 2, 
             0, 3, 2, 
             
@@ -104,7 +102,6 @@
             [0, -1,  0, 0],
             [0, -1,  0, 0],
             [0, -1,  0, 0]
-       
         ];
         
         super(gl, vertices, indices, normals, shaderProgram);      
