@@ -14,7 +14,7 @@
     this.rotate = [0, 1.0, 0];
     /*view: points the camera from the center of projection (eye) toward a desired "at" point
     with a specified "up" direction for the camera*/
-    this.modelViewvMatrix = lookAt(this.position, this.at , this.rotate);
+    this.viewMatrix = lookAt(this.position, this.at , this.rotate);
 
     /*selects a lens for a perspective view and how much of the world the camera should image*/
     this.perspectiveMatrix = perspective(this.fieldOfView, this.aspect, this.near, this.far);
@@ -28,18 +28,17 @@
     else {
       this.perspectiveMatrix = ortho(-11, 11, -11, 11, this.near, this.far);
     }
-    this.modelViewvMatrix = lookAt(this.position, this.at , this.rotate);
-
+    this.viewMatrix = lookAt(this.position, this.at , this.rotate);
+    
     var perspectiveMatrix = this.gl.getUniformLocation(this.shaderProgram, "perspectiveMatrix");
-    var modelViewvMatrix = this.gl.getUniformLocation(this.shaderProgram, "modelViewvMatrix");
-    var cameraPos = this.gl.getUniformLocation(this.shaderProgram, "cameraPos");
-    this.gl.uniform4fv(cameraPos, flatten(vec4(this.position,1)));
+    var viewMatrix = this.gl.getUniformLocation(this.shaderProgram, "viewMatrix");
+
     this.gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(this.perspectiveMatrix));
-    this.gl.uniformMatrix4fv(modelViewvMatrix, false, flatten(this.modelViewvMatrix));
+    this.gl.uniformMatrix4fv(viewMatrix, false, flatten(this.viewMatrix));
   }
 
   getVMatrix(){
-    return this.modelViewvMatrix;
+    return this.viewMatrix;
   }
   getPMatrix() {
     return this.perspectiveMatrix;

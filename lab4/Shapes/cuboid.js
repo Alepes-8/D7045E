@@ -14,32 +14,96 @@
 
         /*The vector positions for each point relative to each other in the 3D space*/
         let vertices = [
-            vec4( -x, -y,  z, 1 ),   // front/bottom/left
-            vec4( -x,  y,  z, 1 ),   // front/top/left
-            vec4(  x,  y,  z, 1 ),   // front/top/right
-            vec4(  x, -y,  z, 1) ,   // front/bottom/right
-            vec4(  x, -y, -z, 1 ),   // back/bottom/right
-            vec4(  x,  y, -z, 1 ),   // back/top/right
-            vec4( -x,  y, -z, 1 ),   // back/top/left
-            vec4( -x, -y, -z, 1 )    // back/bottom/left
+            vec4( -x,  y, -z, 1 ),   // top/upper/left = back/upper/left
+            vec4( -x,  y,  z, 1 ),   // top/lower/left = front/upper/left
+            vec4(  x,  y,  z, 1 ),   // top/lower/right = front/upper/right
+            vec4(  x,  y, -z, 1 ),   // top/upper/right = back/upper/right
+
+            vec4( -x,  y,  z, 1 ),   // left/upper/right = top/lower/left = front/upper/left
+            vec4( -x, -y,  z, 1 ),   // left/lower/right = bot/upper/left = front/lower/left
+            vec4( -x, -y, -z, 1 ),   // left/lower/left = bot/lower/left = back/lower/left
+            vec4( -x,  y, -z, 1 ),    // left/upper/left = top/upper/left = back/upper/left
+
+            vec4(  x,  y,  z, 1 ),   // right/upper/left = top/lower/right = front/upper/right
+            vec4(  x, -y,  z, 1 ),   // right/lower/left = bot/upper/right = front/lower/right
+            vec4(  x, -y, -z, 1 ),   // right/lower/right = bot/lower/right = back/lower/right
+            vec4(  x,  y, -z, 1 ),   // right/upper/right = top/upper/right = back/upper/right
+            
+            vec4(  x,  y,  z, 1 ),   // front/upper/right
+            vec4(  x, -y,  z, 1 ),   // front/lower/right
+            vec4( -x, -y,  z, 1 ),   // front/lower/left
+            vec4( -x,  y,  z, 1 ),   // front/upper/left
+            
+            vec4(  x,  y, -z, 1 ),   // back/upper/right
+            vec4(  x, -y, -z, 1 ),   // back/lower/right
+            vec4( -x, -y, -z, 1 ),   // back/lower/left
+            vec4( -x,  y, -z, 1 ),   // back/upper/left
+            
+            vec4( -x, -y, -z, 1 ),   // bot/lower/left = back/lower/left
+            vec4( -x, -y,  z, 1 ),   // bot/upper/left = front/lower/left
+            vec4(  x, -y,  z, 1 ),   // bot/upper/right = front/lower/right
+            vec4(  x, -y, -z, 1 )   // bot/lower/right = back/lower/right
         ];
     
         /*The connections between the vertices*/
         let indices = [
             0, 1, 2, 
-            2, 3, 0, 
-            0, 1, 6, 
-            6, 7, 0, 
-            1, 2, 5,
-            5, 6, 1, 
-            2, 5, 4,
-            4, 3, 2,
-            3, 0, 7,
-            7, 4, 3,
-            4, 5, 6,
-            6, 7, 4
+            0, 3, 2, 
+            
+            5, 4, 6, 
+            6, 4, 7, 
+            
+            8, 9, 10, 
+            8, 11, 10, 
+            
+            12, 13, 14, 
+            12, 15, 14, 
+            
+            16, 17, 18, 
+            16, 19, 18, 
+            
+            21, 20, 22, 
+            22, 20, 23
         ];
 
-        super(gl, vertices, indices, shaderProgram);      
+        let normals = [
+            // Top
+            [0,  1,  0, 0],
+            [0,  1,  0, 0],
+            [0,  1,  0, 0],
+            [0,  1,  0, 0],
+
+            // Left
+            [-1,  0,  0, 0],
+            [-1,  0,  0, 0],
+            [-1,  0,  0, 0],
+            [-1,  0,  0, 0],
+
+            // Right
+            [1,  0,  0, 0],
+            [1,  0,  0, 0],
+            [1,  0,  0, 0],
+            [1,  0,  0, 0],
+
+            // Front
+            [0,  0,  1, 0],
+            [0,  0,  1, 0],
+            [0,  0,  1, 0],
+            [0,  0,  1, 0],
+       
+            // Back
+            [0,  0, -1, 0],
+            [0,  0, -1, 0],
+            [0,  0, -1, 0],
+            [0,  0, -1, 0],
+       
+           // Bottom
+            [0, -1,  0, 0],
+            [0, -1,  0, 0],
+            [0, -1,  0, 0],
+            [0, -1,  0, 0]
+        ];
+        
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

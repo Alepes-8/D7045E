@@ -20,4 +20,28 @@ class CameraNode extends Camera{
         }
         this.children = [];
     }
+
+    draw() {
+        let matrix;
+        if(this.start){
+            matrix =  mult(this.localMatrix ,this.translate);
+            if(matrix != this.transform){
+                this.transform = matrix;
+            }
+        }else{
+            matrix =  mult(mult(this.worldMatrix.transform, this.localMatrix),this.translate);
+            if(matrix != this.transform){
+            this.transform = matrix;
+            }
+        }
+    }
+
+    //if you move a node around the transform needs to be updated
+    updateLocalMatrix(m) {
+        this.localMatrix = mult(this.localMatrix, m);
+    }
+
+    getTransform() {
+        return this.transform;
+    }
 }

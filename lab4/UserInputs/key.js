@@ -11,15 +11,12 @@ function keyInput(deltaTime){
                 pz += direction * speed ;
                 pz += (-pz * friction* deltaTime )
             }else if(lookDirectionDegree > 0){
-                console.log(lookDirectionDegree)
-
                 let temp = direction * speed ;
                 let tempZ = temp *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180)));
                 let tempY = -temp * Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180)));
                 pz += tempZ;
                 py += tempY;
             }else if(lookDirectionDegree < 0){
-                console.log(lookDirectionDegree)
                 let temp = direction * speed ;
                 let tempZ = temp *  Math.abs(Math.cos(lookDirectionDegree*(Math.PI/180)));
                 let tempY = temp * Math.abs(Math.sin(lookDirectionDegree*(Math.PI/180)));
@@ -29,8 +26,7 @@ function keyInput(deltaTime){
         }else{
             pz += direction * speed ;
             pz += (-pz * friction* deltaTime )
-        }
-        
+        }  
     }
     if (keys['32'] || keys['16']) {//upp and down
         const direction = keys['16'] ? 1 : -1;

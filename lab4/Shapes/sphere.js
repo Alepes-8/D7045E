@@ -9,41 +9,52 @@
  class Sphere extends Mesh{
     constructor(gl, width, shaderProgram){
         let radius = width / 2;   
-        let points  = 10;
+
+        let slices  = 16;
+		let stacks = 8;
         let indices = [];
 		let vertices = [];
+		let normals = [];
 
 		// generate vertices, normals and uvs
 
-		for ( let j = 0; j <= points ; j ++ ) {
-			for ( let i = 0; i <= points; i ++ ) {
-				const v = j / points * Math.PI;
-				const u = i / points * Math.PI * 2;
+		for ( let j = 0; j <= stacks; j ++ ) {
+			let v = -Math.PI/2 + j* Math.PI/stacks;
 
+			for ( let i = 0; i <= slices; i ++ ) {
+
+				let u = i * 2*Math.PI/slices;
+				
 				// vertex
 
-				let verX = -( radius) * Math.sin( v ) * Math.cos( u );
-				let verY = ( radius) * Math.cos( v );
-				let verZ = radius * Math.sin( v ) * Math.sin( u );
+				let x = Math.cos( u ) * Math.cos( v );
+				let y =  Math.sin( u ) * Math.cos( v );
+				let z = Math.sin( v );
 
-				vertices.push( vec4(verX, verY, verZ, 1));
+				let verX = radius * x;
+				let verY = radius * y;
+				let verZ = radius * z;
+
+				vertices.push( vec4(verX, verY, verZ, 1.0));
+				normals.push(vec4(x, y, z, 1.0))
 			}
 		}
 
 		// generate indices
-		for ( let j = 1; j <= points ; j ++ ) {
-			for ( let i = 1; i <= points; i ++ ) {
-				// indices
-				let a = ( points + 1 ) * j + i - 1;
-				let b = ( points + 1 ) * ( j - 1 ) + i - 1;
-				let c = ( points + 1 ) * ( j - 1 ) + i;
-				let d = ( points + 1 ) * j + i;
-				// faces
-				indices.push( a, b, d );
-				indices.push( b, c, d );
+		for ( let j = 0; j < stacks ; j ++ ) {
+			let row1 = j*(slices+1);
+			let row2 = (j+1)*(slices+1);
+			for ( let i = 0; i < slices; i ++ ) {
+
+				indices.push(row1+i);
+				indices.push(row2+i+1);
+				indices.push(row2+i);
+				indices.push(row1+i);
+				indices.push(row1+i+1);
+				indices.push(row2+i+1);
 			}
 		}
 
-        super(gl, vertices, indices, shaderProgram);      
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

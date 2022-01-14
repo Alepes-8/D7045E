@@ -1,5 +1,5 @@
 class Laborint{
-    constructor(xSize, ySize, xAmount, yAmount, thickness, floor, color){
+    constructor(xSize, ySize, xAmount, yAmount, thickness, floor, color, lightSource){
         this.xSize = xSize;
         this.ySize = ySize;
         this.xAmount = xAmount;
@@ -10,6 +10,7 @@ class Laborint{
         this.color = color;
         this.floor = floor;
         this.objectArray = [];
+        this.lightSource = lightSource;
     }
 
     createRandomLaborint(gl,  shader){  
@@ -31,7 +32,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
         arr = [];
         while(arr.length < this.yAmount*this.xAmount*0.5){
@@ -42,13 +43,13 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
         
     }
 
     createLaborint(gl,  shader){  
-        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
+        let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader, this.lightSource);
         var arr = [];
         let hight;
         if(this.weight > this.length){
@@ -102,7 +103,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
 
 
@@ -120,7 +121,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl,this.thickness, hight, this.length, shader.getProgram());
             let transform = mat4(1,0,0,-this.weight/2, 0,1,0,hight/2, 0,0,1,0, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[i]]));
         }
 
 
@@ -164,7 +165,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
 
 
@@ -185,7 +186,7 @@ class Laborint{
             let translation = translate(0,0,0);
             let cuboid = new Cuboid(gl, this.weight, hight, this.thickness, shader.getProgram());
             let transform = mat4(1,0,0,0, 0,1,0,hight/2, 0,0,1,-this.length/2, 0,0,0,1);
-            this.objectArray.push(new GraphicsNode(gl, cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
+            this.objectArray.push(new GraphicsNode(gl, shader.getProgram(), cuboid, this.color, transform, monoBlack, translation, this.floor.objectArray[arr[j]]));
         }
         
     }

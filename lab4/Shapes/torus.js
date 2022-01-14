@@ -6,50 +6,55 @@
  * 
  * @author Alex Peschel, Oliver Olofsson
  */
+
  class Torus extends Mesh{
     constructor(gl, width, height, shaderProgram){
-        let radius = width / 2; 
-        let tube = height / 2;
-  
-        let radialSegments = 8
-        let tubularSegments = 8
-        let arc = Math.PI * 2 // the whole loop. If we place Math.PI will the system only draw half a cirkle 
-        let indices = [];
-		let vertices = [];
+        var outerRadius = width/2;
+        var innerRadius = height/3;
+        var slices = 16;
+        var stacks = 8;
 
-		// generate vertices, normals and uvs
+        var vertices = [];
+        var normals = [];
+        var indices = [];
 
-		for ( let j = 0; j <= radialSegments; j ++ ) {
-			for ( let i = 0; i <= tubularSegments; i ++ ) {
-				const u = i / tubularSegments * arc;
-				const v = j / radialSegments * Math.PI * 2;
+        var du = 2*Math.PI/slices;
+        var dv = 2*Math.PI/stacks;
+        var centerRadius = (innerRadius+outerRadius)/2;
+        var tubeRadius = outerRadius - centerRadius;
+        var indexV = 0;
 
-				// vertex
+        for (var j = 0; j <= stacks; j++) {
+            var v = -Math.PI + j*dv;
+            var cos = Math.cos(v);
+            var sin = Math.sin(v);
+            for (var i = 0; i <= slices; i++) {
+                var u = i*du;
+                var cx = Math.cos(u);
+                var cy = Math.sin(u);
 
-				let verX = ( radius + tube * Math.cos( v ) ) * Math.cos( u );
-				let verY = ( radius + tube * Math.cos( v ) ) * Math.sin( u );
-				let verZ = tube * Math.sin( v );
+                var x = cx*(centerRadius + tubeRadius*cos);
+                var y = cy*(centerRadius + tubeRadius*cos);
+                var z = sin*tubeRadius;
 
-				vertices.push( vec4(verX, verY, verZ,1));
-
-			}
-
-		}
-		// generate indices
-		for ( let j = 1; j <= radialSegments; j ++ ) {
-			for ( let i = 1; i <= tubularSegments; i ++ ) {
-				// indices
-				let a = ( tubularSegments + 1 ) * j + i - 1;
-				let b = ( tubularSegments + 1 ) * ( j - 1 ) + i - 1;
-				let c = ( tubularSegments + 1 ) * ( j - 1 ) + i;
-				let d = ( tubularSegments + 1 ) * j + i;
-				// faces
-				indices.push( a, b, d );
-				indices.push( b, c, d );
-			}
-
-		}
-
-        super(gl, vertices, indices, shaderProgram);      
+                vertices[indexV] = vec4(x, y, z, 1.0);
+                normals[indexV] = vec4(cx*cos, cy*cos, sin, 1.0);
+                indexV++;
+            } 
+        }
+        var k = 0;
+        for (var j = 0; j < stacks; j++) {
+            var row1 = j*(slices+1);
+            var row2 = (j+1)*(slices+1);
+            for (var i = 0; i < slices; i++) {
+                indices[k++] = row1 + i;
+                indices[k++] = row2 + i + 1;
+                indices[k++] = row2 + i;
+                indices[k++] = row1 + i;
+                indices[k++] = row1 + i + 1;
+                indices[k++] = row2 + i + 1;
+            }
+        }
+        super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

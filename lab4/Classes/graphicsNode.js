@@ -14,12 +14,14 @@
 
 class GraphicsNode{
    /*holds a mesh resource, material and an instance specific transform*/
-  constructor(gl, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
+  constructor(gl, shaderProgram, mesh, material, localMatrix, materialBlack, translate = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1), worldMatrix = null) {
     this.gl = gl;
+    this.shaderProgram = shaderProgram;
     this.mesh = mesh;
     this.material = material;
     this.materialBlack = materialBlack;
     this.localMatrix = localMatrix;
+
     if(worldMatrix == null){
       this.start = true;
       this.worldMatrix = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
@@ -51,18 +53,13 @@ class GraphicsNode{
     }
 
     this.material.applyMaterial(matrix);
-
     /*execute a draw call*/
     this.gl.drawElements(this.gl.TRIANGLES, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
-
-    this.materialBlack.applyMaterial(matrix);
-
-    this.gl.drawElements(this.gl.LINE_STRIP, this.mesh.getIndices().length, this.gl.UNSIGNED_BYTE, 0);
   }
 
   //if you move a node around the transform needs to be updated
   updateLocalMatrix(m) {
-   this.localMatrix = mult(this.localMatrix, m);
+    this.localMatrix = mult(this.localMatrix, m);
   }
 
   getTransform() {

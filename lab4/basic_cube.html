@@ -20,6 +20,9 @@
     <script src="Classes/shaderProgram.js"></script>
     <script src="Classes/matrial.js"></script>
     <script src="Classes/graphicsNode.js"></script>
+    <script src="Classes/lightSource.js"></script>
+    <script src="Objects/sunNode.js"></script>
+
     <script src="Classes/monochromeMaterial.js"></script>
     <script src="Shapes/cuboid.js"></script>
     <script src="Shapes/torus.js"></script>
@@ -27,59 +30,102 @@
     <script src="Shapes/cone.js"></script>
     <script src="Shapes/sphere.js"></script>
     <script src="Shapes/star.js"></script>
+    <script src="Shapes/sunSphere.js"></script>
     <script src="Objects/floor.js"></script>
     <script src="Objects/robot.js"></script>
     <script src="Objects/laborint.js"></script>
+    
     <script src="camera.js"></script>
     <script src="Objects/cameraNode.js"></script>
     <script src="UserInputs/key.js"></script>
+    <script src="physicCaluclation.js"></script>
+
     <script>
         //id vertex shader and id fragmen shader is the shaders we have
 
     const vertexShaderSource = `#version 300 es
-        layout(location=0) in vec4 vertexPos;
-        uniform mat4 cMatrix;
-        uniform mat4 modelViewvMatrix;
-        uniform mat4 perspectiveMatrix;
-        uniform vec4 cameraPos;
+        precision mediump float;
         
-        out float distance;
+        layout(location=0) in vec4 vertexPos;
+        in vec4 normalPos;
+
+        uniform mat4 modelMatrix;
+        uniform mat4 viewMatrix;
+        uniform mat4 perspectiveMatrix;
+        
+        out vec3 cameraPos;
+        out vec3 v_normal;  //A normalized normal position 
+
         void main()
         {
-            gl_Position = perspectiveMatrix * modelViewvMatrix * cMatrix * vertexPos;
-            distance = length((cMatrix * vertexPos) - cameraPos) ;
+
+            gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vertexPos ; //clipspace -> worldSpace ->viewSpace
+            v_normal = normalize(normalPos.xyz);
+            cameraPos = (modelMatrix * vertexPos).xyz; 
         }`;
 
     const fragmentShaderSource = `#version 300 es
         precision mediump float;
-        uniform vec4 u_Color;
-        in float distance;
-        out vec4 fragColor;
+        
+        uniform vec4 lightPosition;
+        uniform vec4 diffuseProduct;
+        uniform vec3 specularProduct;
+        uniform float shininess;
+
+        uniform mat4 modelMatrix;
+
+        float attenuationFactor = 0.5;
+        float attenuation = 0.08;
+
+        in vec3 v_normal;
+        in vec3 cameraPos;
+        out vec4 fragment_color;
+
         void main() {
-            fragColor = vec4(u_Color.xyz * (20.0/(distance)),1);
+            if(attenuation > 0.0 ){
+                float dist = distance(cameraPos,lightPosition.xyz/lightPosition.w);
+                attenuationFactor = 1.0 / (1.0 + dist*attenuation);
+            }
+
+            vec3 N, L, R, V;  // vectors for lighting equation
+            N = normalize( mat3(modelMatrix) * v_normal );
+
+            L = normalize(lightPosition.xyz/lightPosition.w - cameraPos);
+            
+            R = -reflect(L,N);
+            V = normalize(-cameraPos);  // (Assumes a perspective projection.)
+            vec3 amb = vec3(0.1f,0.1f,0.1f) ;
+            float LdotN = max(0.0f, dot(L,N));
+            amb = (1.0f - LdotN) * amb;
+            vec3 color = (LdotN * diffuseProduct.rgb +  amb * diffuseProduct.rgb)*attenuationFactor;
+            color += 0.4*pow(max(0.0f, dot(R,V)),shininess) * specularProduct;
+            fragment_color = vec4(color, 1.0);
+            //fragment_color = vec4(N, 1.0);
         }`;
 
     let canvas;
     let gl;
-    let camera;
-    let shader;
     let part = true;
     let lookDirectionDegree = 0;
-    let then = 0;
+    let then = 0; //start time
     let arrayWorld = [[],[]];
-    const speed = 0.01;
-    const turnSpeed = 0.2;
+    const speed = 0.007;
+    const turnSpeed = 0.1;
+    var friction = 10;
     let pz = 0;
     let py = 0;
     let px = 0;
     let ang = 0;
     const keys = {};
-    var friction = 10;
+    let left = true;
     
     function optionListiners(){
         //buttons
         document.getElementById("persproj").checked = true;
         document.getElementById("fly").checked = false;
+        document.getElementById("sun").checked = false;
+        document.getElementById("sunUp").checked = false;
+
         //key input        
         window.addEventListener('keydown', (e) => {
         keys[e.keyCode] = true;
@@ -98,6 +144,8 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         shader.activate();
         camera.activate(document.getElementById("persproj").checked);
+        lightSource.activate();
+
         for(let i = 0; i < arrayWorld.length; i++){
             for(let j = 0; j < arrayWorld[i].length; j++){
                 arrayWorld[i][j].draw();
@@ -107,68 +155,44 @@
         arrayWorld[1][robotID].rotateHead(1);
         arrayWorld[1][robotID].changeSizeStar(0.01);
 
-       //fps camera
+        if(document.getElementById("sun").checked){
+            lightSource.rotateSunPosition(0.1);
+            if(lightSource.getLightDegree() > 100){
+                lightSource.rotateSunPosition(-200);
+            }
+        }
+        lightSource.rotateSun(1);
+        //fps camera
         moveWorld(mat4(1,0,0,px, 0,1,0,0, 0,0,1,0, 0,0,0,1)); // left and right  [0]
         moveWorld(mat4(1,0,0,0, 0,1,0,py, 0,0,1,0, 0,0,0,1)); // up and down [1]
         moveWorld(mat4(1,0,0,0, 0,1,0,0, 0,0,1,pz, 0,0,0,1)); // forward and backwards [2]
+
         rotateWorldY(ang);
-        
+
         //change the speed in one direction with the given friction value
-        if(Math.abs(px) > 0){
-            px += ((-px) * friction *deltaTime);
-            if(px> 0 && px<0.005){
-                px = 0;
-            }
-            if(px< 0 && px>-0.005){
-                px = 0;
-            }
-        }
-         
-        if(Math.abs(pz) > 0){
-            pz += ((-pz) * friction *deltaTime);
-            if(pz> 0 && pz<0.005){
-                pz = 0;
-            }
-            if(pz< 0 && pz>-0.005){
-                pz = 0;
-            }
-            
-        }
-        if(Math.abs(py) > 0){
-            py += ((-py) * friction *deltaTime);
-            if(py> 0 && py<0.005){
-                py = 0;
-            }
-            if(py< 0 && py>-0.005){
-                py = 0;
-            }
-            
-        }
-        if(Math.abs(ang) > 0){
-            ang += ((-ang) * friction *deltaTime);
-            if(ang> 0 && ang<0.05){
-                ang = 0;
-            }
-            if(ang< 0 && ang>-0.05){
-                ang = 0;
-            }
-        }
+        physics(deltaTime);
         
         keyInput(deltaTime);
         requestAnimationFrame(render);
     }
+
+
     function moveWorld(m){
-        for(let i = 0; i < arrayWorld[0].length; i++){
-            arrayWorld[0][i].updateLocalMatrix(m);
-        }
+        if(document.getElementById("sunUp").checked){
+            if(m[0][3] == 0 && m[2][3] == 0){
+                let temp = negate(vec4(0,m[1][3],0,0));
+                m[1][3] = temp[1];
+                lightSource.updateLocalMatrix(m);
+            }
+        }else{
+            arrayWorld[0][0].updateLocalMatrix(m);   
+        } 
     }
-    
-    function rotateWorldY(degree){        
-        rotateFromOrigin(arrayWorld[0][0],degree);
-        
-        
+
+    function rotateWorldY(degree){    
+        rotateFromOriginY(arrayWorld[0][0],degree);
     } 
-    
+
     window.onload = init;
     
 </script>
@@ -181,11 +205,15 @@
     <label><input type="radio" name="projectionType" id="persproj" value="perspective">Perspective projection</label>
     <label><input type="radio" name="projectionType" id="orthproj" value="orthogonal" style="margin-left:1cm">Orthogonal projection</label>
     <label><b><input type="checkbox" id="fly">&nbsp;God&nbsp;Mode</b></label>
+    <label><b><input type="checkbox" id="sun">&nbsp;Move the Sun</b></label>
+    <label><b><input type="checkbox" id="sunUp">&nbsp;Change Sun's Elivation</b></label>
+
+
     </p>
 
     <noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
     <div id="canvas-holder">
-    <canvas width=1500px height=800px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
+    <canvas width=1900px height=950px id="webglcanvas" style="background-color:rgb(0, 0, 0)"></canvas>
     </div>
 
 </body>

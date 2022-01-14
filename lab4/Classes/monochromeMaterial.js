@@ -13,17 +13,24 @@ class MonochromeMaterial extends Material{
     super(shaderProgram.getProgram());
     this.gl = gl;
     this.color = color;
-    this.colorLocation = null;
     this.shaderProgram = shaderProgram;
+
+    this.diffuseColor = color;
+    this.specularColor = vec3(1.0, 1.0, 1.0);
+    this.shineExponent = 20.0;
   }
 
   applyMaterial(transform) {
-    //The cMatrix gives us the possition of the figure. 
-    let cMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "cMatrix");
-    this.gl.uniformMatrix4fv(cMatrix, false, flatten(transform));
+    //The modelMatrix gives us the possition of the figure. 
+    let modelMatrix = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "modelMatrix");
+    this.gl.uniformMatrix4fv(modelMatrix, false, flatten(transform));
 
-    this.colorLocation = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "u_Color");
-    //if the node is far away the RBG variables gets multiplied with lower values => darker color
-    this.gl.uniform4fv(this.colorLocation, this.color);
+    this.diffuse = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "diffuseProduct");
+    this.specular = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "specularProduct");
+    this.shininess = this.gl.getUniformLocation(this.shaderProgram.getProgram(), "shininess");
+
+    this.gl.uniform4fv(this.diffuse, this.diffuseColor);
+    this.gl.uniform3fv(this.specular, this.specularColor);
+    this.gl.uniform1f(this.shininess, this.shineExponent);
   }
 }

@@ -13,9 +13,9 @@ function rotateObject(object,degree, way){
 }
 
 
-function rotateFromOrigin(object, degree){
-        object.translate = mult(object.translate, rotate(degree,[0,1,0]));
-        rotateObjectY(object,degree);
+function rotateFromOriginY(object, degree){
+    object.translate = mult(object.translate, rotate(degree,[0,1,0]));
+    rotateObjectY(object,degree);
 } 
 
 
@@ -79,5 +79,4 @@ function rotateObjectY(item,degree){
     }
     item.localMatrix[2][3] = a;
     item.localMatrix[0][3] = b;
-   
 }

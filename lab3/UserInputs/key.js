@@ -1,6 +1,3 @@
-/**
- * @author Alex Peschel, Oliver Olofsson
- */
 class Key{
 
     doKey(evt) {
