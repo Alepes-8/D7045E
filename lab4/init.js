@@ -25,14 +25,13 @@ function init() {
 
     //colors
     let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
-    let monoRed = new MonochromeMaterial(gl, vec4(1.0, 0.0, 0, 1.0), shader);
     let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
     let monoWhite = new MonochromeMaterial(gl, vec4(1, 1, 1, 1.0), shader);
     let monoYellow = new MonochromeMaterial(gl, vec4(1, 1, 0, 1.0), shader);
 
-
     // translatons
     let translation = translate(0,0,0);
+
     //transform
     let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
     let firstCubeTransform = mat4(1,0,0,-boardWeith/2+boardWeith/sideSizeX/2, 0,1,0,-3, 0,0,1,boardLength/2-boardLength/sideSizeZ/2, 0,0,0,1);
@@ -59,8 +58,8 @@ function init() {
     let cone = new Cone(gl, 3, objectsHights, shader.getProgram());
 
     //center
-    lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null, vec4(1,1,1,1));
     camera = new CameraNode(gl, shader.getProgram(),centerNode, monoWhite, centerTransform, monoBlack, translation);
+    lightSource = new SunNode(gl, shader.getProgram(),sunShape, null, sunTransform, null, translation, null, vec4(1,1,1,1));
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), worldNode, monoWhite, centerTransform, monoBlack, translation, camera));
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), firstCubes, monoWhite, firstCubeTransform, monoBlack, translation, arrayWorld[0][0]));
     arrayWorld[0].push(new GraphicsNode(gl, shader.getProgram(), worldNode, monoWhite, centerTransform, monoBlack, translation, arrayWorld[0][0]));
@@ -78,14 +77,15 @@ function init() {
  
 
     //objects
-    laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue, lightSource);
-    robot = new Robot(arrayWorld[1][0].objectArray[60], lightSource);
+    laborint = new Laborint(boardWeith, boardLength, sideSizeX, sideSizeZ, boardHight, floor, monoBlue);
+    robot = new Robot(arrayWorld[1][floorID].objectArray[60]);
     laborint.createLaborint(gl,shader);
     robot.createRobot(gl,shader);
     
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
     down = true;  
+    
     //nodes
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), moonSphere, monoWhite, moonTransform, monoBlack, translation, lightSource));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));

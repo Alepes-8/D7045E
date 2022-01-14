@@ -1,5 +1,6 @@
 function physics(deltaTime){
     if(Math.abs(px) > 0){
+        console.log(px);
         px += ((-px) * friction *deltaTime);
         if(px> 0 && px<0.005){
             px = 0;
@@ -36,16 +37,6 @@ function physics(deltaTime){
         }
         if(ang< 0 && ang>-0.05){
             ang = 0;
-        }
-    }
-
-    if(Math.abs(topang) > 0){
-        topang += ((-topang) * friction *deltaTime);
-        if(topang> 0 && ang<0.05){
-            topang = 0;
-        }
-        if(topang< 0 && topang>-0.05){
-            topang = 0;
         }
     }
 }

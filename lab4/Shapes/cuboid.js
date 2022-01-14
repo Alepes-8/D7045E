@@ -48,41 +48,6 @@
     
         /*The connections between the vertices*/
         let indices = [
-            /*0, 1, 2, 
-            2, 3, 0,
-
-            0, 1, 6, 
-            6, 7, 0, 
-
-            1, 2, 5,
-            5, 6, 1, 
-
-            2, 5, 4,
-            4, 3, 2,
-
-            3, 0, 7,
-            7, 4, 3,
-
-            4, 5, 6,
-            6, 7, 4*/
-            
-            /*0, 1, 2, 
-            0, 2, 3, 
-            
-            5, 4, 6, 
-            6, 4, 7, 
-            
-            9, 8, 10, 
-            10, 8, 11, 
-            
-            13, 12, 14, 
-            15, 14, 12, 
-            
-            16, 17, 18, 
-            16, 18, 19, 
-            
-            21, 20, 22, 
-            22, 20, 23*/
 
             0, 1, 2, 
             0, 3, 2, 
@@ -142,9 +107,6 @@
        
         ];
         
-        //console.log("V: ", vertices);
-        //.log("I; ", indices);
-        //console.log("N: ", normals);
         super(gl, vertices, indices, normals, shaderProgram);      
     }
 }

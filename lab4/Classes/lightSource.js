@@ -14,21 +14,9 @@ class LightSource{
     }
   
     activate() {
-      /*let modelMatrix = this.gl.getUniform(this.shaderProgram, this.modelMatrix_loc);
-      let viewMatrix = this.gl.getUniform(this.shaderProgram, this.viewMatrix_loc);
-      console.log("M: ", mat4(modelMatrix));
-      console.log("V: ", viewMatrix);
-      
-      let u_normalMatrix = normalMatrixs( mult((viewMatrix), (modelMatrix)), true);
-      //console.log("N: ", u_normalMatrix);
-      
-      this.gl.uniformMatrix3fv(this.normalMatrix, false, flatten(u_normalMatrix));*/
-      //this.lightPosition = vec4( this.matrixLight[0][3], this.matrixLight[1][3], this.matrixLight[2][3],0);
       let lightPosition = this.gl.getUniformLocation(this.shaderProgram, "lightPosition");
       this.gl.uniform4fv(lightPosition, flatten(this.lightPosition));
     }
 
-    lightPos(){
-      console.log(this.lightPosition);
-    }
+
 }

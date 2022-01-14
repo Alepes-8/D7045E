@@ -1,5 +1,5 @@
 class Robot{
-    constructor(start, lightSource){
+    constructor(start){
         
         this.worldMatrix = start;
         this.objectArray = [];
@@ -14,7 +14,6 @@ class Robot{
         this.length = 0.5;
         this.headDegree = 0;
         this.rotateLeft = true;
-        this.lightSource = lightSource;
     }
     createRobot(gl,shader){
         
@@ -130,6 +129,7 @@ class Robot{
             this.down = true;
         }
     }
+    
     draw(){
         for(let i = 0; i < this.objectArray.length; i++){
             this.objectArray[i].draw();

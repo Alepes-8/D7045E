@@ -18,11 +18,6 @@ function rotateFromOriginY(object, degree){
     rotateObjectY(object,degree);
 } 
 
-function rotateFromOriginZ(object, degree){
-    object.translate = mult(object.translate, rotate(degree,[1,0,0]));
-    rotateObjectZ(object,degree);
-} 
-
 
 function rotateObjectY(item,degree){
     let a = item.localMatrix[2][3]; //z
