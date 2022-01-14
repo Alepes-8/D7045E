@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <html>
 <head>
-    <title>Laboration 3</title>
+    <title>Laboration 4</title>
     <style>
         body {
             background-color: #ffffff;
@@ -59,8 +59,8 @@
         void main()
         {
 
-            gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vertexPos ; //clipspace -> worldSpace ->viewSpace
-            v_normal = normalize(normalPos.xyz);
+            gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vertexPos ; //localspace -> worldSpace -> viewSpace -> clipspace
+            v_normal = normalize(mat3(modelMatrix) * normalPos.xyz);
             cameraPos = (modelMatrix * vertexPos).xyz; 
         }`;
 
@@ -88,7 +88,7 @@
             }
 
             vec3 N, L, R, V;  // vectors for lighting equation
-            N = normalize( mat3(modelMatrix) * v_normal );
+            N = normalize( v_normal );
 
             L = normalize(lightPosition.xyz/lightPosition.w - cameraPos);
             
