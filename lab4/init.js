@@ -21,8 +21,6 @@ function init() {
     let sideSizeZ = 8;
     let objectsHights = 4;
 
-
-
     //colors
     let monoBlue = new MonochromeMaterial(gl, vec4(0,1, 1, 1.0), shader);
     let monoBlack = new MonochromeMaterial(gl, vec4(0, 0, 0, 1.0), shader);
@@ -34,23 +32,24 @@ function init() {
 
     //transform
     let centerTransform = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+    let sunTransform = mat4(1,0,0,0, 0,1,0,17, 0,0,1,-8, 0,0,0,1);
     let firstCubeTransform = mat4(1,0,0,-boardWeith/2+boardWeith/sideSizeX/2, 0,1,0,-3, 0,0,1,boardLength/2-boardLength/sideSizeZ/2, 0,0,0,1);
+    
+    let moonTransform = mat4(1,0,0,1.7, 0,1,0,0, 0,0,1,0, 0,0,0,1);
     let sphereTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let cubeTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let torusTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let cylinderTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
     let coneTransform = mat4(1,0,0,0, 0,1,0,2, 0,0,1,0, 0,0,0,1);
-    let sunTransform = mat4(1,0,0,0, 0,1,0,17, 0,0,1,-8, 0,0,0,1);
-    let moonTransform = mat4(1,0,0,1.7, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 
 
     //shapes
-    let sunShape = new SunSphere(gl, 2, shader.getProgram());
-    let moonSphere = new Sphere(gl, 0.6, shader.getProgram());
-
     let centerNode = new Sphere(gl, 0.1, shader.getProgram());
     let worldNode = new Sphere(gl, 0.0, shader.getProgram());
+    let sunShape = new SunSphere(gl, 2, shader.getProgram());
     let firstCubes = new Cuboid(gl, boardWeith/sideSizeX, boardHight, boardLength/sideSizeZ, shader.getProgram());
+
+    let moonSphere = new Sphere(gl, 0.6, shader.getProgram());
     let sphere = new Sphere(gl, 2, shader.getProgram());
     let cube = new Cuboid(gl, 3, objectsHights, 2, shader.getProgram());
     let torus = new Torus(gl, objectsHights/2, 1, shader.getProgram());
@@ -85,7 +84,7 @@ function init() {
     arrayWorld[1].push(robot);
     robotID = arrayWorld[1].length - 1;
     down = true;  
-    
+
     //nodes
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), moonSphere, monoWhite, moonTransform, monoBlack, translation, lightSource));
     arrayWorld[1].push(new GraphicsNode(gl, shader.getProgram(), sphere, monoYellow, sphereTransform, monoBlack, translation, arrayWorld[1][floorID].objectArray[4]));
